@@ -1,5 +1,9 @@
 import React from "react";
 import { ProductCard } from "../productCard/ProductCard";
+import productImg1 from "../../assets/Rectangle 25.png"
+import productImg2 from "../../assets/Rectangle 26 (1).png"
+import productImg3 from "../../assets/Rectangle 26 (2).png"
+import productImg5 from "../../assets/Rectangle 26.png"
 
 export const Cart = () => {
   return (
@@ -190,11 +194,11 @@ export const Cart = () => {
         </div>
         <h3 className="mt-10 text-[25px] font-normal">Similar products</h3>
         <div className="mt-2 flex gap-3 overflow-x-auto">
-            <ProductCard image = {""}/>
-            <ProductCard image = {""}/>
-            <ProductCard image = {""}/>
-            <ProductCard image = {""}/>
-            <ProductCard image = {""}/>
+            <ProductCard image = {productImg1}/>
+            <ProductCard image = {productImg2}/>
+            <ProductCard image = {productImg1}/>
+            <ProductCard image = {productImg3}/>
+            <ProductCard image = {productImg4}/>
         </div>
       </div>
     </>

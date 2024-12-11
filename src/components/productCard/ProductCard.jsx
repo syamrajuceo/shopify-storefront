@@ -26,7 +26,7 @@ export const ProductCard = ({image}) => {
       </CardOff>
       <CardImageContainer>
         <CardImage
-          src="https://i.pinimg.com/736x/56/2c/4b/562c4bc65ed427515b6b6b11883bb611.jpg"
+          src={image}
           alt="Product Image"
         />
       </CardImageContainer>
