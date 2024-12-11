@@ -1,9 +1,10 @@
 import React from "react";
+import { ProductCard } from "../productCard/ProductCard";
 
 export const Cart = () => {
   return (
     <>
-      <div className="container mx-auto mt-10">
+      {/* <div className="container mx-auto mt-10">
         <div className="sm:flex shadow-md my-10">
           <div className="  w-full  sm:w-3/4 bg-white px-10 py-10">
             <div className="flex justify-between border-b pb-8">
@@ -177,6 +178,23 @@ export const Cart = () => {
               </button>
             </div>
           </div>
+        </div>
+      </div> */}
+
+
+      <div className="py-16 px-20 ">
+        <p>Cart</p>
+        <div className="h-[60vh] border flex">
+            <div className="border w-[60%]"></div>
+            <div className="border w-[40%]"></div>
+        </div>
+        <h3 className="mt-10 text-[25px] font-normal">Similar products</h3>
+        <div className="mt-2 flex gap-3 overflow-x-auto">
+            <ProductCard image = {""}/>
+            <ProductCard image = {""}/>
+            <ProductCard image = {""}/>
+            <ProductCard image = {""}/>
+            <ProductCard image = {""}/>
         </div>
       </div>
     </>

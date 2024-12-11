@@ -278,7 +278,9 @@ export const CartIndex = () => {
     const email = userEmail || "salihkm000@gmail.com";
   
     try {
-      const checkoutUrl = await createPreAuthenticatedCheckoutUrl(cartId, email); // Use Storefront API
+      // const checkoutUrl = await createPreAuthenticatedCheckoutUrl(cartId, email); // Use Storefront API
+      // const checkoutUrl = `https://4bz4tg-qg.myshopify.com/cart/c/Z2NwLWFzaWEtc291dGhlYXN0MTowMUpFUlIzUko2RjVYMFk4NjE5QTcyRlRBRA?key=cBRz27x9X13P53n1KDn8Ed0DO0jLnJ15Ql9ZJ2ougHK2A3jKANfqbfUad_mEGvx4dpekA89Ay5ArHr1vCJVmc7ZSBsaHQ-itVDr764C2Q6Xr0Soc3tO3-1X3A8RGmHVyXyU-HFCe6QfkZ2Gv2THfjRKaQUe7YL_ho3DvdrGNTxmpxQfgLGHOdjNWAneGliSd`;
+      const checkoutUrl = localStorage.getItem("checkoutUrl");
       window.location.href = checkoutUrl;
     } catch (error) {
       console.error("Error during checkout:", error.message);

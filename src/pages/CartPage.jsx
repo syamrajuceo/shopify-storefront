@@ -4,8 +4,8 @@ import { CartIndex } from "../components/cart/CartIndex"
 export const CartPage = () => {
   return (
     <>
-      <CartIndex/>
-      {/* <Cart/> */}
+      {/* <CartIndex/> */}
+      <Cart/>
     </>
   )
 }

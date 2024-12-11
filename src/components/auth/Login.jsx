@@ -18,6 +18,8 @@ export const Login = () => {
       const { email, password } = data;
       const customer = await signIn(email, password);
 
+      console.log("Customer:", customer)
+
       if (customer !== undefined) {
         toast.success("Logged in successfully!");
         navigate("/");
@@ -25,7 +27,6 @@ export const Login = () => {
     } catch (error) {
       console.error("Error during login:", error);
 
-      // Check for specific error messages
       if (
         error.message === "User not found" ||
         error.message === "Invalid password"

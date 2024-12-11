@@ -41,7 +41,7 @@ export const Card = styled.div`
   flex: 0 0 auto;
   background: #ffffff;
   border-radius: 0.625rem;
-  width: 17.125rem;
+  width: 15.125rem;
   scroll-snap-align: center;
   position: relative;
 `;
@@ -75,7 +75,7 @@ export const CardImageContainer = styled.div`
 // Card Image inside Card
 export const CardImage = styled.img`
   width: 100%;
-  height: 12.5rem;
+  height: 18.5rem;
   object-fit: cover;
   border-radius: 0.625rem;
 `;
