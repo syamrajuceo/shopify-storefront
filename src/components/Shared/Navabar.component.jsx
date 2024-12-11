@@ -6,25 +6,29 @@ import { NavLink } from "react-router-dom";
 import LinkData from "../../data/Link.data.json";
 import tamara from "../../assets/tamara.png";
 import tabby from "../../assets/tabby.png";
+import { useState } from "react";
+import { FaBars } from "react-icons/fa6";
+import { MdClose } from "react-icons/md";
 
 function NavabarComponent({ cartnumber = 0, getSearchData }) {
+  const [hidden, setHidden] = useState(true);
   const handleSearchInput = (event) => {
     if (getSearchData) {
-      getSearchData(event.target.value); 
+      getSearchData(event.target.value);
     }
   };
 
   return (
-    <div>
+    <div className="bg-slate-100">
       {/* Top Section */}
-      <div className="flex justify-between p-4 items-center text-2xl">
+      <div className="flex justify-between p-4 items-center text-md lg:text-xl">
         <img src={logo} alt="logo" />
-        <div className="flex bg-slate-100 items-center h-[40px] w-[600px]">
+        <div className="hidden sm:flex bg-slate-200 items-center h-[40px] sm:w-[300px] md:w-[400px] lg:w-[600px]">
           <input
             type="search"
             placeholder="Search for products, categories or brands..."
-            className="w-full bg-slate-100 h-[40px] px-3"
-            onChange={handleSearchInput} 
+            className="w-full bg-slate-200 h-[40px] px-3"
+            onChange={handleSearchInput}
           />
           <button className="w-[40px] p-2">
             <IoIosSearch />
@@ -43,25 +47,42 @@ function NavabarComponent({ cartnumber = 0, getSearchData }) {
           </button>
         </div>
       </div>
-
+      <div className="flex sm:hidden  bg-slate-200 items-center h-[40px] w-[90%] mx-auto">
+        <input
+          type="search"
+          placeholder="Search for products, categories or brands..."
+          className="w-full bg-slate-200 h-[40px] px-3"
+          onChange={handleSearchInput}
+        />
+        <button className="w-[40px] p-2">
+          <IoIosSearch />
+        </button>
+      </div>
       {/* Bottom Section */}
-      <div className="flex items-center justify-between border-t px-4 py-2">
+      <div className="sm:flex items-center justify-between border-t px-4 py-2 relative">
         {/* Navigation Links */}
-        <div className="flex gap-4">
+        <MdClose className={`${hidden ?  'hidden':''} md:hidden text-xl absolute top-0 right-4 `}  onClick={() => setHidden(true)}/>
+
+        <FaBars className={`${hidden ? ' ' : 'hidden'} md:hidden text-xl absolute top-0 right-4 `} onClick={() => setHidden(false)} />
+
+        <div className={`${hidden ? 'hidden ' : ''}md:flex gap-4`}>
           {LinkData.map((linkobj) => (
             <NavLink
               to={linkobj.url === "/home" ? "/" : linkobj.url}
               key={linkobj.name}
               className={({ isActive }) =>
-                isActive
+                `block p-2 ${isActive
                   ? "text-blue-500 font-bold border-b-2 border-blue-500"
                   : "text-gray-700"
+                }`
               }
             >
               {linkobj.name}
             </NavLink>
           ))}
         </div>
+
+
 
         {/* EMI Section */}
         <div className="flex items-center gap-2">
