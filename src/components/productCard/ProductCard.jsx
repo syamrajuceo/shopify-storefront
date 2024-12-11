@@ -18,69 +18,28 @@
 // import expressLogo from "../../assets/Frame 390 1.png";
 // import deliveryLogo from "../../assets/Group.png";
 
-// export const ProductCard = ({product}) => {
-//   console.log("product :", product);
-//   const { title, descriptionHtml, images, variants,id } = product;
-//   const productImage = images && images?.edges[0]?.node?.url;
-//   const discountPrice = variants && variants.edges[0]?.node?.priceV2?.amount;
-//   const originalPrice =
-//     variants && variants.edges[0]?.node?.compareAtPriceV2?.amount;
-//   const productCurrency =
-//     variants && variants.edges[0]?.node?.priceV2?.currencyCode;
-// //   const variantId = variants && variants.edges[0]?.node?.id;
-//   const productId = id;
-
-//   // Calculate the discount percentage
-//   const offerPercentage =
-//     originalPrice && discountPrice
-//       ? ((originalPrice - discountPrice) / originalPrice) * 100
-//       : null;
-
-//   // Handle Add to Cart
-//   const handleAddToCart = async () => {
-//     console.log("Add to Cart ", productId)
-//     // try {
-//     //   if (!variantId) {
-//     //     console.error("Variant ID not found.");
-//     //     return;
-//     //   }
-//     //   const quantity = 1; // Default quantity
-//     //   const cart = await addToCart(variantId, quantity);
-//     //   console.log("Cart updated:", cart);
-//     //   alert("Product added to cart!");
-//     // } catch (error) {
-//     //   console.error("Failed to add product to cart:", error.message);
-//     // }
-//   };
-
+// export const ProductCard = () => {
 //   return (
 //     <Card>
 //       <CardOff>
-//         <CardOffText>
-//           {offerPercentage ? offerPercentage.toFixed(2) : 0}% off
-//         </CardOffText>
+//         <CardOffText>40% off</CardOffText>
 //       </CardOff>
 //       <CardImageContainer>
 //         <CardImage
-//           src={
-//             productImage ||
-//             "https://i.pinimg.com/736x/56/2c/4b/562c4bc65ed427515b6b6b11883bb611.jpg"
-//           } // Default image if none available
-//           alt={title || "Product Image"}
+//           src="https://i.pinimg.com/736x/56/2c/4b/562c4bc65ed427515b6b6b11883bb611.jpg"
+//           alt="Product Image"
 //         />
 //       </CardImageContainer>
 //       <CardBody>
 //         <CardHeading>
-//           <h3>{title || "Product Title"}</h3>
+//           <h3>Product Title</h3>
 //         </CardHeading>
 //         <CardPrice>
 //           <CardPriceText>
-//             {productCurrency}
-//             {originalPrice ? Number(originalPrice).toFixed(2) : "0.00"}
+//             AED 578
 //           </CardPriceText>
 //           <CardOffPrice>
-//             {productCurrency}
-//             {discountPrice ? Number(discountPrice).toFixed(2) : "0.00"}
+//            AED 350
 //           </CardOffPrice>
 //         </CardPrice>
 
@@ -92,7 +51,7 @@
 //           </CardDeliverySpan>
 //         </CardDelivery>
 //         <div>
-//           <CardButton onClick={handleAddToCart}>Add To Cart</CardButton>
+//           <CardButton>Add To Cart</CardButton>
 //         </div>
 //       </CardBody>
 //     </Card>
@@ -158,7 +117,7 @@ export const ProductCard = ({ product = {} }) => {
   return (
     <Card>
       <CardOff>
-        <CardOffText>{offerPercentage.toFixed(2)}% off</CardOffText>
+        <CardOffText>{offerPercentage.toFixed(0)}% off</CardOffText>
       </CardOff>
       <CardImageContainer>
         <CardImage
