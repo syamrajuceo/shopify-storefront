@@ -8,52 +8,57 @@ import { ProductDetailsPage } from "../pages/ProductDetailsPage";
 import { ProductListingPage } from "../pages/ProductListingPage";
 import { UserLayout } from "../layout/UserLayout";
 import ProtectedRoute from "../utils/ProtectedRoute";
+import Navlayout from "../layout/Navlayout";
 
 export const router = createBrowserRouter([
   {
-    path: "/login",
-    element: (
-      <ProtectedRoute>
-        <LoginPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/register",
-    element: (
-      <ProtectedRoute>
-        <RegisterPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/",
-    element: <HomePage />,
-  },
-  {
-    path: "/products",
-    element: <ProductListingPage />,
-  },
-  {
-    path: "/product:id",
-    element: <ProductDetailsPage />,
-  },
-  {
-    path: "/contact",
-    element: <ProductDetailsPage />,
-  },
-  // User routes
-  {
-    element: <UserLayout />,
+    element: <Navlayout />,
     children: [
       {
-        path: "/cart",
-        element: <CartPage />,
+        path: "/login",
+        element: (
+          <ProtectedRoute>
+            <LoginPage />
+          </ProtectedRoute>
+        ),
       },
       {
-        path: "/profile",
-        element: <ProfilePage />,
+        path: "/register",
+        element: (
+          <ProtectedRoute>
+            <RegisterPage />
+          </ProtectedRoute>
+        ),
       },
-    ],
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/products",
+        element: <ProductListingPage />,
+      },
+      {
+        path: "/product:id",
+        element: <ProductDetailsPage />,
+      },
+      {
+        path: "/contact",
+        element: <ProductDetailsPage />,
+      },
+      // User routes
+      {
+        element: <UserLayout />,
+        children: [
+          {
+            path: "/cart",
+            element: <CartPage />,
+          },
+          {
+            path: "/profile",
+            element: <ProfilePage />,
+          },
+        ],
+      },]
   },
 ]);
