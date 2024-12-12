@@ -42,18 +42,26 @@ export const router = createBrowserRouter([
     path: "/contact",
     element: <ProductDetailsPage />,
   },
-  // User routes
   {
-    element: <UserLayout />,
-    children: [
-      {
-        path: "/cart",
-        element: <CartPage />,
-      },
-      {
-        path: "/profile",
-        element: <ProfilePage />,
-      },
-    ],
+    path: "/cart",
+    element: <CartPage />,
   },
+  {
+    path: "/profile",
+    element: <ProfilePage />,
+  },
+  // User routes
+  // {
+  //   element: <UserLayout />,
+  //   children: [
+  //     {
+  //       path: "/cart",
+  //       element: <CartPage />,
+  //     },
+  //     {
+  //       path: "/profile",
+  //       element: <ProfilePage />,
+  //     },
+  //   ],
+  // },
 ]);
