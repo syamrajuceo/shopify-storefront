@@ -1,3 +1,4 @@
+
 // import React from "react";
 // import {
 //   Card,
@@ -141,7 +142,9 @@ export const ProductCard = ({ product = {} }) => {
           <ExpressLogo src={expressLogo} alt="" />
           <CardDeliverySpan>
             <img src={deliveryLogo} alt="" />
-            <CardDeliveryText>{DeliveryFee}</CardDeliveryText>
+
+            <CardDeliveryText>Free Delivery</CardDeliveryText>
+
           </CardDeliverySpan>
         </CardDelivery>
         <div>

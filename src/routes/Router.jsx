@@ -69,6 +69,7 @@ export const router = createBrowserRouter([
         ],
       },]
   },
+
   // User routes
   // {
   //   element: <UserLayout />,
