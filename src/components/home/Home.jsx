@@ -17,10 +17,14 @@ export const Home = () => {
       <ShapeSelector/>
       <ProductCategories/>
       <Banner image={BannerImage1}/>
-      <ProductCarousel/>
       {/* <ProductCarousel/> */}
+      {/* <ProductCarousel/> */}
+
+      <div className=''>
       <Banner image={BannerImage2}/>
       <Banner image={BannerImage3}/>
+      </div>
+
       <Brand/>
       <ProductCarousel2/> 
       
