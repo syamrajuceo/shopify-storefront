@@ -1,9 +1,10 @@
 import React from "react";
 
-function Banner({ image }) {
+function Banner({ image,mobile }) {
   return (
-    <div className="px-4 md:p-8 md:mt-6 md:h-[500px] ">
-        <img src={image} alt="banner" className="w-full h-auto object-fit rounded-lg md:h-[350px]  " />
+    <div className="px-4 md:px-8 md:mt-6 md:h-[350px] ">
+        <img src={image} alt="banner" className="w-full h-auto object-cover rounded-lg md:h-[350px] md:flex hidden " />
+        <img src={mobile} alt="banner" className="w-full h-auto object-cover rounded-lg md:h-[350px]  flex md:hidden" />
     </div>
   );
 }

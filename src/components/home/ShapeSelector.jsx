@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import Rounded from '../../assets/roundglass.png'
-import Rectangle from '../../assets/rectangle.png'
-import CatEye from '../../assets/catEye.png'
+import Rounded from '../../assets/round.png'
+import Rectangle from '../../assets/rectangleglass.png'
+import CatEye from '../../assets/catEyeglass.png'
 import aviator from '../../assets/aviator.png'
-import Geometric from '../../assets/geomatric.png'
+import Geometric from '../../assets/geomatricglass.png'
 const shapes = [
   {
     id: 'round',
@@ -51,7 +51,7 @@ export default function ShapeSelector() {
             >
               <div
                 className={`
-                 h-36 w-36 border-2  rounded-full overflow-hidden 
+                 md:h-36 md:w-36 h-24 w-24 border-2  rounded-full overflow-hidden 
                   transition-all duration-300 ease-in-out
                   cursor-pointer transform hover:scale-105
                   ${selectedShape === shape.id ? ' ring-offset-4' : ''}
@@ -62,7 +62,7 @@ export default function ShapeSelector() {
                 <img
                   src={shape.image}
                   alt={shape.name}
-                  className="max-w-full max-h-full object-contain m-auto  block "
+                  className="max-w-full max-h-full object-contain m-auto block "
                 />
               </div>
               <div className="mt-4 text-center">
