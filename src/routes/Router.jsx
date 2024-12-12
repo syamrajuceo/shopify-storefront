@@ -9,6 +9,7 @@ import { ProductListingPage } from "../pages/ProductListingPage";
 import { UserLayout } from "../layout/UserLayout";
 import ProtectedRoute from "../utils/ProtectedRoute";
 import Navlayout from "../layout/Navlayout";
+import SunGlasses from "../pages/sunglasses";
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +46,12 @@ export const router = createBrowserRouter([
       {
         path: "/contact",
         element: <ProductDetailsPage />,
+      },
+      {
+        path: "/sunglasses",
+        element:<SunGlasses/>
+      },{
+
       },
       // User routes
       {

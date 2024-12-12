@@ -9,6 +9,24 @@ import tabby from "../../assets/tabby.png";
 import { useState } from "react";
 import { FaBars } from "react-icons/fa6";
 import { MdClose } from "react-icons/md";
+import MobileLinkData from "../../data/Moblielink.data.json";
+
+import { FaHome, FaShoppingCart } from "react-icons/fa";
+import { BiSolidOffer } from "react-icons/bi";
+import { BiSolidTagAlt } from "react-icons/bi";
+const iconMapping = {
+  FaHome: <FaHome className="text-yellow-500 text-2xl" />, 
+  FaOffer: <BiSolidOffer className="text-red-600 text-2xl" />,
+  FaTag: (
+    <BiSolidTagAlt 
+      className="text-blue-600 text-2xl" 
+      style={{ transform: "rotate(270deg)" }} 
+    />
+  ),
+  FaShoppingCart: <FaShoppingCart className="text-blue-500 text-2xl" />
+};
+
+
 
 function NavabarComponent({ cartnumber = 0, getSearchData }) {
   const [hidden, setHidden] = useState(true);
@@ -35,7 +53,7 @@ function NavabarComponent({ cartnumber = 0, getSearchData }) {
           </button>
         </div>
         <div className="flex items-center gap-2">
-          <button>Contact</button>
+          <button className="hidden md:block">Contact</button>
           <button>
             <img src={user} alt="user" />
           </button>
@@ -59,9 +77,9 @@ function NavabarComponent({ cartnumber = 0, getSearchData }) {
         </button>
       </div>
       {/* Bottom Section */}
-      <div className="sm:flex items-center justify-between border-t px-4 py-2 relative">
+      <div className="hidden md:flex items-center justify-between border-t px-4 py-2 relative">
         {/* Navigation Links */}
-        <MdClose className={`${hidden ?  'hidden':''} md:hidden text-xl absolute top-0 right-4 `}  onClick={() => setHidden(true)}/>
+        <MdClose className={`${hidden ? 'hidden' : ''} md:hidden text-xl absolute top-0 right-4 `} onClick={() => setHidden(true)} />
 
         <FaBars className={`${hidden ? ' ' : 'hidden'} md:hidden text-xl absolute top-0 right-4 `} onClick={() => setHidden(false)} />
 
@@ -90,6 +108,28 @@ function NavabarComponent({ cartnumber = 0, getSearchData }) {
           <img src={tamara} alt="Tamara" className="h-6" />
           <img src={tabby} alt="Tabby" className="h-6" />
         </div>
+      </div>
+      <div className="block md:hidden fixed bottom-[0%] z-20 w-full p-3 bg-slate-300">
+
+        <div className="flex justify-between w-full">
+          {MobileLinkData.map((linkobj, index) => (
+            <NavLink
+              key={index}
+              to={linkobj.url === "/home" ? "/" : linkobj.url}
+              className={({ isActive }) =>
+                isActive
+                  ? "flex  flex-col items-center sm:gap-2 text-blue-600 font-bold"
+                  : "flex  flex-col items-center sm:gap-2 text-gray-800 hover:text-blue-600"
+              }
+            >
+              {iconMapping[linkobj.icon]}
+              <span>{linkobj.name}</span>
+            </NavLink>
+          ))}
+        </div>
+
+
+
       </div>
     </div>
   );

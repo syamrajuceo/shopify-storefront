@@ -18,11 +18,11 @@ import {
 import expressLogo from "../../assets/Frame 390 1.png";
 import deliveryLogo from "../../assets/Group.png";
 
-export const ProductCard = ({image}) => {
+export const ProductCard = ({image="",off="40",Head="GUESS UV Protected ROUND Sun Glasses",RealPrice="578",OurPrice="550",DeliveryFee="Free Delivery"}) => {
   return (
     <Card>
       <CardOff>
-        <CardOffText>40% off</CardOffText>
+        <CardOffText>{off}% off</CardOffText>
       </CardOff>
       <CardImageContainer>
         <CardImage
@@ -32,18 +32,18 @@ export const ProductCard = ({image}) => {
       </CardImageContainer>
       <CardBody>
         <CardHeading>
-          GUESS UV Protected ROUND Sun Glasses
+          {Head}
         </CardHeading>
         <CardPrice>
-          <CardPriceText>AED 578</CardPriceText>
-          <CardOffPrice>AED 350</CardOffPrice>
+          <CardPriceText>AED {RealPrice}</CardPriceText>
+          <CardOffPrice>AED {OurPrice}</CardOffPrice>
         </CardPrice>
 
         <CardDelivery>
           <img src={expressLogo} alt="" />
           <CardDeliverySpan>
             <img src={deliveryLogo} alt="" />
-            <CardDeliveryText>Free Delivery</CardDeliveryText>
+            <CardDeliveryText>{DeliveryFee}</CardDeliveryText>
           </CardDeliverySpan>
         </CardDelivery>
         <div>
