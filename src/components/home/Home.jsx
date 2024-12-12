@@ -8,7 +8,7 @@ export const Home = () => {
     <>
       <Carousel/>
       <ShapeSelector/>
-      {/* <ProductCategories/> */}
+      <ProductCategories/>
     </>
   )
 }
