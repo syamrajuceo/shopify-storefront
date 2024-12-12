@@ -10,6 +10,7 @@ import { UserLayout } from "../layout/UserLayout";
 import ProtectedRoute from "../utils/ProtectedRoute";
 import Navlayout from "../layout/Navlayout";
 import SunGlasses from "../pages/sunglasses";
+import { ContactPage } from "../pages/ContactPage";
 
 export const router = createBrowserRouter([
   {
@@ -45,7 +46,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/contact",
-        element: <ProductDetailsPage />,
+        element: <ContactPage />,
       },
       {
         path: "/sunglasses",

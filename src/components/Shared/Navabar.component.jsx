@@ -2,7 +2,7 @@ import logo from "../../assets/logo.png";
 import user from "../../assets/user.png";
 import cart from "../../assets/cart.png";
 import { IoIosSearch } from "react-icons/io";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import LinkData from "../../data/Link.data.json";
 import tamara from "../../assets/tamara.png";
 import tabby from "../../assets/tabby.png";
@@ -53,7 +53,7 @@ function NavabarComponent({ cartnumber = 0, getSearchData }) {
           </button>
         </div>
         <div className="flex items-center gap-2">
-          <button className="hidden md:block">Contact</button>
+          <Link className="hidden md:block" to={"/contact"}>Contact</Link>
           <button>
             <img src={user} alt="user" />
           </button>
