@@ -38,7 +38,6 @@ export const Cart = () => {
         setLoading(false);
       }
     };
-
     loadData();
   }, []);
 
