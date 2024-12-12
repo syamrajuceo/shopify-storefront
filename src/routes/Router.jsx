@@ -8,48 +8,68 @@ import { ProductDetailsPage } from "../pages/ProductDetailsPage";
 import { ProductListingPage } from "../pages/ProductListingPage";
 import { UserLayout } from "../layout/UserLayout";
 import ProtectedRoute from "../utils/ProtectedRoute";
+import Navlayout from "../layout/Navlayout";
+import SunGlasses from "../pages/sunglasses";
+import { ContactPage } from "../pages/ContactPage";
 
 export const router = createBrowserRouter([
   {
-    path: "/login",
-    element: (
-      <ProtectedRoute>
-        <LoginPage />
-      </ProtectedRoute>
-    ),
+    element: <Navlayout />,
+    children: [
+      {
+        path: "/login",
+        element: (
+          <ProtectedRoute>
+            <LoginPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/register",
+        element: (
+          <ProtectedRoute>
+            <RegisterPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/products",
+        element: <ProductListingPage />,
+      },
+      {
+        path: "/product:id",
+        element: <ProductDetailsPage />,
+      },
+      {
+        path: "/contact",
+        element: <ContactPage />,
+      },
+      {
+        path: "/sunglasses",
+        element:<SunGlasses/>
+      },{
+
+      },
+      // User routes
+      {
+        element: <UserLayout />,
+        children: [
+          {
+            path: "/cart",
+            element: <CartPage />,
+          },
+          {
+            path: "/profile",
+            element: <ProfilePage />,
+          },
+        ],
+      },]
   },
-  {
-    path: "/register",
-    element: (
-      <ProtectedRoute>
-        <RegisterPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/",
-    element: <HomePage />,
-  },
-  {
-    path: "/products",
-    element: <ProductListingPage />,
-  },
-  {
-    path: "/product:id",
-    element: <ProductDetailsPage />,
-  },
-  {
-    path: "/contact",
-    element: <ProductDetailsPage />,
-  },
-  {
-    path: "/cart",
-    element: <CartPage />,
-  },
-  {
-    path: "/profile",
-    element: <ProfilePage />,
-  },
+
   // User routes
   // {
   //   element: <UserLayout />,
