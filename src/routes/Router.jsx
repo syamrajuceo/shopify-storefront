@@ -30,10 +30,10 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      // {
-      //   path: "/",
-      //   element: <HomePage />,
-      // },
+      {
+        path: "/",
+        element: <HomePage />,
+      },
       {
         path: "/products",
         element: <ProductListingPage />,
@@ -60,9 +60,5 @@ export const router = createBrowserRouter([
           },
         ],
       },]
-  },
-  {
-    path: "/",
-    element: <HomePage />,
   },
 ]);
