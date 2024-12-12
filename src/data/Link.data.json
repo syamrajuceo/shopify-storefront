@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Home",
+        "url": "/home",
+        "active": true
+    },
+    {
+        "name": "Eyeglasses",
+        "url": "/eyeglasses",
+        "active": false
+    },
+    {
+        "name": "Contact Lenses",
+        "url": "/contactLenses",
+        "active": false
+    },
+    {
+        "name": "Sunglasses",
+        "url": "/sunglasses",
+        "active": false
+    },
+    {
+        "name": "Men",
+        "url": "/men",
+        "active": false
+    },
+    {
+        "name": "Women",
+        "url": "/women",
+        "active": false
+    }
+]

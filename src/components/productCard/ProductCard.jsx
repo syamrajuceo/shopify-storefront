@@ -108,7 +108,6 @@ export const ProductCard = ({ product = {} }) => {
       console.error("Failed to add product to cart:", error.message);
     }
   };
-
   return (
     <Card>
       <CardOff>
@@ -142,7 +141,7 @@ export const ProductCard = ({ product = {} }) => {
           <ExpressLogo src={expressLogo} alt="" />
           <CardDeliverySpan>
             <img src={deliveryLogo} alt="" />
-            <CardDeliveryText>Free Delivery</CardDeliveryText>
+            <CardDeliveryText>{DeliveryFee}</CardDeliveryText>
           </CardDeliverySpan>
         </CardDelivery>
         <div>
