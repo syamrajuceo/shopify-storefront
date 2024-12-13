@@ -5,6 +5,7 @@ import useShopifyStore from "../../store/useShopifyStore";
 export const ProductListing = () => {
   const products = useShopifyStore((state) => state.products);
 
+  console.log(products)
   return (
     <div className="product-listing">
       {products?.length > 0 ? (

@@ -18,21 +18,20 @@
 // import expressLogo from "../../assets/Frame 390 1.png";
 // import deliveryLogo from "../../assets/Group.png";
 
-// export const ProductCard = ({image}) => {
+
+// export const ProductCard = ({ image }) => {
 //   return (
 //     <Card>
 //       <CardOff>
 //         <CardOffText>40% off</CardOffText>
 //       </CardOff>
 //       <CardImageContainer>
-//         <CardImage
-//           src={image}
-//           alt="Product Image"
-//         />
+//         <CardImage src={image} alt="Product Image" />
 //       </CardImageContainer>
 //       <CardBody>
 //         <CardHeading>
-//           GUESS UV Protected ROUND Sun Glasses
+//           GUESS UV Protected ROUND Sun Glasses GUESS UV Protected ROUND Sun
+//           Glasses
 //         </CardHeading>
 //         <CardPrice>
 //           <CardPriceText>AED 578</CardPriceText>
@@ -70,6 +69,7 @@ import {
   CardOffText,
   CardPrice,
   CardPriceText,
+  ExpressLogo,
 } from "../../ui/CardStyle";
 import expressLogo from "../../assets/Frame 390 1.png";
 import deliveryLogo from "../../assets/Group.png";
@@ -114,6 +114,7 @@ export const ProductCard = ({ product = {} }) => {
     <Card>
       <CardOff>
         <CardOffText>{offerPercentage.toFixed(0)}% off</CardOffText>
+
       </CardOff>
       <CardImageContainer>
         <CardImage
@@ -139,7 +140,7 @@ export const ProductCard = ({ product = {} }) => {
           </CardOffPrice>
         </CardPrice>
         <CardDelivery>
-          <img src={expressLogo} alt="" />
+          <ExpressLogo src={expressLogo} alt="" />
           <CardDeliverySpan>
             <img src={deliveryLogo} alt="" />
             <CardDeliveryText>Free Delivery</CardDeliveryText>

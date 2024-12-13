@@ -3,6 +3,7 @@ import { RouterProvider } from "react-router-dom";
 import { fetchAllProducts  } from "./store/products";
 import { router } from "./routes/Router";
 import { fetchCart } from "./store/cart";
+import { fetchReviews } from "./store/reviews";
 
 const App = () => {
   useEffect(() => {
@@ -10,8 +11,9 @@ const App = () => {
       try {
         const products = await fetchAllProducts();
         const cart = await fetchCart();
-        // console.log("Products :" + JSON.stringify(products));
-        // console.log("cart : " + JSON.stringify(cart));
+
+        // const reviews = await fetchReviews();
+        // console.log("Reviews : ", reviews)
       } catch (error) {
         console.error("Error during initial fetch:", error.message);
       }

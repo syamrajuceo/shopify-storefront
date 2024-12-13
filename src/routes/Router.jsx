@@ -9,6 +9,8 @@ import { ProductListingPage } from "../pages/ProductListingPage";
 import { UserLayout } from "../layout/UserLayout";
 import ProtectedRoute from "../utils/ProtectedRoute";
 import Navlayout from "../layout/Navlayout";
+import SunGlasses from "../pages/sunglasses";
+import { ContactPage } from "../pages/ContactPage";
 
 export const router = createBrowserRouter([
   {
@@ -30,21 +32,27 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      // {
-      //   path: "/",
-      //   element: <HomePage />,
-      // },
+      {
+        path: "/",
+        element: <HomePage />,
+      },
       {
         path: "/products",
         element: <ProductListingPage />,
       },
       {
-        path: "/product:id",
+        path: "/product/:id",
         element: <ProductDetailsPage />,
       },
       {
         path: "/contact",
-        element: <ProductDetailsPage />,
+        element: <ContactPage />,
+      },
+      {
+        path: "/sunglasses",
+        element:<SunGlasses/>
+      },{
+
       },
       // User routes
       {
@@ -61,8 +69,19 @@ export const router = createBrowserRouter([
         ],
       },]
   },
-  {
-    path: "/",
-    element: <HomePage />,
-  },
+
+  // User routes
+  // {
+  //   element: <UserLayout />,
+  //   children: [
+  //     {
+  //       path: "/cart",
+  //       element: <CartPage />,
+  //     },
+  //     {
+  //       path: "/profile",
+  //       element: <ProfilePage />,
+  //     },
+  //   ],
+  // },
 ]);

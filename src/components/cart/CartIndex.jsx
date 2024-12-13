@@ -1,189 +1,6 @@
-// import React, { useEffect, useState } from "react";
-// import { shopifyClient } from "../../config/shopifyClient";
-// import { createPreAuthenticatedCheckoutUrl } from "../../store/cart";
-
-// export const CartIndex = () => {
-//   const [cartData, setCartData] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-//   const [discountCode, setDiscountCode] = useState(""); // To store the entered discount code
-//   const [giftCardCode, setGiftCardCode] = useState(""); // To store the entered gift card code
-
-//   useEffect(() => {
-//     const loadData = async () => {
-//       try {
-//         const cartId = localStorage.getItem("cartId");
-
-//         const query = `
-//           query fetchCartDetails($cartId: ID!) {
-//             cart(id: $cartId) {
-//               id
-//               checkoutUrl
-//               lines(first: 10) {
-//                 edges {
-//                   node {
-//                     id
-//                     quantity
-//                     merchandise {
-//                       ... on ProductVariant {
-//                         id
-//                         title
-//                         priceV2 {
-//                           amount
-//                           currencyCode
-//                         }
-//                         product {
-//                           title
-//                           productType
-//                           images(first: 1) {
-//                             edges {
-//                               node {
-//                                 src
-//                                 altText
-//                               }
-//                             }
-//                           }
-//                         }
-//                       }
-//                     }
-//                   }
-//                 }
-//               }
-//             }
-//           }
-//         `;
-
-//         const response = await shopifyClient.post("", {
-//           query,
-//           variables: { cartId },
-//         });
-
-//         const fetchedCart = response.data.data.cart;
-
-//         if (fetchedCart) {
-//           setCartData(fetchedCart);
-//         } else {
-//           setCartData(null);
-//         }
-//       } catch (error) {
-//         console.error("Error during initial fetch:", error.message);
-//         setError(error.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     loadData();
-//   }, []);
-
-//   // Apply discount code
-//   const handleApplyDiscountCode = async () => {
-//     try {
-//       const query = `
-//         mutation checkoutDiscountCodeApplyV2($checkoutId: ID!, $discountCode: String!) {
-//           checkoutDiscountCodeApplyV2(checkoutId: $checkoutId, discountCode: $discountCode) {
-//             checkout {
-//               id
-//               discountApplications(first: 10) {
-//                 edges {
-//                   node {
-//                     code
-//                     value {
-//                       ... on DiscountAmount {
-//                         amount
-//                       }
-//                     }
-//                   }
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       `;
-
-//       const response = await shopifyClient.post("", {
-//         query,
-//         variables: {
-//           checkoutId: cartData.id,
-//           discountCode,
-//         },
-//       });
-
-//       console.log("Discount applied", response.data);
-//     } catch (error) {
-//       console.error("Error applying discount code:", error.message);
-//     }
-//   };
-//   const handleCheckoutButtonClick = async () => {
-//     const accessToken = localStorage.getItem("accessToken");
-//     try {
-//       const checkoutUrl = await createPreAuthenticatedCheckoutUrl(accessToken);
-//       window.location.href = checkoutUrl;
-//     } catch (error) {
-//       console.error("Error during checkout:", error.message);
-//     }
-//   };
-
-//   if (loading) {
-//     return <div>Loading...</div>;
-//   }
-
-//   if (error) {
-//     return <div>Error: {error}</div>;
-//   }
-
-//   if (!cartData) {
-//     return <div>No cart data available</div>;
-//   }
-
-//   return (
-//     <div>
-//       <h1>Your Cart</h1>
-//       <div>
-//         {cartData.lines.edges.map(({ node }) => (
-//           <div key={node.id}>
-//             <p>Product: {node.merchandise.product.title}</p>
-//             <p>Variant: {node.merchandise.title}</p>
-//             <p>Quantity: {node.quantity}</p>
-//             <p>
-//               Price: {node.merchandise.priceV2.amount}{" "}
-//               {node.merchandise.priceV2.currencyCode}
-//             </p>
-//             <p>Category: {node.merchandise.product.productType}</p>
-//             <div>
-//               <img
-//                 src={node.merchandise.product.images.edges[0]?.node.src}
-//                 alt={
-//                   node.merchandise.product.images.edges[0]?.node.altText ||
-//                   "Product image"
-//                 }
-//                 style={{ width: "100px", height: "100px" }}
-//               />
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-
-//       {/* Discount and Gift Card Form */}
-//       <div>
-//         <input
-//           type="text"
-//           placeholder="Enter discount code"
-//           value={discountCode}
-//           onChange={(e) => setDiscountCode(e.target.value)}
-//         />
-//         <button onClick={handleApplyDiscountCode}>Apply Discount</button>
-//       </div>
-//       <div>
-//         <button onClick={handleCheckoutButtonClick}>Proceed to Checkout</button>
-//       </div>
-//     </div>
-//   );
-// };
-
 import React, { useEffect, useState } from "react";
 import { shopifyClient } from "../../config/shopifyClient";
-import { createPreAuthenticatedCheckoutUrl, fetchCart } from "../../store/cart";
+import { fetchCart } from "../../store/cart";
 
 export const CartIndex = () => {
   const [cartData, setCartData] = useState(null);
@@ -253,33 +70,8 @@ export const CartIndex = () => {
     }
   };
 
-  // // Function to generate pre-authenticated checkout URL
-  // const generatePreAuthCheckoutUrl = (cartId, email) => {
-  //   return `https://4bz4tg-qg.myshopify.com/cart/${cartId}?checkout[email]=${encodeURIComponent(email)}`;
-  //   // return `https://4bz4tg-qg.myshopify.com/cart/c/Z2NwLWFzaWEtc291dGhlYXN0MTowMUpFUlIzUko2RjVYMFk4NjE5QTcyRlRBRA?key=cBRz27x9X13P53n1KDn8Ed0DO0jLnJ15Ql9ZJ2ougHK2A3jKANfqbfUad_mEGvx4dpekA89Ay5ArHr1vCJVmc7ZSBsaHQ-itVDr764C2Q6Xr0Soc3tO3-1X3A8RGmHVyXyU-HFCe6QfkZ2Gv2THfjRKaQUe7YL_ho3DvdrGNTxmpxQfgLGHOdjNWAneGliSd`; //this is my unauthenticated checkout url
-  // };
-
-  // // Handle checkout button click
-  // const handleCheckoutButtonClick = async () => {
-  //   const cartId = localStorage.getItem("cartId");
-  //   // const cartId = cartData.id;
-  //   const email = userEmail || "salihkm000@gmail.com";
-
-  //   try {
-  //     const checkoutUrl = generatePreAuthCheckoutUrl(cartId, email);
-  //     window.location.href = checkoutUrl;
-  //   } catch (error) {
-  //     console.error("Error during checkout:", error.message);
-  //   }
-  // };
-
-  const handleCheckoutButtonClick = async () => {
-    const cartId = localStorage.getItem("cartId");
-    const email = userEmail || "salihkm000@gmail.com";
-  
+  const handleCheckoutButtonClick = async () => {  
     try {
-      // const checkoutUrl = await createPreAuthenticatedCheckoutUrl(cartId, email); // Use Storefront API
-      // const checkoutUrl = `https://4bz4tg-qg.myshopify.com/cart/c/Z2NwLWFzaWEtc291dGhlYXN0MTowMUpFUlIzUko2RjVYMFk4NjE5QTcyRlRBRA?key=cBRz27x9X13P53n1KDn8Ed0DO0jLnJ15Ql9ZJ2ougHK2A3jKANfqbfUad_mEGvx4dpekA89Ay5ArHr1vCJVmc7ZSBsaHQ-itVDr764C2Q6Xr0Soc3tO3-1X3A8RGmHVyXyU-HFCe6QfkZ2Gv2THfjRKaQUe7YL_ho3DvdrGNTxmpxQfgLGHOdjNWAneGliSd`;
       const checkoutUrl = localStorage.getItem("checkoutUrl");
       window.location.href = checkoutUrl;
     } catch (error) {
@@ -309,7 +101,7 @@ export const CartIndex = () => {
             <p>Variant: {node.merchandise.title}</p>
             <p>Quantity: {node.quantity}</p>
             <p>
-              Price: {node.merchandise.priceV2.amount}{" "}
+              Price: {node.merchandise.priceV2.amount}
               {node.merchandise.priceV2.currencyCode}
             </p>
             <p>Category: {node.merchandise.product.productType}</p>
