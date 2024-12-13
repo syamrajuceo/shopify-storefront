@@ -1,4 +1,3 @@
-
 // import React from "react";
 // import {
 //   Card,
@@ -18,6 +17,7 @@
 // } from "../../ui/CardStyle";
 // import expressLogo from "../../assets/Frame 390 1.png";
 // import deliveryLogo from "../../assets/Group.png";
+
 
 // export const ProductCard = ({ image }) => {
 //   return (
@@ -109,11 +109,12 @@ export const ProductCard = ({ product = {} }) => {
       console.error("Failed to add product to cart:", error.message);
     }
   };
+
   return (
     <Card>
       <CardOff>
-        {/* <CardOffText>{offerPercentage.toFixed(0)}% off</CardOffText> */}
-        <CardOffText>45% off</CardOffText>
+        <CardOffText>{offerPercentage.toFixed(0)}% off</CardOffText>
+
       </CardOff>
       <CardImageContainer>
         <CardImage
@@ -126,7 +127,7 @@ export const ProductCard = ({ product = {} }) => {
       </CardImageContainer>
       <CardBody>
         <CardHeading>
-          {title || "Adidas Blue Cat Eye AOR006 027"}
+          {title || "Product Title"}
         </CardHeading>
         <CardPrice>
           <CardPriceText>
@@ -142,9 +143,7 @@ export const ProductCard = ({ product = {} }) => {
           <ExpressLogo src={expressLogo} alt="" />
           <CardDeliverySpan>
             <img src={deliveryLogo} alt="" />
-
             <CardDeliveryText>Free Delivery</CardDeliveryText>
-
           </CardDeliverySpan>
         </CardDelivery>
         <div>
