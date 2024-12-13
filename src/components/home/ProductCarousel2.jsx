@@ -1,79 +1,81 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ScrollButton } from './Scrollbutton';
 import { ProductCard } from '../productCard/ProductCard';
 import { FaArrowRight } from "react-icons/fa";
+import useShopifyStore from "../../store/useShopifyStore";
 
 export function ProductCarousel2() {
   const scrollContainerRef = useRef(null);
-
-  const Products = [
-    {
-      id: 1,
-      image: "https://images.unsplash.com/photo-1577803645773-f96470509666?auto=format&fit=crop&q=80&w=500",
-      title: "GUESS UV Protected Round Sun Glasses",
-      originalPrice: 24.0,
-      discountedPrice: 13.0,
-      discount: 45,
-      expressDelivery: true,
-    },
-    {
-      id: 2,
-      image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&q=80&w=500",
-      title: "Ray-Ban Aviator Classic",
-      originalPrice: 179.0,
-      discountedPrice: 143.2,
-      discount: 20,
-      expressDelivery: true,
-    },
-    {
-      id: 3,
-      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=500",
-      title: "Oakley Holbrook",
-      originalPrice: 156.0,
-      expressDelivery: false,
-    },
-    {
-        id: 1,
-        image: "https://images.unsplash.com/photo-1577803645773-f96470509666?auto=format&fit=crop&q=80&w=500",
-        title: "GUESS UV Protected Round Sun Glasses",
-        originalPrice: 24.0,
-        discountedPrice: 13.0,
-        discount: 45,
-        expressDelivery: true,
-      },
-      {
-        id: 2,
-        image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&q=80&w=500",
-        title: "Ray-Ban Aviator Classic",
-        originalPrice: 179.0,
-        discountedPrice: 143.2,
-        discount: 20,
-        expressDelivery: true,
-      },
-      {
-        id: 3,
-        image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=500",
-        title: "Oakley Holbrook",
-        originalPrice: 156.0,
-        expressDelivery: false,
-      },
-      {
-        id: 2,
-        image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&q=80&w=500",
-        title: "Ray-Ban Aviator Classic",
-        originalPrice: 179.0,
-        discountedPrice: 143.2,
-        discount: 20,
-        expressDelivery: true,
-      },
-      {
-        id: 3,
-        image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=500",
-        title: "Oakley Holbrook",
-        originalPrice: 156.0,
-        expressDelivery: false,
-      },
-  ];
+  const Products = useShopifyStore((state) => state.products);
+// console.log(products);
+  // const Products = [
+  //   {
+  //     id: 1,
+  //     image: "https://images.unsplash.com/photo-1577803645773-f96470509666?auto=format&fit=crop&q=80&w=500",
+  //     title: "GUESS UV Protected Round Sun Glasses",
+  //     originalPrice: 24.0,
+  //     discountedPrice: 13.0,
+  //     discount: 45,
+  //     expressDelivery: true,
+  //   },
+  //   {
+  //     id: 2,
+  //     image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&q=80&w=500",
+  //     title: "Ray-Ban Aviator Classic",
+  //     originalPrice: 179.0,
+  //     discountedPrice: 143.2,
+  //     discount: 20,
+  //     expressDelivery: true,
+  //   },
+  //   {
+  //     id: 3,
+  //     image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=500",
+  //     title: "Oakley Holbrook",
+  //     originalPrice: 156.0,
+  //     expressDelivery: false,
+  //   },
+  //   {
+  //       id: 1,
+  //       image: "https://images.unsplash.com/photo-1577803645773-f96470509666?auto=format&fit=crop&q=80&w=500",
+  //       title: "GUESS UV Protected Round Sun Glasses",
+  //       originalPrice: 24.0,
+  //       discountedPrice: 13.0,
+  //       discount: 45,
+  //       expressDelivery: true,
+  //     },
+  //     {
+  //       id: 2,
+  //       image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&q=80&w=500",
+  //       title: "Ray-Ban Aviator Classic",
+  //       originalPrice: 179.0,
+  //       discountedPrice: 143.2,
+  //       discount: 20,
+  //       expressDelivery: true,
+  //     },
+  //     {
+  //       id: 3,
+  //       image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=500",
+  //       title: "Oakley Holbrook",
+  //       originalPrice: 156.0,
+  //       expressDelivery: false,
+  //     },
+  //     {
+  //       id: 2,
+  //       image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&q=80&w=500",
+  //       title: "Ray-Ban Aviator Classic",
+  //       originalPrice: 179.0,
+  //       discountedPrice: 143.2,
+  //       discount: 20,
+  //       expressDelivery: true,
+  //     },
+  //     {
+  //       id: 3,
+  //       image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=500",
+  //       title: "Oakley Holbrook",
+  //       originalPrice: 156.0,
+  //       expressDelivery: false,
+  //     },
+  // ];
 
   const scroll = (direction) => {
     const container = scrollContainerRef.current;
@@ -114,7 +116,7 @@ console.log(targetScroll)
           <div key={product.id} className="snap-start">
             <ProductCard
               className="min-w-[300px] transform transition-all duration-300 hover:scale-105"
-             image={product.image}
+              product={product}
             />
           </div>
         ))}
