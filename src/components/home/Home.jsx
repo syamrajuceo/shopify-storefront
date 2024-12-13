@@ -20,8 +20,8 @@ export const Home = () => {
       <ShapeSelector/>
       <ProductCategories/>
       <Banner image={BannerImage1} mobile={bannerMobile} />
-      <ProductCarousel/>
-      <ProductCarousel/>
+      {/* <ProductCarousel/> */}
+      {/* <ProductCarousel/> */}
       <div className='flex flex-col gap-5'>
       <Banner image={BannerImage2} mobile={bannerMobile2} />
       <Banner image={BannerImage3} mobile={bannerMobile3} />

@@ -1,20 +1,21 @@
-
-import React from 'react';
-import sunglass from '../../assets/sunglass.jpg'
-import eyeglass from '../../assets/eyeglass.jpg'
-import contactlens from '../../assets/contactlens.jpg'
+import React from "react";
+import sunglass from "../../assets/sunglass.jpg";
+import eyeglass from "../../assets/eyeglass.jpg";
+import contactlens from "../../assets/contactlens.jpg";
+import { IoMdArrowForward } from "react-icons/io";
+import eyeglass2 from "../../assets/Category_Image.webp"
 const categories = [
   {
-    title: 'Sunglasses',
-    image:sunglass,
+    title: "Sunglasses",
+    image: sunglass,
   },
   {
-    title: 'Eyeglasses',
-    image:eyeglass,
+    title: "Eyeglasses",
+    image: eyeglass,
   },
   {
-    title: 'Contact lenses',
-    image:contactlens,
+    title: "Contact lenses",
+    image: contactlens,
   },
 ];
 
@@ -30,46 +31,89 @@ const ProductCard = ({ title, image }) => {
         />
         {/* <div className="absolute inset-0 bg-black/40 transition-opacity duration-300 group-hover:bg-black/50" />   */}
       </div>
-      
+
       <div className="absolute bottom-0 left-0 right-0 p-6 bg-custom-black text-center">
         <h3 className="text-white text-2xl font-semibold tracking-wide">
           {title}
         </h3>
       </div>
-
     </div>
   );
 };
 
 function ProductCategories() {
   return (
-    //desktop
-    <div className="h-[400px] hidden md:flex">
-      <div className=" mx-auto px-8">
-        <div className="text-center mb-12">
-          <h2 className=" font-bold text-gray-900 md:text-2xl mb-4 mt-5">
-            Product Categories
-          </h2>
-        </div>
-        
-        <div className="grid grid-cols-3 gap-5 w-full">
-          {/* Render product cards dynamically */}
-          {categories.map((category, index) => (
-            <ProductCard
-              key={index}
-              title={category.title}
-              image={category.image}
-            />
-          ))}
+    <>
+      {/* //desktop */}
+      <div className="h-[400px] hidden md:flex">
+        <div className=" mx-auto px-8">
+          <div className="text-center mb-12">
+            <h2 className=" font-bold text-gray-900 md:text-2xl mb-4 mt-5">
+              Product Categories
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-3 gap-5 w-full">
+            {/* Render product cards dynamically */}
+            {categories.map((category, index) => (
+              <ProductCard
+                key={index}
+                title={category.title}
+                image={category.image}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
-//mobile 
+      {/* //mobile  */}
+      <div className="w-full p-4 flex flex-col gap-3 md:hidden ">
+        <div className="flex">
+          <div className="flex items-center justify-center gap-2 h-[150px] bg-custom-gray w-[40%] rounded-tl-xl rounded-bl-xl ">
+            <h1>sunglass </h1>
+            <IoMdArrowForward />
+          </div>
 
+          <div className="flex items-center justify-center gap-2 h-[150px]  w-[60%] ">
+            <img
+              src={sunglass}
+              alt="sunglass"
+              className="w-full h-full  object-cover rounded-tr-xl rounded-br-xl"
+            />
+          </div>
+        </div>
 
-    
+        <div className="flex">
+          <div className="flex items-center justify-center gap-2 h-[150px]  w-[60%] ">
+            <img
+              src={eyeglass2}
+              alt="sunglass"
+              className="w-full h-full  object-cover rounded-tl-xl rounded-bl-xl"
+            />
+          </div>
+          <div className="flex items-center justify-center gap-2 h-[150px] bg-custom-gray w-[40%] rounded-tr-xl rounded-br-xl ">
+            <h1>Eyeglass</h1>
+            <IoMdArrowForward />
+          </div>
+        </div>
+
+        <div className="flex">
+          <div className="flex items-center justify-center gap-2 h-[150px] bg-custom-gray w-[40%] rounded-tl-xl rounded-bl-xl ">
+            <h1>sunglass </h1>
+            <IoMdArrowForward />
+          </div>
+
+          <div className="flex items-center justify-center gap-2 h-[150px]  w-[60%] ">
+            <img
+              src={contactlens}
+              alt="contactlens"
+              className="w-full h-full  object-cover rounded-tr-xl rounded-br-xl"
+            />
+          </div>
+        </div>
+
+      </div>
+    </>
   );
 }
 
 export default ProductCategories;
-

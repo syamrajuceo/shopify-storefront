@@ -1,14 +1,18 @@
 import { useState } from 'react';
-
+import DG from '../../assets/D&G.png'
+import Burberry from '../../assets/Burberry.png'
+import TiffanyCo from '../../assets/Tiffany&co.png'
+import ArmaniExchange from '../../assets/ArmaniExange.png'
+import Vouge  from '../../assets/Vouge.png'
 function Brand() {
   const brands = [
     {
         name: 'D&G',
-        image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=684&h=384',
+        image: DG,
       },
       {
-        name: 'D&G',
-        image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=684&h=384',
+        name:'BURBERRY',
+        image:Burberry
       },
       {
         name: 'D&G',
@@ -16,19 +20,19 @@ function Brand() {
       },
     {
       name: 'BURBERRY',
-      image: 'https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?auto=format&fit=crop&q=80&w=684&h=384',
+      image:TiffanyCo ,
     },
     {
       name: 'TIFFANY & CO.',
-      image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&q=80&w=684&h=384',
+      image:TiffanyCo,
     },
     {
       name: 'ARMANI EXCHANGE',
-      image: 'https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?auto=format&fit=crop&q=80&w=684&h=384',
+      image: ArmaniExchange,
     },
     {
       name: 'VOGUE',
-      image: 'https://images.unsplash.com/photo-1596510914965-9ae08acae566?auto=format&fit=crop&q=80&w=684&h=384',
+      image:Vouge,
     },
     {
       name: 'VERSACE',
@@ -53,7 +57,7 @@ function Brand() {
   ];
 
   return (
-    <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-8">
+    <div className="  py-12 px-4 sm:px-6 lg:px-8">
       <div className=" mx-auto">
         <h1 className="text-1xl font-bold text-center text-gray-900 mb-12">
           Pick your Brand
