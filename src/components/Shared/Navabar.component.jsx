@@ -57,12 +57,12 @@ function NavabarComponent({ cartnumber = 0, getSearchData }) {
           <button>
             <img src={user} alt="user" />
           </button>
-          <button className="relative">
+          <Link className="relative" to={"/cart"}>
             <img src={cart} alt="cart" />
             <span className="absolute top-[-13px] bg-red-500 rounded-[100%] p-1 text-xs text-slate-50">
               {cartnumber}
             </span>
-          </button>
+          </Link>
         </div>
       </div>
       <div className="flex sm:hidden  bg-slate-200 items-center h-[40px] w-[90%] mx-auto">

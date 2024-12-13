@@ -2,7 +2,7 @@ import { useState } from "react";
 import FilterBoxComponent from "./FilterBox.component";
 import { IoIosArrowForward } from "react-icons/io";
 import { ProductCard } from "../productCard/ProductCard";
-import ProductData from "../../data/Product.data.json";
+// import ProductData from "../../data/Product.data.json";
 import { FaFilter, FaSort } from "react-icons/fa6";
 import { BiSortAlt2 } from "react-icons/bi";
 import { GoPlus } from "react-icons/go";
@@ -10,11 +10,11 @@ import { AiOutlineClose } from "react-icons/ai";
 import faqData from "../../data/FAQ.data.json";
 import SortComponent from "./Sort.component";
 import FilterComponent from "./Filter.component";
-import useShopifyStore from "../../store/useShopifyStore";
+// import useShopifyStore from "../../store/useShopifyStore";
 
-function CollectionComponent() {
+function CollectionComponent({products=[]}) {
   const [priceRange, setPriceRange] = useState({ min: 0, max: 30 });
-  const products = useShopifyStore((state) => state.products);
+  // const products = useShopifyStore((state) => state.products);
 
   const genderOptions = [
     "Men",
@@ -142,7 +142,7 @@ function CollectionComponent() {
         </div>
 
         {/* Product grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4 justify-items-center">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4 justify-items-center">
           {/* {ProductData.map((prodobj, index) => (
             <ProductCard
               key={index}
