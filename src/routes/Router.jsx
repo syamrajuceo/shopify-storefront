@@ -69,19 +69,4 @@ export const router = createBrowserRouter([
         ],
       },]
   },
-
-  // User routes
-  // {
-  //   element: <UserLayout />,
-  //   children: [
-  //     {
-  //       path: "/cart",
-  //       element: <CartPage />,
-  //     },
-  //     {
-  //       path: "/profile",
-  //       element: <ProfilePage />,
-  //     },
-  //   ],
-  // },
 ]);

@@ -4,11 +4,16 @@ import Burberry from '../../assets/Burberry.png'
 import TiffanyCo from '../../assets/Tiffany&co.png'
 import ArmaniExchange from '../../assets/ArmaniExange.png'
 import Vouge  from '../../assets/Vouge.png'
+import DgLoGO from '../../assets/dglogo2.png'
+import ArmaniXlogo from '../../assets/ArmaniXlogo.png'
+import Vougelogo from '../../assets/vougeLogo.png'
+import oakelylogo from '../../assets/oakleylogo.png'
 function Brand() {
   const brands = [
     {
         name: 'D&G',
         image: DG,
+        logo:DgLoGO 
       },
       {
         name:'BURBERRY',
@@ -29,10 +34,12 @@ function Brand() {
     {
       name: 'ARMANI EXCHANGE',
       image: ArmaniExchange,
+      logo:ArmaniXlogo
     },
     {
       name: 'VOGUE',
       image:Vouge,
+      logo:Vougelogo
     },
     {
       name: 'VERSACE',
@@ -45,6 +52,7 @@ function Brand() {
     {
       name: 'OAKLEY',
       image: 'https://images.unsplash.com/photo-1625591339971-4c9a87a66871?auto=format&fit=crop&q=80&w=684&h=384',
+      logo:oakelylogo
     },
     {
       name: 'AMARA',
@@ -76,10 +84,12 @@ function Brand() {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-40 transition-opacity duration-300 group-hover:bg-opacity-30" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <h2 className="text-white text-2xl font-bold tracking-wider">
-                    {brand.name}
-                  </h2>
+                <div className="absolute inset-0 flex items-center justify-center  ">
+                  <img
+                    src={brand.logo}
+                    alt="logo"
+                    className="object-cover w-auto h-auto"
+                    />
                 </div>
               </div>
             </div>
