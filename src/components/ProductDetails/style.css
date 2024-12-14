@@ -1,0 +1,13 @@
+.carousel-container {
+    display: flex;
+    justify-content: center; /* Center the items horizontally */
+    align-items: center; /* Center the items vertically */
+  }
+  
+  .carousel-item-padding-20-px {
+    padding: 0 20px; /* Adjusts space between items */
+    display: flex;
+    justify-content: center; /* Center each product card inside its container */
+    align-items: center; /* Vertically center each product card */
+  }
+  

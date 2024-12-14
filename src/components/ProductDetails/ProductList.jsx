@@ -4,7 +4,8 @@ import "react-multi-carousel/lib/styles.css";
 import expressLogo from "../../assets/images/Frame 390 1.png";
 import truckImg from "../../assets/images/hugeicons_truck-delivery.png";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
-
+import { ProductCard } from "../productCard/ProductCard";
+import "./style.css"
 const products = [
   {
     id: 1,
@@ -119,9 +120,17 @@ export default function ProductList({ title }) {
           infinite={true}
           autoPlay={true}
           containerClass="carousel-container"
-          itemClass="carousel-item-padding-40-px"
+          itemClass="carousel-item-padding-20-px"
         >
-          {products.map((product) => (
+            {products?.length > 0 ? (
+                      products.map(
+                        (product) =>
+                          product && <ProductCard key={product.id} product={product} />
+                      )
+                    ) : (
+                      <p>No products available</p>
+                    )}
+          {/* {products.map((product) => (
             <div
               key={product.id}
               className="group relative mx-2 w-[300px] h-auto mt-[20px] max-h-[500px]"
@@ -156,7 +165,7 @@ export default function ProductList({ title }) {
                 <p className="">Add to cart</p>
               </div>
             </div>
-          ))}
+          ))} */}
         </Carousel>
       </div>
     </div>
