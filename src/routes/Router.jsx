@@ -9,7 +9,7 @@ import { ProductListingPage } from "../pages/ProductListingPage";
 import { UserLayout } from "../layout/UserLayout";
 import ProtectedRoute from "../utils/ProtectedRoute";
 import Navlayout from "../layout/Navlayout";
-import SunGlasses from "../pages/Sunglasses";
+import SunGlasses from "../pages/SunGlasses";
 import { ContactPage } from "../pages/ContactPage";
 
 export const router = createBrowserRouter([
