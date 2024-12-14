@@ -4,7 +4,9 @@ import { ProductCard } from "../productCard/ProductCard";
 import evervaImg from "../../assets/everva.webp";
 import { ArrowRight } from "lucide-react";
 import { cn } from "../../lib/utils";
+import useShopifyStore from "../../store/useShopifyStore";
 export function ProductCarousel({ Promoimage }) {
+  const Products =useShopifyStore((state) => state.products);
   const scrollContainerRef = useRef(null);
 
   const PromoCard = ({ title, subtitle, buttonText, imageUrl, className }) => {
@@ -28,10 +30,10 @@ export function ProductCarousel({ Promoimage }) {
         {/* Content */}
         <div className="relative p-8 flex flex-col items-start h-full">
           <div className="mt-auto">
-            <h2 className="text-2xl font-bold text-white tracking-tight">
+            <h2 className="md:text-2xl text-white tracking-tig">
               {title}
             </h2>
-            <p className="text-5xl font-extrabold text-white mb-3">
+            <p className="text-3xl md:text-5xl font-extrabold text-white mb-3">
               {subtitle}
             </p>
             \
@@ -46,36 +48,60 @@ export function ProductCarousel({ Promoimage }) {
     );
   };
 
-  const Products = [
-    {
-      id: 1,
-      image:
-        "https://images.unsplash.com/photo-1577803645773-f96470509666?auto=format&fit=crop&q=80&w=500",
-      title: "GUESS UV Protected Round Sun Glasses",
-      originalPrice: 24.0,
-      discountedPrice: 13.0,
-      discount: 45,
-      expressDelivery: true,
-    },
-    {
-      id: 2,
-      image:
-        "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&q=80&w=500",
-      title: "Ray-Ban Aviator Classic",
-      originalPrice: 179.0,
-      discountedPrice: 143.2,
-      discount: 20,
-      expressDelivery: true,
-    },
-    {
-      id: 3,
-      image:
-        "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=500",
-      title: "Oakley Holbrook",
-      originalPrice: 156.0,
-      expressDelivery: false,
-    },
-  ];
+  // const Products = [
+  //   {
+  //     id: 1,
+  //     image:
+  //       "https://images.unsplash.com/photo-1577803645773-f96470509666?auto=format&fit=crop&q=80&w=500",
+  //     title: "GUESS UV Protected Round Sun Glasses",
+  //     originalPrice: 24.0,
+  //     discountedPrice: 13.0,
+  //     discount: 45,
+  //     expressDelivery: true,
+  //   },
+  //   {
+  //     id: 2,
+  //     image:
+  //       "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&q=80&w=500",
+  //     title: "Ray-Ban Aviator Classic",
+  //     originalPrice: 179.0,
+  //     discountedPrice: 143.2,
+  //     discount: 20,
+  //     expressDelivery: true,
+  //   },
+  //   {
+  //     id: 3,
+  //     image:
+  //       "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=500",
+  //     title: "Oakley Holbrook",
+  //     originalPrice: 156.0,
+  //     expressDelivery: false,
+  //   },
+  //   {
+  //     id: 3,
+  //     image:
+  //       "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=500",
+  //     title: "Oakley Holbrook",
+  //     originalPrice: 156.0,
+  //     expressDelivery: false,
+  //   },
+  //   {
+  //     id: 3,
+  //     image:
+  //       "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=500",
+  //     title: "Oakley Holbrook",
+  //     originalPrice: 156.0,
+  //     expressDelivery: false,
+  //   },
+  //   {
+  //     id: 3,
+  //     image:
+  //       "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=500",
+  //     title: "Oakley Holbrook",
+  //     originalPrice: 156.0,
+  //     expressDelivery: false,
+  //   },
+  // ];
 
   const scroll = (direction) => {
     const container = scrollContainerRef.current;
@@ -93,9 +119,9 @@ export function ProductCarousel({ Promoimage }) {
   };
 
   return (
-    <div className="relative p-5 mx-4 mt-5">
+    <div className="relative p-4 md:p-8 mx-4 mt-5">
       {/* Carousel Container */}
-      <div className="relative">
+      <div className="relative md:mx-10">
         <div
           ref={scrollContainerRef}
           className="flex gap-12 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide "
@@ -131,9 +157,9 @@ export function ProductCarousel({ Promoimage }) {
          
 
           {/* Product Cards */}
-          {Products.map((product) => (
+          {Products.slice(0, 4).map((product) => (
             <div key={product.id} className="snap-start">
-              <ProductCard image={product.image} />
+              <ProductCard product={product} />
             </div>
           ))}
         </div>
