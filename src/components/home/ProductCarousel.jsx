@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { ScrollButton } from "./Scrollbutton";
+import { ScrollButton } from "./ScrollButton";
 import { ProductCard } from "../productCard/ProductCard";
 import evervaImg from "../../assets/everva.webp";
 import { ArrowRight } from "lucide-react";
