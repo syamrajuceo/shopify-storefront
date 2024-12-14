@@ -1,0 +1,99 @@
+import { useState, useEffect } from 'react';
+import RatingContainer from './RatingContainer';
+
+function ReviewForm({ SetIsShow }) {
+    const [review, setReview] = useState({
+        reviewer_name: '',
+        reviewer_email: '',
+        rating: 3.5,
+        review_body: '',
+        product_handle: '',
+        title: '',
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        // Disable scrolling 
+        document.body.style.overflow = 'hidden';
+
+        // Clean up when the component unmounts
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, []);
+
+    const handleReviewChange = (event) => {
+        setReview({ ...review, [event.target.name]: event.target.value });
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setIsSubmitting(true);
+        console.log('Review Submitted:', {
+            title: review.title,
+            rating: review.rating,
+            review_body: review.review_body,
+        });
+
+
+
+        setTimeout(() => {
+            alert("Review submitted successfully!");
+            SetIsShow(false);
+        }, 1000);
+    };
+
+
+    return (
+        <div className="z-40 absolute top-0 left-0 right-0 bottom-0 bg-slate-500 bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-8 rounded-lg w-4/5 md:w-1/3 shadow-lg">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-6">Leave a Review</h2>
+
+                <RatingContainer
+                    rating={review.rating}
+                    setRating={(newRating) => setReview({ ...review, rating: newRating })}
+                />
+
+                <input
+                    name="title"
+                    type="text"
+                    className="w-full p-3 border-2 border-gray-300 rounded-md mb-4 focus:outline-none focus:border-blue-500"
+                    placeholder="Review Title"
+                    value={review.title}
+                    onChange={handleReviewChange}
+                />
+
+                <textarea
+                    name="review_body"
+                    className="w-full p-3 border-2 border-gray-300 rounded-md mb-6 focus:outline-none focus:border-blue-500"
+                    placeholder="Write your review..."
+                    rows="4"
+                    value={review.review_body}
+                    onChange={handleReviewChange}
+                />
+
+                <div className="grid grid-cols-2 gap-4 justify-between items-center">
+                    <button
+                        type="button"
+                        onClick={() => SetIsShow(false)}
+                        className="px-6 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500 transition duration-200 w-full"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        onClick={handleSubmit}
+                        className={`px-6 py-2 bg-blue-500 text-white rounded-md ${isSubmitting ? 'opacity-60 cursor-not-allowed' : 'hover:bg-blue-600 transition duration-200'} w-full`}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? 'Submitting...' : 'Submit Review'}
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    );
+}
+
+export default ReviewForm;

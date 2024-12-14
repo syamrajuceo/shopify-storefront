@@ -19,136 +19,9 @@ const getCartFromLocalStorage = () => {
     : null;
 };
 
-// export const createCart = async () => {
-//   const query = `
-//     mutation cartCreate {
-//       cartCreate(input: {}) {
-//         cart {
-//           id
-//           checkoutUrl
-//         }
-//       }
-//     }
-//   `;
-
-//   try {
-//     const response = await shopifyClient.post("", { query });
-
-//     if (response.data.errors) {
-//       throw new Error(`GraphQL Error: ${response.data.errors[0].message}`);
-//     }
-
-//     const { cart } = response.data.data.cartCreate;
-//     if (!cart) {
-//       throw new Error("Failed to create a cart.");
-//     }
-
-//     // If accessToken is provided, update the cart buyer identity
-//     if (accessToken) {
-//       const updatedCart = await updateCartBuyerIdentity(cart.id, accessToken);
-//       if (updatedCart) {
-//         cart.checkoutUrl = updatedCart.checkoutUrl;
-//       }
-//     }
-
-//     // Store cart in localStorage and Zustand
-//     storeCartInLocalStorage(cart.id, cart.checkoutUrl);
-//     useShopifyStore.getState().setCart(cart.id, cart.checkoutUrl);
-
-//     return cart;
-//   } catch (error) {
-//     console.error("Cart Creation Error:", error.message || error);
-//     throw error;
-//   }
-// };
-
-// export const addToCart = async (variantId, quantity) => {
-//   let { cartId } = useShopifyStore.getState();
-
-//   if (!cartId) {
-//     // Try to fetch from localStorage if cart ID is not in the state
-//     cartId = localStorage.getItem("cartId");
-
-//     // If no cart ID, create a new one
-//     if (!cartId) {
-//       console.warn("No cart ID available, creating a new cart...");
-//       try {
-//         const cart = await createCart();
-//         cartId = cart?.id;
-//         if (!cartId) {
-//           throw new Error("Cart creation failed.");
-//         }
-//       } catch (error) {
-//         console.error("Error creating cart:", error.message);
-//         throw error;
-//       }
-//     }
-//   }
-
-//   const query = `
-//     mutation addLineItem($cartId: ID!, $lines: [CartLineInput!]!) {
-//       cartLinesAdd(cartId: $cartId, lines: $lines) {
-//         cart {
-//           id
-//           checkoutUrl
-//           lines(first: 10) {
-//             edges {
-//               node {
-//                 id
-//                 quantity
-//                 merchandise {
-//                   ... on ProductVariant {
-//                     id
-//                     title
-//                   }
-//                 }
-//               }
-//             }
-//           }
-//         }
-//         userErrors {
-//           field
-//           message
-//         }
-//       }
-//     }
-//   `;
-
-//   const variables = {
-//     cartId,
-//     lines: [{ quantity, merchandiseId: variantId }],
-//   };
-
-//   try {
-//     const response = await shopifyClient.post("", { query, variables });
-
-//     const errors = response?.data?.data?.cartLinesAdd?.userErrors || [];
-//     if (errors.length > 0) {
-//       console.error("API User Errors:", errors);
-//       throw new Error(errors.map(err => err.message).join(", "));
-//     }
-
-//     const cart = response?.data?.data?.cartLinesAdd?.cart;
-//     if (!cart) {
-//       console.error("Failed to update cart: No cart returned.");
-//       throw new Error("Failed to update cart.");
-//     }
-
-//     // Update Zustand and localStorage with new cart data
-//     useShopifyStore.getState().setCart(cart.id, cart.checkoutUrl);
-//     localStorage.setItem("cartId", cart.id);
-//     localStorage.setItem("checkoutUrl", cart.checkoutUrl);
-
-//     return cart;
-//   } catch (error) {
-//     console.error("Error adding product to cart:", error.message);
-//     throw error;
-//   }
-// };
-
 export const createCart = async (accessToken = null) => {
   // Retrieve user details from localStorage
-  const user = JSON.parse(localStorage.getItem("user")); // Assuming userDetails is saved in localStorage as a JSON string
+  const user = JSON.parse(localStorage.getItem("user")); 
 
   // Set default buyer identity if no user details are available
   const buyerIdentity = user
@@ -176,7 +49,7 @@ export const createCart = async (accessToken = null) => {
       }
     : {};
 
-  console.log("Buyer identity updated: ", JSON.stringify(buyerIdentity));
+  // console.log("Buyer identity updated: ", JSON.stringify(buyerIdentity));
 
   const query = `
     mutation cartCreate($input: CartInput!) {
@@ -396,69 +269,6 @@ export const updateCart = async (lineItemId, quantity) => {
   }
 };
 
-// Fetch the cart from Shopify
-// export const fetchCart = async () => {
-//   const { cartId } = getCartFromLocalStorage() || {};
-//   const { accessToken } = getCartFromLocalStorage() || {};
-//   if (!cartId) {
-//     console.log("No cart ID available.");
-//     return null;
-//   }
-
-//   const query = `
-//     query fetchCart($cartId: ID!) {
-//       cart(id: $cartId) {
-//         id
-//         lines(first: 10) {
-//           edges {
-//             node {
-//               id
-//               merchandise {
-//                 ... on ProductVariant {
-//                   id
-//                   title
-//                 }
-//               }
-//               quantity
-//             }
-//           }
-//         }
-//         checkoutUrl
-//       }
-//     }
-//   `;
-
-//   try {
-//     const response = await shopifyClient.post("", {
-//       query,
-//       variables: { cartId },
-//     });
-
-//     const cart = response?.data?.data?.cart;
-
-//     if (!cart) {
-//       throw new Error("Cart not found.");
-//     }
-
-//     // Update cart buyer identity if accessToken is provided
-//     if (accessToken) {
-//       const updatedCart = await updateCartBuyerIdentity(cart.id, accessToken);
-//       if (updatedCart) {
-//         cart.checkoutUrl = updatedCart.checkoutUrl;
-//       }
-//     }
-
-//     // Store cart in localStorage and update Zustand
-//     storeCartInLocalStorage(cart.id, cart.checkoutUrl);
-//     useShopifyStore.getState().setCart(cart.id, cart.checkoutUrl);
-
-//     return cart;
-//   } catch (error) {
-//     console.error("Error fetching cart:", error.message);
-//     throw error;
-//   }
-// };
-
 export const fetchCart = async () => {
   const accessToken = localStorage.getItem("accessToken");
   const { cartId } = getCartFromLocalStorage() || {};
@@ -570,70 +380,6 @@ export const fetchCart = async () => {
   }
 };
 
-// export const createPreAuthenticatedCheckoutUrl = async (accessToken) => {
-//   const cartId = localStorage.getItem("cartId");
-//   if (!cartId) {
-//     throw new Error("No cart ID found.");
-//   }
-
-//   // Update cart buyer identity if accessToken is provided
-//   if (accessToken) {
-//     try {
-//       const res = await updateCartBuyerIdentity(cartId, accessToken);
-//       console.log("Updated cart buyer : " + JSON.stringify(res));
-//     } catch (error) {
-//       console.error("Error updating cart buyer identity:", error.message);
-//       throw error;
-//     }
-//   }
-
-//   const query = `
-//     mutation checkoutCreate($input: CheckoutCreateInput!) {
-//       checkoutCreate(input: $input) {
-//         checkout {
-//           id
-//           webUrl
-//         }
-//         userErrors {
-//           field
-//           message
-//         }
-//       }
-//     }
-//   `;
-
-//   const variables = {
-//     input: {
-//       cartId,
-//     },
-//   };
-
-//   try {
-//     const response = await shopifyClient.post("", { query, variables });
-
-//     console.log("Response: " + JSON.stringify(response));
-
-//     const errors = response?.data?.data?.checkoutCreate?.userErrors || [];
-//     if (errors.length > 0) {
-//       console.error("API User Errors:", errors);
-//       throw new Error(errors.map((err) => err.message).join(", "));
-//     }
-
-//     const checkout = response?.data?.data?.checkoutCreate?.checkout;
-
-//     if (!checkout) {
-//       throw new Error("Failed to create checkout.");
-//     }
-
-//     return checkout.webUrl;
-//   } catch (error) {
-//     console.log(
-//       "Error creating pre-authenticated checkout URL:",
-//       error.message
-//     );
-//     throw error;
-//   }
-// };
 
 export const createPreAuthenticatedCheckoutUrl = async () => {
   const cartId = localStorage.getItem("cartId");

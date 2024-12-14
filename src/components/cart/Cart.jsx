@@ -1,206 +1,378 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ProductCard } from "../productCard/ProductCard";
-import productImg1 from "../../assets/Rectangle 25.png"
-import productImg2 from "../../assets/Rectangle 26 (1).png"
-import productImg3 from "../../assets/Rectangle 26 (2).png"
-import productImg5 from "../../assets/Rectangle 26.png"
+import productImg1 from "../../assets/Rectangle 25.png";
+import productImg2 from "../../assets/Rectangle 26 (1).png";
+import productImg3 from "../../assets/Rectangle 26 (2).png";
+import productImg4 from "../../assets/Rectangle 26.png";
+import couponIcon from "../../assets/Vector.png";
+import tamaraIcon from "../../assets/image 1.png";
+import tabbyIcon from "../../assets/image 2.png";
+import cartIcon from "../../assets/Vector (1).png";
+import { shopifyClient } from "../../config/shopifyClient";
+import { fetchCart } from "../../store/cart";
+import { Link } from "react-router-dom";
+import { CartCard } from "./CartCard";
+// import SimilarProductsCarousel from "../carousel/Carousel";
 
 export const Cart = () => {
-  return (
-    <>
-      {/* <div className="container mx-auto mt-10">
-        <div className="sm:flex shadow-md my-10">
-          <div className="  w-full  sm:w-3/4 bg-white px-10 py-10">
-            <div className="flex justify-between border-b pb-8">
-              <h1 className="font-semibold text-2xl">Shopping Cart</h1>
-              <h2 className="font-semibold text-2xl">3 Items</h2>
+  const [cartData, setCartData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [discountCode, setDiscountCode] = useState("");
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const fetchedCart = await fetchCart();
+        console.log("fetchedCart : ", fetchedCart);
+
+        if (fetchedCart) {
+          setCartData(fetchedCart);
+        } else {
+          setCartData(null);
+        }
+      } catch (error) {
+        console.error("Error during initial fetch:", error.message);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  // Apply discount code
+  const handleApplyDiscountCode = async () => {
+    try {
+      const query = `
+        mutation checkoutDiscountCodeApplyV2($checkoutId: ID!, $discountCode: String!) {
+          checkoutDiscountCodeApplyV2(checkoutId: $checkoutId, discountCode: $discountCode) {
+            checkout {
+              id
+              discountApplications(first: 10) {
+                edges {
+                  node {
+                    code
+                    value {
+                      ... on DiscountAmount {
+                        amount
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      `;
+
+      const response = await shopifyClient.post("", {
+        query,
+        variables: {
+          checkoutId: cartData.id,
+          discountCode,
+        },
+      });
+
+      console.log("Discount applied", response.data);
+    } catch (error) {
+      console.error("Error applying discount code:", error.message);
+    }
+  };
+  const handleCheckoutButtonClick = async () => {
+    try {
+      const checkoutUrl = localStorage.getItem("checkoutUrl");
+      window.location.href = checkoutUrl;
+    } catch (error) {
+      console.error("Error during checkout:", error.message);
+    }
+  };
+
+  const handleCartUpdate = (updatedCart) => {
+    setCart(updatedCart);
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!cartData) {
+    return (
+      <div className="h-[30rem] flex justify-center items-center">
+        <div className="flex flex-col gap-2 justify-center items-center ">
+          <div className="px-4 py-5 rounded-[50%] bg-[#F6F6F6] flex justify-center items-center">
+            <div className="w-[110px] h-[100px] px-4 py-5 flex justify-center items-center rounded-[50%] bg-[#EFF0F3]">
+              <img src={cartIcon} alt="" className="h-full w-full" />
             </div>
-            <div className="md:flex items-strech py-8 md:py-10 lg:py-8 border-t border-gray-50">
-              <div className="md:w-4/12 2xl:w-1/4 w-full">
-                <img
-                  src="https://i.ibb.co/6gzWwSq/Rectangle-20-1.png"
-                  alt="Black Leather Purse"
-                  className="h-full object-center object-cover md:block hidden"
-                />
-                <img
-                  src="https://i.ibb.co/TTnzMTf/Rectangle-21.png"
-                  alt="Black Leather Purse"
-                  className="md:hidden w-full h-full object-center object-cover"
-                />
-              </div>
-              <div className="md:pl-3 md:w-8/12 2xl:w-3/4 flex flex-col justify-center">
-                <p className="text-xs leading-3 text-gray-800 md:pt-0 pt-4">
-                  RF293
-                </p>
-                <div className="flex items-center justify-between w-full">
-                  <p className="text-base font-black leading-none text-gray-800">
-                    Luxe card holder
-                  </p>
-                  <select
-                    aria-label="Select quantity"
-                    className="py-2 px-1 border border-gray-200 mr-6 focus:outline-none"
-                  >
-                    <option>01</option>
-                    <option>02</option>
-                    <option>03</option>
-                  </select>
-                </div>
-                <p className="text-xs leading-3 text-gray-600 pt-2">
-                  Height: 10 inches
-                </p>
-                <p className="text-xs leading-3 text-gray-600 py-4">
-                  Color: Black
-                </p>
-                <p className="w-96 text-xs leading-3 text-gray-600">
-                  Composition: 100% calf leather
-                </p>
-                <div className="flex items-center justify-between pt-5">
-                  <div className="flex itemms-center">
-                    <p className="text-xs leading-3 underline text-gray-800 cursor-pointer">
-                      Add to favorites
-                    </p>
-                    <p className="text-xs leading-3 underline text-red-500 pl-5 cursor-pointer">
-                      Remove
-                    </p>
-                  </div>
-                  <p className="text-base font-black leading-none text-gray-800">
-                    ,000
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="md:flex items-strech py-8 md:py-10 lg:py-8 border-t border-gray-50">
-              <div className="md:w-4/12 2xl:w-1/4 w-full">
-                <img
-                  src="https://i.ibb.co/6gzWwSq/Rectangle-20-1.png"
-                  alt="Black Leather Purse"
-                  className="h-full object-center object-cover md:block hidden"
-                />
-                <img
-                  src="https://i.ibb.co/TTnzMTf/Rectangle-21.png"
-                  alt="Black Leather Purse"
-                  className="md:hidden w-full h-full object-center object-cover"
-                />
-              </div>
-              <div className="md:pl-3 md:w-8/12 2xl:w-3/4 flex flex-col justify-center">
-                <p className="text-xs leading-3 text-gray-800 md:pt-0 pt-4">
-                  RF293
-                </p>
-                <div className="flex items-center justify-between w-full">
-                  <p className="text-base font-black leading-none text-gray-800">
-                    Luxe card holder
-                  </p>
-                  <select
-                    aria-label="Select quantity"
-                    className="py-2 px-1 border border-gray-200 mr-6 focus:outline-none"
-                  >
-                    <option>01</option>
-                    <option>02</option>
-                    <option>03</option>
-                  </select>
-                </div>
-                <p className="text-xs leading-3 text-gray-600 pt-2">
-                  Height: 10 inches
-                </p>
-                <p className="text-xs leading-3 text-gray-600 py-4">
-                  Color: Black
-                </p>
-                <p className="w-96 text-xs leading-3 text-gray-600">
-                  Composition: 100% calf leather
-                </p>
-                <div className="flex items-center justify-between pt-5">
-                  <div className="flex itemms-center">
-                    <p className="text-xs leading-3 underline text-gray-800 cursor-pointer">
-                      Add to favorites
-                    </p>
-                    <p className="text-xs leading-3 underline text-red-500 pl-5 cursor-pointer">
-                      Remove
-                    </p>
-                  </div>
-                  <p className="text-base font-black leading-none text-gray-800">
-                    ,000
-                  </p>
-                </div>
-              </div>
-            </div>
-            <a
-              href="#"
-              className="flex font-semibold text-indigo-600 text-sm mt-10"
-            >
-              <svg
-                className="fill-current mr-2 text-indigo-600 w-4"
-                viewBox="0 0 448 512"
-              >
-                <path d="M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z" />
-              </svg>
+          </div>
+          <p className="text-[24px] font-medium text-[#535353]">
+            Your Cart is Not Available
+          </p>
+          <p className="text-[16px] font-normal text-[#787878]">
+            Please
+            <Link to="/login" className="text-[18px] font-bold underline">
+              Login
+            </Link>
+            or
+            <Link to="/register" className="text-[18px] font-bold underline">
+              Create New Account
+            </Link>
+          </p>
+          {/* <Link to="/products">
+            <button className="bg-[#464646] w-[287px] px-3 py-2 text-[#fff] mt-3 rounded">
               Continue Shopping
-            </a>
-          </div>
-          <div
-            id="summary"
-            className=" w-full   sm:w-1/4   md:w-1/2     px-8 py-10"
-          >
-            <h1 className="font-semibold text-2xl border-b pb-8">
-              Order Summary
-            </h1>
-            <div className="flex justify-between mt-10 mb-5">
-              <span className="font-semibold text-sm uppercase">Items 3</span>
-              <span className="font-semibold text-sm">590$</span>
-            </div>
-            <div>
-              <label className="font-medium inline-block mb-3 text-sm uppercase">
-                Shipping
-              </label>
-              <select className="block p-2 text-gray-600 w-full text-sm">
-                <option>Standard shipping - $10.00</option>
-              </select>
-            </div>
-            <div className="py-10">
-              <label
-                htmlFor="promo"
-                className="font-semibold inline-block mb-3 text-sm uppercase"
-              >
-                Promo Code
-              </label>
-              <input
-                type="text"
-                id="promo"
-                placeholder="Enter your code"
-                className="p-2 text-sm w-full"
-              />
-            </div>
-            <button className="bg-red-500 hover:bg-red-600 px-5 py-2 text-sm text-white uppercase">
-              Apply
             </button>
-            <div className="border-t mt-8">
-              <div className="flex font-semibold justify-between py-6 text-sm uppercase">
-                <span>Total cost</span>
-                <span>$600</span>
-              </div>
-              <button className="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">
-                Checkout
-              </button>
-            </div>
-          </div>
-        </div>
-      </div> */}
-
-
-      <div className="py-16 px-20 ">
-        <p>Cart</p>
-        <div className="h-[60vh] border flex">
-            <div className="border w-[60%]"></div>
-            <div className="border w-[40%]"></div>
-        </div>
-        <h3 className="mt-10 text-[25px] font-normal">Similar products</h3>
-        <div className="mt-2 flex gap-3 overflow-x-auto">
-            <ProductCard image = {productImg1}/>
-            <ProductCard image = {productImg2}/>
-            <ProductCard image = {productImg1}/>
-            <ProductCard image = {productImg3}/>
-            <ProductCard image = {productImg4}/>
+          </Link> */}
         </div>
       </div>
-    </>
+    );
+  }
+  return (
+    <div>
+      <div className="py-8 px-4 md:py-16 md:px-20 bg-white mb-18">
+        {cartData?.lines?.edges?.length > 0 ? (
+          <div className="h-auto lg:max-h-[33rem] flex flex-col lg:flex-row gap-4">
+            {/* ------------------Cart Items------------------ */}
+            <div className="w-full lg:w-[60%] pr-0 lg:pr-4 flex flex-col gap-2 overflow-y-auto overflow-x-hidden">
+              {cartData.lines.edges.map(({ node }) => (
+                <CartCard
+                  key={node.id}
+                  product={node}
+                  onCartUpdate={handleCartUpdate}
+                />
+              ))}
+            </div>
+
+            {/* ------------------Cart Summary for desktop------------------ */}
+            <div className="w-full hidden lg:block lg:w-[40%] bg-white p-4 border rounded-xl shadow-xl">
+              <p className="text-[16px] text-[#535353] font-medium">
+                Order Summary
+              </p>
+
+              {/* ------------------Coupon Code------------------ */}
+              <div>
+                <div className="mt-3 flex items-center w-full h-[50px] border-2 border-[#dddddd] bg-white p-0 rounded-md overflow-hidden">
+                  <input
+                    type="text"
+                    placeholder="Coupon Code"
+                    className="w-full h-full py-1 px-2 outline-none border-none bg-transparent"
+                    value={discountCode}
+                    onChange={(e) => setDiscountCode(e.target.value)}
+                  />
+                  <button
+                    onClick={handleApplyDiscountCode}
+                    className="w-[103px] h-full bg-[#545454] text-[16px] font-semibold text-white"
+                  >
+                    Apply
+                  </button>
+                </div>
+                <div className="flex items-center gap-2 mt-2 bg-[#5BAF6729] border-2 border-[#00980053] py-1 px-3 rounded-md">
+                  <img src={couponIcon} alt="" />
+                  <p className="text-[#196F35] text-[14px] font-normal">
+                    Coupon Applied: AKG0101
+                  </p>
+                </div>
+              </div>
+
+              {/* ------------------Summary------------------ */}
+              <div className="mt-6 text-[#5A5A5A]">
+                <div className="flex justify-between items-center">
+                  <p className="text-[18px] font-normal">Subtotal (1 item)</p>
+                  <p className="text-[18px] font-semibold">AED 2999.00</p>
+                </div>
+                <div className="flex justify-between items-center mt-1">
+                  <p className="text-[18px] font-normal">Coupon</p>
+                  <p className="text-[18px] font-semibold text-[#228944]">
+                    - AED 2999.00
+                  </p>
+                </div>
+                <div className="flex justify-between items-center mt-1">
+                  <p className="text-[18px] font-normal">Shipping Fee</p>
+                  <p className="text-[18px] font-semibold text-[#228944]">
+                    FREE
+                  </p>
+                </div>
+                <div className="flex justify-between items-center mt-4">
+                  <p className="text-[20px] font-bold">
+                    Total
+                    <span className="ml-1 text-[14px] font-medium">
+                      (Inclusive of VAT)
+                    </span>
+                  </p>
+                  <p className="text-[20px] font-bold">AED 2999.00</p>
+                </div>
+              </div>
+
+              {/* ------------------Checkout Button------------------ */}
+              <div className="mt-2">
+                <button
+                  onClick={handleCheckoutButtonClick}
+                  className="w-full h-[50px] bg-[#353535] text-[16px] text-white font-semibold rounded"
+                >
+                  CHECK OUT
+                </button>
+              </div>
+
+              {/* ------------------Payment Options------------------ */}
+              <div>
+                <div className="flex items-center gap-2 mt-4 w-full px-3 py-1 border rounded border-[#FFE0BD]">
+                  <img src={tamaraIcon} alt="" />
+                  <p className="text-[14px] font-medium">
+                    Split 4 payments of AEW 15.50 - No late fees, Sharia
+                    Complaints
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 mt-2 w-full px-3 py-1 border rounded border-[#9BFFBC]">
+                  <img src={tabbyIcon} alt="" />
+                  <p className="text-[14px]">
+                    4 interest-free payments of AED 15.50. No fees.
+                    Shariah-compliant
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* ------------------Cart Summary for mobile------------------ */}
+            <div className="w-full block lg:hidden bg-white">
+              {/* ------------------Coupon Code------------------ */}
+              <div>
+                <div className="mt-3 flex items-center w-full h-[50px] border-2 border-[#dddddd] bg-white p-0 rounded-md overflow-hidden">
+                  <input
+                    type="text"
+                    placeholder="Coupon Code"
+                    className="w-full h-full py-1 px-2 outline-none border-none bg-transparent"
+                    value={discountCode}
+                    onChange={(e) => setDiscountCode(e.target.value)}
+                  />
+                  <button
+                    onClick={handleApplyDiscountCode}
+                    className="w-[103px] h-full bg-[#545454] text-[16px] font-semibold text-white"
+                  >
+                    Apply
+                  </button>
+                </div>
+                <div className="flex items-center gap-2 mt-2 bg-[#5BAF6729] border-2 border-[#00980053] py-1 px-3 rounded-md">
+                  <img src={couponIcon} alt="" />
+                  <p className="text-[#196F35] text-[14px] font-normal">
+                    Coupon Applied: AKG0101
+                  </p>
+                </div>
+              </div>
+              {/* ------------------Summary------------------ */}
+
+              <div className="mt-6 text-[#5A5A5A] bg-[#F3F4F9] p-4 rounded-xl">
+                <p className="text-[18px] text-[#535353] font-medium">
+                  Order Summary
+                </p>
+                <div className="flex justify-between items-center mt-6">
+                  <p className="text-[16px] font-normal">Subtotal (1 item)</p>
+                  <p className="text-[16px] font-semibold">AED 2999.00</p>
+                </div>
+                <div className="flex justify-between items-center mt-1">
+                  <p className="text-[16px] font-normal">Coupon</p>
+                  <p className="text-[16px] font-semibold text-[#228944]">
+                    - AED 2999.00
+                  </p>
+                </div>
+                <div className="flex justify-between items-center mt-1">
+                  <p className="text-[16px] font-normal">Shipping Fee</p>
+                  <p className="text-[16px] font-semibold text-[#228944]">
+                    FREE
+                  </p>
+                </div>
+                <hr className="mt-2 border-[#a0a0a0ab]" />
+                <div className="flex justify-between items-center mt-4">
+                  <div>
+                    <p className="text-[18px] font-bold">Total</p>
+                    <span className="ml-1 text-[12px] font-medium">
+                      (Inclusive of VAT)
+                    </span>
+                  </div>
+                  <p className="text-[18px] font-bold">AED 2999.00</p>
+                </div>
+              </div>
+
+              {/* ------------------Payment Options------------------ */}
+              <div>
+                <div className="flex items-center gap-2 mt-4 w-full px-3 py-1 border rounded border-[#FFE0BD]">
+                  <img src={tamaraIcon} alt="" />
+                  <p className="text-[14px] font-medium">
+                    Split 4 payments of AEW 15.50 - No late fees, Sharia
+                    Complaints
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 mt-2 w-full px-3 py-1 border rounded border-[#9BFFBC]">
+                  <img src={tabbyIcon} alt="" />
+                  <p className="text-[14px]">
+                    4 interest-free payments of AED 15.50. No fees.
+                    Shariah-compliant
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="h-[30rem] flex justify-center items-center">
+            <div className="flex flex-col gap-2 justify-center items-center ">
+              <div className="px-4 py-5 rounded-[50%] bg-[#F6F6F6] flex justify-center items-center">
+                <div className="w-[110px] h-[100px] px-4 py-5 flex justify-center items-center rounded-[50%] bg-[#EFF0F3]">
+                  <img src={cartIcon} alt="" className="h-full w-full" />
+                </div>
+              </div>
+              <p className="text-[24px] font-medium text-[#535353]">
+                Your Cart is Empty
+              </p>
+              <p className="text-[16px] font-normal text-[#787878]">
+                Looks like you haven’t added anything to your cart.
+              </p>
+              <Link to="/products">
+                <button className="bg-[#464646] w-[287px] px-3 py-2 text-[#fff] mt-3 rounded">
+                  Continue Shopping
+                </button>
+              </Link>
+            </div>
+          </div>
+        )}
+        {/* ------------------Similar Products------------------ */}
+        <h3 className="mt-10 text-[20px] lg:text-[25px] font-normal">
+          Similar Products
+        </h3>
+        <div className="mt-2 flex gap-3 overflow-x-auto">
+          <ProductCard image={productImg1} />
+          <ProductCard image={productImg2} />
+          <ProductCard image={productImg1} />
+          <ProductCard image={productImg3} />
+          <ProductCard image={productImg4} />
+          <ProductCard
+            image={
+              "https://intellilens.in/cdn/shop/products/51pYcM8vleL_7b96e926-1b64-4be7-aa28-b61c2604db4b.jpg?v=1688856502"
+            }
+          />
+        </div>
+        {/* <SimilarProductsCarousel/> */}
+      </div>
+      {/* ------------------Checkout Button for mobile------------------ */}
+      {cartData?.lines?.edges?.length > 0 && (
+        <div className="fixed lg:hidden bottom-0 w-full text-[#5A5A5A] flex justify-between items-center bg-[#fff] px-4 py-2">
+          <div className="flex flex-col">
+            <p className="text-[14px]">
+              Total :
+              <span className="text-[13px] line-through">AED 3999.00</span>
+            </p>
+            <p className="text-[20px] font-bold">AED 2999.00</p>
+          </div>
+          <button
+            onClick={handleCheckoutButtonClick}
+            className="w-[40%] h-[50px] bg-[#353535] text-[16px] text-[#fff] text-white font-semibold rounded"
+          >
+            CHECK OUT
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
