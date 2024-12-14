@@ -74,6 +74,7 @@ import {
 import expressLogo from "../../assets/Frame 390 1.png";
 import deliveryLogo from "../../assets/Group.png";
 import { addToCart } from "../../store/cart";
+import { Link } from "react-router-dom";
 
 export const ProductCard = ({ product = {} }) => {
   const {
@@ -82,6 +83,7 @@ export const ProductCard = ({ product = {} }) => {
     images = null,
     variants = null,
     id = "",
+    handle = "",
   } = product || {};
   const productImage = images?.edges?.[0]?.node?.url || "";
   const discountPrice = variants?.edges?.[0]?.node?.priceV2?.amount || "0.00";
@@ -111,6 +113,7 @@ export const ProductCard = ({ product = {} }) => {
   };
 
   return (
+    
     <Card>
       <CardOff>
         <CardOffText>{offerPercentage.toFixed(0)}% off</CardOffText>
@@ -126,6 +129,7 @@ export const ProductCard = ({ product = {} }) => {
         />
       </CardImageContainer>
       <CardBody>
+      <Link to = {`/product/${handle}`}>
         <CardHeading>
           {title || "Product Title"}
         </CardHeading>
@@ -146,6 +150,7 @@ export const ProductCard = ({ product = {} }) => {
             <CardDeliveryText>Free Delivery</CardDeliveryText>
           </CardDeliverySpan>
         </CardDelivery>
+        </Link>
         <div>
           <CardButton onClick={handleAddToCart}>Add To Cart</CardButton>
         </div>

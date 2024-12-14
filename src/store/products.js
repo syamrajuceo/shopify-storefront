@@ -10,7 +10,9 @@ export const fetchAllProducts = async () => {
               id
               title
               descriptionHtml
+              description
               vendor
+              handle
               productType
               options {
                 name
@@ -43,6 +45,22 @@ export const fetchAllProducts = async () => {
                   }
                 }
               }
+              metafields(identifiers: [
+              {namespace: "shopify", key: "color-pattern"},
+              {namespace: "shopify", key: "age-group"},
+              {namespace: "shopify", key: "eyewear-frame-design"},
+              {namespace: "shopify", key: "target-gender"},
+              {namespace: "shopify", key: "fabric"},
+              {namespace: "shopify", key: "lens_polarization"},
+              {namespace: "custom", key: "express_delivery"}
+              {namespace: "custom", key: "free_delivery"}
+            ]) {
+              namespace
+              key
+              value
+              type
+              description
+            }
             }
           }
         }
@@ -52,9 +70,25 @@ export const fetchAllProducts = async () => {
   try {
     const response = await shopifyClient.post("", { query });
     // console.log("response: " + JSON.stringify(response));
-    const products = response.data.data.products.edges.map((edge) => edge.node);
+    const products = response.data.data.products.edges.map((edge) => {
+      const product = edge.node;
 
-    // console.log("Fetched products: ", products);
+      // Safely map metafields if they exist and are not null
+      const metafields = product.metafields? product.metafields
+            .filter((mf) => mf !== null) 
+            .map((mf) => ({
+              key: mf.key,
+              value: mf.value,
+              namespace: mf.namespace,
+              type: mf.type,
+              description: mf.description,
+            }))
+        : [];
+      return {
+        ...product,
+        metafields,
+      };
+    });
 
     // Store products in Zustand
     useShopifyStore.getState().setProducts(products);
@@ -65,6 +99,10 @@ export const fetchAllProducts = async () => {
     throw error;
   }
 };
+
+
+
+
 
 // export const fetchProductById = async (variantId) => {
 //   const query = `
@@ -147,10 +185,9 @@ export const fetchVariantsByProductId = async (productId) => {
     });
 
     const variants = response.data.data.product.variants.edges;
-    return variants.map(variant => variant.node);
+    return variants.map((variant) => variant.node);
   } catch (error) {
     console.error("Error fetching variants:", error.message);
     throw error;
   }
 };
-

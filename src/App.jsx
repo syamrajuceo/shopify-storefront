@@ -11,9 +11,6 @@ const App = () => {
       try {
         const products = await fetchAllProducts();
         const cart = await fetchCart();
-
-        // const reviews = await fetchReviews();
-        // console.log("Reviews : ", reviews)
       } catch (error) {
         console.error("Error during initial fetch:", error.message);
       }
