@@ -1,11 +1,14 @@
 import { Rating } from "@mui/material";
+import ReviewForm from "./ReviewForm";
+import { useState } from "react";
 
 export const Review = () => {
   const overallRating = 4.5;
   const totalReviews = 1200;
-
+  const [isShow, SetIsShow] = useState(false)
   return (
     <div className="w-full">
+      {isShow && <ReviewForm SetIsShow={SetIsShow} />}
       <section className="">
         <div className="w-full max-w-7xl lg-6 mx-auto">
           <div className="w-full">
@@ -166,9 +169,16 @@ export const Review = () => {
             <div className="py-2 mt-4">
               <div className="flex items-center justify-between">
                 <p className="font-bold ">All Reviews (1)</p>
-                <p className="font-bold text-blue-500 cursor-pointer">
+                <p
+                  className="font-bold text-blue-500 cursor-pointer"
+                  onClick={() => {
+                    SetIsShow(true);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                >
                   + Add Review
                 </p>
+
               </div>
               <div className="w-full mt-5">
                 <div className="px-4 p-2">
