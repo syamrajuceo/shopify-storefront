@@ -1,0 +1,23 @@
+[
+    {
+      "name": "Home",
+      "url": "/home",
+      "icon": "FaHome"
+    },
+    {
+      "name": "Offer",
+      "url": "/offer",
+      "icon": "FaOffer"
+    },
+    {
+      "name": "Category",
+      "url": "/category",
+      "icon": "FaTag"
+    },
+    {
+      "name": "Cart",
+      "url": "/cart",
+      "icon": "FaShoppingCart"
+    }
+  ]
+  
