@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { ScrollButton } from "./Scrollbutton";
+import { ScrollButton } from "./ScrollButton";
 import { ProductCard } from "../productCard/ProductCard";
 import evervaImg from "../../assets/everva.webp";
 import { ArrowRight } from "lucide-react";
@@ -119,9 +119,11 @@ export function ProductCarousel({ Promoimage }) {
   };
 
   return (
+
   
       
       <div className="relative p-4 md:p-8 ">
+
         <div
           ref={scrollContainerRef}
           className="flex overflow-x-auto gap-6 xl:gap-0 scroll-smooth snap-x snap-mandatory scrollbar-hide bg-custom-gray justify-between p-4 rounded-xl"
@@ -148,7 +150,9 @@ export function ProductCarousel({ Promoimage }) {
 {/* Everva Image Div */}
          
           {/* Product Cards */}
+
           {Products.slice(0, 3).map((product) => (
+
             <div key={product.id} className="snap-start">
               <ProductCard product={product} />
             </div>
