@@ -12,19 +12,35 @@ import {
   QuantityMobile,
   Title,
 } from "../../ui/CartCardStyle";
-import { updateCart } from "../../store/cart";
-import CircularProgress from '@mui/material/CircularProgress';
-
+import CircularProgress from "@mui/material/CircularProgress";
+import toast from 'react-hot-toast';
 
 export const CartCard = ({
   product,
-  onCartUpdate,
   handleQuantityChange,
   handleRemove,
-  qtyLoading,
 }) => {
-  // const [quantity, setQuantity] = useState(product.quantity)
   const { quantity, id } = product;
+
+  const [loading,setLoading] = useState(false)
+
+  const originalPrice = product.merchandise?.compareAtPriceV2?.amount 
+  const discountPrice = product.merchandise?.priceV2?.amount 
+
+  const offerPercentage =
+    originalPrice && discountPrice
+      ? ((originalPrice - discountPrice) / originalPrice) * 100
+      : 0;
+
+    const handleQtyUpdate = async (qty, id) => {
+      setLoading(true)
+      try {
+        await handleQuantityChange(qty,id)
+        setLoading(false)
+      } catch (error) {
+        toast.error('Failed to update quantity')
+      }
+    }
   return (
     <CartCardWrapper>
       <div className="flex flex-col gap-2">
@@ -40,20 +56,20 @@ export const CartCard = ({
         <QuantityMobile>
           <span
             className="control"
-            onClick={() => handleQuantityChange(quantity - 1, id)}
+            onClick={() => handleQtyUpdate(quantity - 1, id)}
           >
             -
           </span>
-          {qtyLoading ? (
+          {loading ? (
             <div className="px-[5px] flex justify-center items-center">
-            <CircularProgress size="20px" />
+              <CircularProgress size="20px" />
             </div>
           ) : (
             <span className="value font-bold">{quantity}</span>
           )}
           <span
             className="control"
-            onClick={() => handleQuantityChange(quantity + 1, id)}
+            onClick={() => handleQtyUpdate(quantity + 1, id)}
           >
             +
           </span>
@@ -67,7 +83,7 @@ export const CartCard = ({
               {product.merchandise?.priceV2?.currencyCode}
               {product.merchandise?.compareAtPriceV2?.amount}
             </p>
-            <p className="discount">45% off</p>
+            <p className="discount">{offerPercentage.toFixed(2)}% off</p>
           </PriceWrapper>
         </div>
         <DeliveryWrapper>
@@ -95,14 +111,20 @@ export const CartCard = ({
           <div className="quantity">
             <span
               className="control"
-              onClick={() => handleQuantityChange(quantity - 1, id)}
+              onClick={() => handleQtyUpdate(quantity - 1, id)}
             >
               -
             </span>
-            <span className="value">{product.quantity}</span>
+            {loading ? (
+              <div className="px-[5px] flex justify-center items-center">
+                <CircularProgress size="20px" />
+              </div>
+            ) : (
+              <span className="value font-bold">{quantity}</span>
+            )}
             <span
               className="control"
-              onClick={() => handleQuantityChange(quantity + 1, id)}
+              onClick={() => handleQtyUpdate(quantity + 1, id)}
             >
               +
             </span>

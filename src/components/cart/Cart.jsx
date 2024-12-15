@@ -19,17 +19,16 @@ import { Discount } from "@mui/icons-material";
 export const Cart = () => {
   const [cartData, setCartData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [qtyLoading, setQtyoading] = useState(false);
-
   const [error, setError] = useState(null);
-  const [discountCode, setDiscountCode] = useState("");
-  const [totalAmount, setTotalAmount] = useState(0);
+  // const [discountCode, setDiscountCode] = useState("");
+  const [subTotal, setSubTotal] = useState(0);
+  const [discountedTotal, setDiscountedTotal] = useState(0);
   const [totalDiscount, setTotalDiscount] = useState(0);
-  const [currency, setCurrency] = useState(0);
+  const [currency, setCurrency] = useState("AED");
   const [totalItems, setTotalItems] = useState(0);
-  const { cart, setCart } = useShopifyStore();
+  // const cartId = localStorage.getItem("cartId");
 
-  const cartId = localStorage.getItem("cartId");
+  const Products = useShopifyStore((state) => state.products);
 
   const loadData = async () => {
     try {
@@ -38,29 +37,46 @@ export const Cart = () => {
 
       if (fetchedCart) {
         setCartData(fetchedCart);
-        const total = fetchedCart.lines.edges
-          .map((node) =>
-            parseFloat(
-              node.node.merchandise.priceV2.amount * node.node.quantity
+        if (fetchedCart.lines.edges.length > 0) {
+          const subTotal = fetchedCart.lines.edges
+            .map((node) =>
+              parseFloat(
+                node.node.merchandise.compareAtPriceV2.amount *
+                  node.node.quantity
+              )
             )
-          )
-          .reduce((acc, curr) => acc + curr, 0);
-        setTotalAmount(total);
+            .reduce((acc, curr) => acc + curr, 0);
+          setSubTotal(subTotal);
 
-        const totalItems = fetchedCart.lines.edges
-          .map((node) => parseFloat(node.node.quantity))
-          .reduce((acc, curr) => acc + curr, 0);
-        setTotalItems(totalItems);
-
-        const totalDiscount = fetchedCart.lines.edges
-          .map((node) =>
-            parseFloat(
-              node.node.merchandise.compareAtPriceV2.amount *
-                node.node.quantity
+          const discountedTotal = fetchedCart.lines.edges
+            .map((node) =>
+              parseFloat(
+                node.node.merchandise.priceV2.amount * node.node.quantity
+              )
             )
-          )
-          .reduce((acc, curr) => acc + curr, 0);
-        setTotalDiscount(totalDiscount);
+            .reduce((acc, curr) => acc + curr, 0);
+          setDiscountedTotal(discountedTotal);
+
+          const totalItems = fetchedCart.lines.edges
+            .map((node) => parseFloat(node.node.quantity))
+            .reduce((acc, curr) => acc + curr, 0);
+          setTotalItems(totalItems);
+
+          const totalDiscount = fetchedCart.lines.edges
+            .map((node) =>
+              parseFloat(
+                node.node.merchandise.compareAtPriceV2.amount *
+                  node.node.quantity
+              )
+            )
+            .reduce((acc, curr) => acc + curr, 0);
+          setTotalDiscount(totalDiscount);
+
+          const currency =
+            fetchedCart.lines.edges[0].node.merchandise.compareAtPriceV2
+              .currencyCode;
+          setCurrency(currency);
+        }
       } else {
         setCartData(null);
       }
@@ -73,71 +89,71 @@ export const Cart = () => {
   };
 
   useEffect(() => {
-     loadData();
+    loadData();
   }, []);
-  console.log("fetchedCart : ", totalAmount);
   // Apply discount code
-  const handleApplyDiscountCode = async () => {
-    try {
-      const query = `
-        mutation checkoutDiscountCodeApplyV2($checkoutId: ID!, $discountCode: String!) {
-          checkoutDiscountCodeApplyV2(checkoutId: $checkoutId, discountCode: $discountCode) {
-            checkout {
-              discountApplications(first: 10) {
-                edges {
-                  node {
-                    allocationMethod
-                    targetSelection
-                    targetType
-                  }
-                }
-              }
-              checkoutUserErrors {
-                message
-                code
-                field
-              }
-            }
-          }
-        }
-      `;
-  
-      const response = await shopifyClient.post("", {
-        query,
-        variables: {
-          checkoutId: cartId,
-          discountCode: discountCode,
-        },
-      });
-  
-      console.log("GraphQL Response:", response.data); 
-  
-      if (response.data?.checkoutDiscountCodeApplyV2?.checkoutUserErrors?.length > 0) {
-        console.error("Error applying discount:", response.data.checkoutDiscountCodeApplyV2.checkoutUserErrors);
-      } else {
-        console.log("Discount applied successfully:", response.data);
-      }
-    } catch (error) {
-      console.error("Error applying discount code:", error.message);
-    }
-  };
-  
+  // const handleApplyDiscountCode = async () => {
+  //   try {
+  //     const query = `
+  //       mutation checkoutDiscountCodeApplyV2($checkoutId: ID!, $discountCode: String!) {
+  //         checkoutDiscountCodeApplyV2(checkoutId: $checkoutId, discountCode: $discountCode) {
+  //           checkout {
+  //             discountApplications(first: 10) {
+  //               edges {
+  //                 node {
+  //                   allocationMethod
+  //                   targetSelection
+  //                   targetType
+  //                 }
+  //               }
+  //             }
+  //             checkoutUserErrors {
+  //               message
+  //               code
+  //               field
+  //             }
+  //           }
+  //         }
+  //       }
+  //     `;
 
+  //     const response = await shopifyClient.post("", {
+  //       query,
+  //       variables: {
+  //         checkoutId: cartId,
+  //         discountCode: discountCode,
+  //       },
+  //     });
+
+  //     console.log("GraphQL Response:", response.data);
+
+  //     if (
+  //       response.data?.checkoutDiscountCodeApplyV2?.checkoutUserErrors?.length >
+  //       0
+  //     ) {
+  //       console.error(
+  //         "Error applying discount:",
+  //         response.data.checkoutDiscountCodeApplyV2.checkoutUserErrors
+  //       );
+  //     } else {
+  //       console.log("Discount applied successfully:", response.data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error applying discount code:", error.message);
+  //   }
+  // };
 
   const handleQuantityChange = async (newQuantity, id) => {
     if (newQuantity < 1) return;
     try {
-      setQtyoading(true)
       await updateCart(id, newQuantity);
       console.log("Cart quantity updated.");
-      await loadData(); 
-      setQtyoading(false)
+      await loadData();
     } catch (error) {
       console.error("Failed to update cart quantity:", error.message);
     }
   };
-  
-  
+
   const handleRemove = async (id) => {
     try {
       await updateCart(id, 0);
@@ -147,8 +163,6 @@ export const Cart = () => {
       console.error("Failed to remove item from cart:", error.message);
     }
   };
-  
-  
 
   const handleCheckoutButtonClick = async () => {
     try {
@@ -203,27 +217,26 @@ export const Cart = () => {
         {cartData?.lines?.edges?.length > 0 ? (
           <div className="h-auto lg:max-h-[33rem] flex flex-col lg:flex-row gap-4">
             {/* ------------------Cart Items------------------ */}
-            <div className="w-full lg:w-[60%] pr-0 lg:pr-4 flex flex-col gap-2 overflow-y-auto overflow-x-hidden">
+            <div className="w-full lg:w-[60%] pr-0 lg:pr-4 flex flex-col gap-2 overflow-y-auto overflow-x-hidden no-scrollbar">
               {cartData.lines.edges.map(({ node }) => (
                 <CartCard
                   key={node.id}
                   product={node}
                   onCartUpdate={handleCartUpdate}
-                  handleQuantityChange = {handleQuantityChange}
-                  handleRemove = {handleRemove}
-                  qtyLoading = {qtyLoading}
+                  handleQuantityChange={handleQuantityChange}
+                  handleRemove={handleRemove}
                 />
               ))}
             </div>
 
             {/* ------------------Cart Summary for desktop------------------ */}
-            <div className="w-full hidden lg:block lg:w-[40%] bg-white p-4 border rounded-xl shadow-xl">
-              <p className="text-[16px] text-[#535353] font-medium">
+            <div className="w-full hidden lg:block lg:w-[40%] bg-white p-4 rounded-xl h-auto no-scrollbar">
+              <p className="text-[16px] text-[#535353] font-semiblod">
                 Order Summary
               </p>
 
               {/* ------------------Coupon Code------------------ */}
-              <div>
+              {/* <div>
                 <div className="mt-3 flex items-center w-full h-[50px] border-2 border-[#dddddd] bg-white p-0 rounded-md overflow-hidden">
                   <input
                     type="text"
@@ -245,7 +258,7 @@ export const Cart = () => {
                     Coupon Applied: AKG0101
                   </p>
                 </div>
-              </div>
+              </div> */}
 
               {/* ------------------Summary------------------ */}
               <div className="mt-6 text-[#5A5A5A]">
@@ -253,12 +266,14 @@ export const Cart = () => {
                   <p className="text-[18px] font-normal">
                     Subtotal ({totalItems} item)
                   </p>
-                  <p className="text-[18px] font-semibold">AED {totalAmount}</p>
+                  <p className="text-[18px] font-semibold">
+                    {currency} {subTotal}
+                  </p>
                 </div>
                 <div className="flex justify-between items-center mt-1">
                   <p className="text-[18px] font-normal">Coupon</p>
                   <p className="text-[18px] font-semibold text-[#228944]">
-                    - AED 00.00
+                    - {currency} 00.00
                   </p>
                 </div>
                 <div className="flex justify-between items-center mt-1">
@@ -270,7 +285,7 @@ export const Cart = () => {
                 <div className="flex justify-between items-center mt-1">
                   <p className="text-[18px] font-normal">Total Discount</p>
                   <p className="text-[18px] font-semibold text-[#228944]">
-                    -AED {totalDiscount}
+                    - {currency} {subTotal - discountedTotal}
                   </p>
                 </div>
                 <div className="flex justify-between items-center mt-4">
@@ -280,7 +295,9 @@ export const Cart = () => {
                       (Inclusive of VAT)
                     </span>
                   </p>
-                  <p className="text-[20px] font-bold">AED {totalAmount}</p>
+                  <p className="text-[20px] font-bold">
+                    {currency} {discountedTotal}
+                  </p>
                 </div>
               </div>
 
@@ -316,7 +333,7 @@ export const Cart = () => {
             {/* ------------------Cart Summary for mobile------------------ */}
             <div className="w-full block lg:hidden bg-white">
               {/* ------------------Coupon Code------------------ */}
-              <div>
+              {/* <div>
                 <div className="mt-3 flex items-center w-full h-[50px] border-2 border-[#dddddd] bg-white p-0 rounded-md overflow-hidden">
                   <input
                     type="text"
@@ -338,7 +355,7 @@ export const Cart = () => {
                     Coupon Applied: AKG0101
                   </p>
                 </div>
-              </div>
+              </div> */}
               {/* ------------------Summary------------------ */}
 
               <div className="mt-6 text-[#5A5A5A] bg-[#F3F4F9] p-4 rounded-xl">
@@ -346,13 +363,17 @@ export const Cart = () => {
                   Order Summary
                 </p>
                 <div className="flex justify-between items-center mt-6">
-                  <p className="text-[16px] font-normal">Subtotal (1 item)</p>
-                  <p className="text-[16px] font-semibold">AED 2999.00</p>
+                  <p className="text-[16px] font-normal">
+                    Subtotal ({totalItems} item)
+                  </p>
+                  <p className="text-[16px] font-semibold">
+                    {currency} {subTotal}
+                  </p>
                 </div>
                 <div className="flex justify-between items-center mt-1">
                   <p className="text-[16px] font-normal">Coupon</p>
                   <p className="text-[16px] font-semibold text-[#228944]">
-                    - AED 2999.00
+                    - {currency} 00.00
                   </p>
                 </div>
                 <div className="flex justify-between items-center mt-1">
@@ -369,7 +390,9 @@ export const Cart = () => {
                       (Inclusive of VAT)
                     </span>
                   </div>
-                  <p className="text-[18px] font-bold">AED 2999.00</p>
+                  <p className="text-[18px] font-bold">
+                    {currency} {discountedTotal}
+                  </p>
                 </div>
               </div>
 
@@ -406,7 +429,7 @@ export const Cart = () => {
               <p className="text-[16px] font-normal text-[#787878]">
                 Looks like you haven’t added anything to your cart.
               </p>
-              <Link to="/products">
+              <Link to="/sunglasses">
                 <button className="bg-[#464646] w-[287px] px-3 py-2 text-[#fff] mt-3 rounded">
                   Continue Shopping
                 </button>
@@ -418,29 +441,30 @@ export const Cart = () => {
         <h3 className="mt-10 text-[20px] lg:text-[25px] font-normal">
           Similar Products
         </h3>
-        <div className="mt-2 flex gap-3 overflow-x-auto">
-          <ProductCard image={productImg1} />
-          <ProductCard image={productImg2} />
-          <ProductCard image={productImg1} />
-          <ProductCard image={productImg3} />
-          <ProductCard image={productImg4} />
-          <ProductCard
-            image={
-              "https://intellilens.in/cdn/shop/products/51pYcM8vleL_7b96e926-1b64-4be7-aa28-b61c2604db4b.jpg?v=1688856502"
-            }
-          />
+        <div className="mt-2 flex gap-3 overflow-x-auto no-scrollbar">
+          {Products ? (
+            Products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))
+          ) : (
+            <p>Similar Product not Available</p>
+          )}
         </div>
         {/* <SimilarProductsCarousel/> */}
       </div>
       {/* ------------------Checkout Button for mobile------------------ */}
       {cartData?.lines?.edges?.length > 0 && (
-        <div className="fixed lg:hidden bottom-0 w-full text-[#5A5A5A] flex justify-between items-center bg-[#fff] px-4 py-2">
+        <div className="fixed lg:hidden bottom-[70px] w-full text-[#5A5A5A] flex justify-between items-center bg-[#fff] px-4 py-2">
           <div className="flex flex-col">
             <p className="text-[14px]">
               Total :
-              <span className="text-[13px] line-through">AED 3999.00</span>
+              <span className="text-[13px] line-through">
+                {currency} {subTotal}
+              </span>
             </p>
-            <p className="text-[20px] font-bold">AED 2999.00</p>
+            <p className="text-[20px] font-bold">
+              {currency} {discountedTotal}
+            </p>
           </div>
           <button
             onClick={handleCheckoutButtonClick}

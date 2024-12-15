@@ -18,7 +18,6 @@
 // import expressLogo from "../../assets/Frame 390 1.png";
 // import deliveryLogo from "../../assets/Group.png";
 
-
 // export const ProductCard = ({ image }) => {
 //   return (
 //     <Card>
@@ -53,7 +52,7 @@
 //   );
 // };
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardBody,
@@ -75,8 +74,11 @@ import expressLogo from "../../assets/Frame 390 1.png";
 import deliveryLogo from "../../assets/Group.png";
 import { addToCart } from "../../store/cart";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const ProductCard = ({ product = {} }) => {
+  const [loading, setLoading] = useState(false)
   const {
     title = "",
     descriptionHtml = "",
@@ -103,21 +105,23 @@ export const ProductCard = ({ product = {} }) => {
         console.error("Variant ID not found.");
         return;
       }
+      setLoading(true)
       const quantity = 1;
       const cart = await addToCart(variantId, quantity);
+      setLoading(false)
       console.log("Cart updated:", cart);
-      alert("Product added to cart!");
+      if (cart.id) {
+        toast.success("Added to cart successfully");
+      }
     } catch (error) {
       console.error("Failed to add product to cart:", error.message);
     }
   };
 
   return (
-    
     <Card>
       <CardOff>
         <CardOffText>{offerPercentage.toFixed(0)}% off</CardOffText>
-
       </CardOff>
       <CardImageContainer>
         <CardImage
@@ -129,30 +133,30 @@ export const ProductCard = ({ product = {} }) => {
         />
       </CardImageContainer>
       <CardBody>
-      <Link to = {`/product/${handle}`}>
-        <CardHeading>
-          {title || "Product Title"}
-        </CardHeading>
-        <CardPrice>
-          <CardPriceText>
-            {productCurrency}
-            {originalPrice}
-          </CardPriceText>
-          <CardOffPrice>
-            {productCurrency}
-            {discountPrice}
-          </CardOffPrice>
-        </CardPrice>
-        <CardDelivery>
-          <ExpressLogo src={expressLogo} alt="" />
-          <CardDeliverySpan>
-            <img src={deliveryLogo} alt="" />
-            <CardDeliveryText>Free Delivery</CardDeliveryText>
-          </CardDeliverySpan>
-        </CardDelivery>
+        <Link to={`/product/${handle}`}>
+          <CardHeading>{title || "Product Title"}</CardHeading>
+          <CardPrice>
+            <CardPriceText>
+              {productCurrency}
+              {originalPrice}
+            </CardPriceText>
+            <CardOffPrice>
+              {productCurrency}
+              {discountPrice}
+            </CardOffPrice>
+          </CardPrice>
+          <CardDelivery>
+            <ExpressLogo src={expressLogo} alt="" />
+            <CardDeliverySpan>
+              <img src={deliveryLogo} alt="" />
+              <CardDeliveryText>Free Delivery</CardDeliveryText>
+            </CardDeliverySpan>
+          </CardDelivery>
         </Link>
         <div>
-          <CardButton onClick={handleAddToCart}>Add To Cart</CardButton>
+          <CardButton onClick={handleAddToCart} className="flex items-center justify-center"> 
+            {loading ? <CircularProgress size="20px" /> : "Add To Cart"}
+          </CardButton>
         </div>
       </CardBody>
     </Card>
