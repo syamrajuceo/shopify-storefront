@@ -25,10 +25,10 @@ function CollectionComponent({ products = [], type = "Men" }) {
   })
   const [filterProduct, setFilterProduct] = useState(products);
   const [pagenatedProduct, setPagenatedProduct] = useState(filterProduct.slice(0, 8));
-  const [visibleCount, setVisibleCount] = useState(4);
+  const [visibleCount, setVisibleCount] = useState(8);
 
   const loadMore = () => {
-    const newCount = visibleCount + 8; 
+    const newCount = visibleCount + 4; 
     setVisibleCount(newCount);
     setPagenatedProduct(filterProduct.slice(0, newCount));
   };  
