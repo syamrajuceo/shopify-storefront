@@ -304,6 +304,7 @@ export const fetchCart = async () => {
                  product {
                    title
                    productType
+                   handle
                    images(first: 1) {
                      edges {
                        node {
