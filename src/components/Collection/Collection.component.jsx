@@ -260,6 +260,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
           <button className="w-full p-5 bg-slate-300 font-semibold">
             Load More
           </button>
+
           <div className="text-center p-14">
           النظارات الواقية الصناعية ضرورية لحماية العمال في البيئات التي تشكل”
             فيها الغبار والحطام والمواد الكيميائية والمخاطر العالية التأثير

@@ -30,7 +30,6 @@ export const deleteReview = async (reviewId) => {
 export const fetchReviews = async () => {
   try {
     const response = await axios.get(`${API_URL}/reviews`);
-
     setReview(response.data.reviews)
     return response.data.reviews;
   } catch (error) {
