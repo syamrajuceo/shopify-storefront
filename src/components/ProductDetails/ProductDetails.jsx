@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { addToCart } from "../../store/cart";
 import toast from "react-hot-toast";
 import { addReview } from "../../store/review";
-
+import { ProductCarousel2 } from "../home/ProductCarousel2";
 export const ProductDetails = () => {
   const { reviews } = useShopifyStore.getState();
   const [product, setProduct] = useState(null);
@@ -417,10 +417,10 @@ export const ProductDetails = () => {
         </div>
       </div>
 
-      <div className="w-full ">
+      <div className="">
         <ProductList title={"Similar Products"} />
       </div>
-      <div className="w-full ">
+      <div className="">
         <ProductList title={"Popular Products"} />
       </div>
 

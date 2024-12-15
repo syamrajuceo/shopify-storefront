@@ -246,25 +246,29 @@ function CollectionComponent({ products = [], type = "Men" }) {
               off={prodobj.off}
             /> */}
           {filterProduct && filterProduct.length > 0 ? (
-            filterProduct.map((product) =>
-              product ? <ProductCard key={product.id} product={product} /> : null
-            )
-          ) : (
-            <p>No products available</p>
-          )}
+  filterProduct.map((product) =>
+    product ? <ProductCard key={product.id} product={product} /> : null
+  )
+) : type === "ContactLenses" ? (
+  <p>Coming soon</p>
+) : (
+  <p>No product available</p>
+)}
 
         </div>
         <div>
           <button className="w-full p-5 bg-slate-300 font-semibold">
             Load More
           </button>
-          <div className="text-center p-14 ">
-            “النظارات الواقية الصناعية ضرورية لحماية العمال في البيئات التي تشكل
+
+          <div className="text-center p-14">
+          النظارات الواقية الصناعية ضرورية لحماية العمال في البيئات التي تشكل”
             فيها الغبار والحطام والمواد الكيميائية والمخاطر العالية التأثير
             تهديدًا. تلبي مجموعتنا من النظارات الواقية المعتمدة أعلى المعايير
             العالمية، بما في ذلك ANSI Z87.1 و EN166، لضمان حماية كاملة للعينين.
             تتوفر النظارات بعدسات مع أو بدون قوة تصحيحية، ونقدم أنماطًا تناسب كل
             احتياج صناعي، بدءًا من البناء إلى التصنيع。”
+            
             {faqData.map((faq, index) => (
               <div key={index} className="p-2 m-2 border-slate-500 ">
                 <h1

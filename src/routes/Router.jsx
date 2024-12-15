@@ -14,6 +14,7 @@ import { ContactPage } from "../pages/ContactPage";
 import MenPage from "../pages/MenPage";
 import WoMenPage from "../pages/WoMenPage";
 import EyeGlasses from "../pages/EyeGlasses";
+import ContactLenses from "../pages/ContactLenses";
 
 export const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
       {
         path: "/sunglasses",
         element:<SunGlasses/>
+      },
+      {
+        path: "/contactLenses",
+        element:<ContactLenses/>
       },
       {
         path: "/eyeglasses",

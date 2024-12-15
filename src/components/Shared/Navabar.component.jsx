@@ -10,7 +10,7 @@ import { useState } from "react";
 import { FaBars } from "react-icons/fa6";
 import { MdClose } from "react-icons/md";
 import MobileLinkData from "../../data/Moblielink.data.json";
-
+import { useNavigate } from 'react-router-dom';
 import { FaHome, FaShoppingCart } from "react-icons/fa";
 import { BiSolidOffer } from "react-icons/bi";
 import { BiSolidTagAlt } from "react-icons/bi";
@@ -29,6 +29,7 @@ const iconMapping = {
 
 
 function NavabarComponent({ cartnumber = 0, getSearchData }) {
+  const navigate = useNavigate();
   const [hidden, setHidden] = useState(true);
   const handleSearchInput = (event) => {
     if (getSearchData) {
@@ -40,7 +41,8 @@ function NavabarComponent({ cartnumber = 0, getSearchData }) {
     <div className="bg-slate-100">
       {/* Top Section */}
       <div className="flex justify-between p-4 items-center text-md lg:text-xl">
-        <img src={logo} alt="logo" />
+        <img src={logo} alt="logo" className="cursor-pointer" onClick={() => navigate('/')}
+        />
         <div className="hidden sm:flex bg-slate-200 items-center h-[40px] sm:w-[300px] md:w-[400px] lg:w-[600px]">
           <input
             type="search"

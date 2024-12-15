@@ -6,8 +6,8 @@ export function ScrollButton({ direction, onClick }) {
     <button
       onClick={onClick}
       className={cn(
-        " md:hidden absolute top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-gray-100",
-        direction === 'left' ? '-left-1' : '-right-1'
+        "absolute top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-gray-100",
+        direction === 'left' ? 'left-1' : 'right-2'
       )}
     >
       {direction === 'left' ? (

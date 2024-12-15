@@ -21,32 +21,32 @@ const getCartFromLocalStorage = () => {
 
 export const createCart = async (accessToken = null) => {
   // Retrieve user details from localStorage
-  const user = JSON.parse(localStorage.getItem("user")); 
+  const user = JSON.parse(localStorage.getItem("user"));
 
   // Set default buyer identity if no user details are available
   const buyerIdentity = user
     ? {
-        email: user.email,
-        countryCode: user.countryCode || "IN", // Default to 'IN' if no country code
-        // deliveryAddressPreferences: user.addresses.edges[0].node
-        //   ? {
-        //       firstName: user.addresses.edges[0].node.firstName, // Adjust fields to match valid fields
-        //       lastName: user.addresses.edges[0].node.lastName, // Ensure these are correct
-        //       address1: user.addresses.edges[0].node.address1,
-        //       address2: user.addresses.edges[0].node.address2,
-        //       city: user.addresses.edges[0].node.city,
-        //       province: user.addresses.edges[0].node.province,
-        //       country: user.addresses.edges[0].node.country,
-        //       zip: user.addresses.edges[0].node.zip,
-        //       phone: user.addresses.edges[0].node.phone,
-        //     }
-        //   : [],
-        preferences: {
-          delivery: {
-            deliveryMethod: user.deliveryMethod || "SHIPPING", // Make sure this matches a valid delivery method
-          },
+      email: user.email,
+      countryCode: user.countryCode || "IN", // Default to 'IN' if no country code
+      // deliveryAddressPreferences: user.addresses.edges[0].node
+      //   ? {
+      //       firstName: user.addresses.edges[0].node.firstName, // Adjust fields to match valid fields
+      //       lastName: user.addresses.edges[0].node.lastName, // Ensure these are correct
+      //       address1: user.addresses.edges[0].node.address1,
+      //       address2: user.addresses.edges[0].node.address2,
+      //       city: user.addresses.edges[0].node.city,
+      //       province: user.addresses.edges[0].node.province,
+      //       country: user.addresses.edges[0].node.country,
+      //       zip: user.addresses.edges[0].node.zip,
+      //       phone: user.addresses.edges[0].node.phone,
+      //     }
+      //   : [],
+      preferences: {
+        delivery: {
+          deliveryMethod: user.deliveryMethod || "SHIPPING", // Make sure this matches a valid delivery method
         },
-      }
+      },
+    }
     : {};
 
   // console.log("Buyer identity updated: ", JSON.stringify(buyerIdentity));
@@ -377,7 +377,13 @@ export const fetchCart = async () => {
     // Store cart in localStorage and update Zustand
     storeCartInLocalStorage(cart.id, cart.checkoutUrl);
     useShopifyStore.getState().setCart(cart.id, cart.checkoutUrl);
+    cart.quantity = cart.lines.edges.length; 
 
+    cart.itemquantity = cart.lines.edges.reduce((total, edge) => {
+      return total + edge.node.quantity;
+    }, 0);
+
+    console.log("getcart:", JSON.stringify(cart))
     return cart;
   } catch (error) {
     console.error("Error fetching cart:", error.message);
