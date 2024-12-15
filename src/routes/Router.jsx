@@ -2,14 +2,14 @@ import { createBrowserRouter } from "react-router-dom";
 import { LoginPage } from "../pages/LoginPage";
 import { RegisterPage } from "../pages/RegisterPage";
 import { CartPage } from "../pages/CartPage";
-import { ProfilePage } from "../pages/ProfilePage";
+import  ProfilePage  from "../pages/ProfilePage";
 import { HomePage } from "../pages/HomePage";
 import { ProductDetailsPage } from "../pages/ProductDetailsPage";
 import { ProductListingPage } from "../pages/ProductListingPage";
 import { UserLayout } from "../layout/UserLayout";
 import ProtectedRoute from "../utils/ProtectedRoute";
 import Navlayout from "../layout/Navlayout";
-import SunGlasses from "../pages/Sunglasses";
+import SunGlasses from "../pages/SunGlasses";
 import { ContactPage } from "../pages/ContactPage";
 
 export const router = createBrowserRouter([
@@ -69,19 +69,4 @@ export const router = createBrowserRouter([
         ],
       },]
   },
-
-  // User routes
-  // {
-  //   element: <UserLayout />,
-  //   children: [
-  //     {
-  //       path: "/cart",
-  //       element: <CartPage />,
-  //     },
-  //     {
-  //       path: "/profile",
-  //       element: <ProfilePage />,
-  //     },
-  //   ],
-  // },
 ]);

@@ -54,9 +54,9 @@ function NavabarComponent({ cartnumber = 0, getSearchData }) {
         </div>
         <div className="flex items-center gap-2">
           <Link className="hidden md:block" to={"/contact"}>Contact</Link>
-          <button>
+          <Link to={"/login"}>
             <img src={user} alt="user" />
-          </button>
+          </Link>
           <Link className="relative" to={"/cart"}>
             <img src={cart} alt="cart" />
             <span className="absolute top-[-13px] bg-red-500 rounded-[100%] p-1 text-xs text-slate-50">

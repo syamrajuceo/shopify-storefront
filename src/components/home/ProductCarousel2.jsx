@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { ScrollButton } from './Scrollbutton';
+import { ScrollButton } from './ScrollButton';
 import { ProductCard } from '../productCard/ProductCard';
 import { FaArrowRight } from "react-icons/fa";
 import useShopifyStore from "../../store/useShopifyStore";
