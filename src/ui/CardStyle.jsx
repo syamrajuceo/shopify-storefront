@@ -17,6 +17,19 @@ export const AdCard = styled.div`
 export const AdCardImage = styled.img`
   width: 17.5rem;
   height: 22.33rem;
+  @media screen and (max-width: 71.8125rem) {
+    width: 15.625rem;
+    height: 20.2;
+  }
+  @media screen and (max-width: 54.75rem) {
+    width: 13.125rem;
+    height: 21.688rem;
+  }
+  @media screen and (max-width: 40.9375rem) {
+    width: 11.875rem;
+    height: 18.813rem;
+    display: none;
+  }
 `;
 
 // Card Container
@@ -29,11 +42,29 @@ export const CardContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+  @media screen and (max-width: 71.8125rem) {
+    gap: 1.25rem;
+  }
+  @media screen and (max-width: 40.9375rem) {
+    margin-left: 0rem;
+  }
+  @media screen and (max-width: 30rem) {
+    gap: 0.6rem;
+  }
 `;
 
 // Ad Card Mobile Image
 export const AdCardMobileImage = styled.img`
   display: none;
+  @media screen and (max-width: 40.9375rem) {
+    width: 11.875rem;
+    height: 17.5rem;
+    display: block;
+  }
+  @media screen and (max-width: 30rem) {
+    width: 10.3125rem;
+    height: 16.2rem;
+  }
 `;
 
 // Individual Card
@@ -43,6 +74,18 @@ export const Card = styled.div`
   width:350px;
   scroll-snap-align: center;
   position: relative;
+  @media screen and (max-width: 71.8125rem) {
+    max-width: 15.625rem;
+  }
+  @media screen and (max-width: 54.75rem) {
+    max-width: 14.375rem;
+  }
+  @media screen and (max-width: 40.9375rem) {
+    width: 12.5rem;
+  }
+  @media screen and (max-width: 30rem) {
+    width: 10rem;
+  }
 `;
 
 // Card Off Label
@@ -61,6 +104,12 @@ export const CardOffText = styled.p`
   font-size: 0.875rem;
   font-weight: 700;
   color: #06b40e;
+  @media screen and (max-width: 40.9375rem) {
+    font-size: 0.7rem;
+  }
+  @media screen and (max-width: 30rem) {
+    font-size: 0.6rem;
+  }
 `;
 
 // Card Image Container
@@ -74,9 +123,17 @@ export const CardImageContainer = styled.div`
 // Card Image inside Card
 export const CardImage = styled.img`
   width: 100%;
-  height: 18.5rem;
+  height: 16rem;
   object-fit: cover;
   border-radius: 0.625rem;
+  background-position: center;
+
+  @media screen and (max-width: 40.9375rem) {
+    height: 14rem;
+  }
+  @media screen and (max-width: 30rem) {
+    height: 12rem;
+  }
 `;
 
 // Card Body
@@ -86,13 +143,14 @@ export const CardBody = styled.div`
   justify-content: space-evenly;
   height: auto;
   position: relative;
+  margin-top: 0.5rem;
 `;
 
 // Card Heading
 export const CardHeading = styled.h3`
   max-width: 90%;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 500;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -100,6 +158,17 @@ export const CardHeading = styled.h3`
   text-overflow: ellipsis;
   line-height: 1.5;
   min-height: 3em;
+  color: #454545;
+
+  @media screen and (max-width: 71.8125rem) {
+    font-size: 0.875rem;
+  }
+  @media screen and (max-width: 40.9375rem) {
+    font-size: 0.75rem;
+  }
+  /* @media screen and (max-width: 30rem) {
+    font-size: 0.625rem;
+  } */
 `;
 
 // Card Price
@@ -118,6 +187,19 @@ export const CardPriceText = styled.p`
   border-radius: 0.25rem;
   text-decoration: line-through;
   color: #8c8c8c;
+  @media screen and (max-width: 71.8125rem) {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.125rem 0.0625rem;
+  }
+  @media screen and (max-width: 54.75rem) {
+  }
+  @media screen and (max-width: 40.9375rem) {
+    font-size: 0.825rem;
+  }
+  @media screen and (max-width: 30rem) {
+    font-size: 0.8rem;
+  }
 `;
 
 // Card Off Price
@@ -128,6 +210,19 @@ export const CardOffPrice = styled.p`
   padding: 0.25rem 0.25rem;
   border-radius: 0.25rem;
   color: #000000;
+  @media screen and (max-width: 71.8125rem) {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.125rem 0.0625rem;
+  }
+  @media screen and (max-width: 54.75rem) {
+  }
+  @media screen and (max-width: 40.9375rem) {
+    font-size: 0.825rem;
+  }
+  @media screen and (max-width: 30rem) {
+    font-size: 0.8rem;
+  }
 `;
 
 // Card Delivery Information
@@ -136,6 +231,15 @@ export const CardDelivery = styled.div`
   align-items: center;
   margin-top: 0.325rem;
   gap: 0.625rem;
+  @media screen and (max-width: 71.8125rem) {
+  }
+  @media screen and (max-width: 54.75rem) {
+    gap: 0.3125rem;
+  }
+  @media screen and (max-width: 40.9375rem) {
+  }
+  @media screen and (max-width: 30rem) {
+  }
 `;
 
 // Card Delivery Span for Icon and Text
@@ -149,6 +253,22 @@ export const CardDeliverySpan = styled.span`
 export const CardDeliveryText = styled.p`
   font-size: 0.875rem;
   font-weight: 700;
+  @media screen and (max-width: 71.8125rem) {
+  }
+  @media screen and (max-width: 54.75rem) {
+    font-size: 0.75rem;
+  }
+  @media screen and (max-width: 40.9375rem) {
+    font-size: 0.55rem;
+  }
+  @media screen and (max-width: 30rem) {
+  }
+`;
+export const ExpressLogo = styled.img`
+  @media screen and (max-width: 54.75rem) {
+    width: auto;
+    height: 0.9375rem;
+  }
 `;
 
 // Card Button
@@ -162,6 +282,14 @@ export const CardButton = styled.button`
   width: 100%;
   margin-top: 0.625rem;
   font-size: 0.875rem;
+  @media screen and (max-width: 40.9375rem) {
+    padding: 0.5125rem 1.25rem;
+    font-size: 0.75rem;
+  }
+  @media screen and (max-width: 30rem) {
+    padding: 0.45rem 1.125rem;
+    font-size: 0.625rem;
+  }
 `;
 
 // Slider Buttons Container
@@ -199,95 +327,95 @@ export const NextButton = styled.button`
   top: 25%;
 `;
 
-// Responsive Design - Media Queries for Screens Smaller than 71.8125rem
-export const CardContainerSmall = styled(CardContainer)`
-  gap: 1.25rem;
+// // Responsive Design - Media Queries for Screens Smaller than 71.8125rem
+// export const CardContainerSmall = styled(CardContainer)`
+//   gap: 1.25rem;
 
-  .card {
-    max-width: 15.625rem;
-  }
+//   .card {
+//     max-width: 15.625rem;
+//   }
 
-  .card-body h3 {
-    font-size: 0.875rem;
-  }
-  .main-card-container .ad-card img {
-    width: 15.625rem;
-    height: 20.2rem;
-  }
-`;
+//   .card-body h3 {
+//     font-size: 0.875rem;
+//   }
+//   .main-card-container .ad-card img {
+//     width: 15.625rem;
+//     height: 20.2rem;
+//   }
+// `;
 
-export const CardContainerMobile = styled(CardContainer)`
-  gap: 1.25rem;
-  .card {
-    max-width: 14.375rem;
-  }
+// export const CardContainerMobile = styled(CardContainer)`
+//   gap: 1.25rem;
+//   .card {
+//     max-width: 14.375rem;
+//   }
 
-  .card-body h3 {
-    font-size: 0.875rem;
-  }
+//   .card-body h3 {
+//     font-size: 0.875rem;
+//   }
 
-  .card-body .card-delivery {
-    gap: 0.3125rem;
-  }
-  .main-card-container .ad-card img {
-    width: 13.125rem;
-    height: 21.688rem;
-  }
-`;
+//   .card-body .card-delivery {
+//     gap: 0.3125rem;
+//   }
+//   .main-card-container .ad-card img {
+//     width: 13.125rem;
+//     height: 21.688rem;
+//   }
+// `;
 
-export const CardContainerExtraMobile = styled(CardContainer)`
-  gap: 1.25rem;
-  .card {
-    max-width: 12.5rem;
-  }
+// export const CardContainerExtraMobile = styled(CardContainer)`
+//   gap: 1.25rem;
+//   .card {
+//     max-width: 12.5rem;
+//   }
 
-  .card-body h3 {
-    font-size: 0.75rem;
-  }
+//   .card-body h3 {
+//     font-size: 0.75rem;
+//   }
 
-  .slider-buttons .prev-btn,
-  .slider-buttons .next-btn {
-    padding: 0.625rem 0.8125rem;
-    font-size: 1rem;
-  }
-  .main-card-container .ad-card img {
-    width: 11.875rem;
-    height: 18.813rem;
-    display: none;
-  }
-  .card-container .ad-card-mobile img {
-    width: 11.875rem;
-    height: 17.5rem;
-    display: block;
-  }
-  .card-body .card-delivery span p {
-    font-size: 0.55rem;
-  }
-`;
+//   .slider-buttons .prev-btn,
+//   .slider-buttons .next-btn {
+//     padding: 0.625rem 0.8125rem;
+//     font-size: 1rem;
+//   }
+//   .main-card-container .ad-card img {
+//     width: 11.875rem;
+//     height: 18.813rem;
+//     display: none;
+//   }
+//   .card-container .ad-card-mobile img {
+//     width: 11.875rem;
+//     height: 17.5rem;
+//     display: block;
+//   }
+//   .card-body .card-delivery span p {
+//     font-size: 0.55rem;
+//   }
+// `;
 
-// For Smaller Devices (30rem)
-export const CardContainerSmallest = styled(CardContainer)`
-  gap: 0.6rem;
-  .card {
-    width: 10rem;
-  }
+// // For Smaller Devices (30rem)
+// export const CardContainerSmallest = styled(CardContainer)`
+//   gap: 0.6rem;
+//   .card {
+//     width: 10rem;
+//   }
 
-  .card-body .card-headding h3 {
-    font-size: 0.625rem;
-  }
-  .card-button button {
-    padding: 0.45rem 1.125rem;
-    font-size: 0.625rem;
-  }
+//   .card-body .card-headding h3 {
+//     font-size: 0.625rem;
+//   }
+//   .card-button button {
+//     padding: 0.45rem 1.125rem;
+//     font-size: 0.625rem;
+//   }
 
-  .slider-buttons .prev-btn,
-  .slider-buttons .next-btn {
-    padding: 0.5rem 0.625rem;
-    font-size: 0.875rem;
-  }
+//   .slider-buttons .prev-btn,
+//   .slider-buttons .next-btn {
+//     padding: 0.5rem 0.625rem;
+//     font-size: 0.875rem;
+//   }
 
-  .card-container .ad-card-mobile img {
-    width: 10.3125rem;
-    height: 16.2rem;
-  }
-`;
+//   .card-container .ad-card-mobile img {
+//     width: 10.3125rem;
+//     height: 16.2rem;
+//   }
+// `;
