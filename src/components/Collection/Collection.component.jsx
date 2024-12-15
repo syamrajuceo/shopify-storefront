@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FilterBoxComponent from "./FilterBox.component";
 import { IoIosArrowForward } from "react-icons/io";
 import { ProductCard } from "../productCard/ProductCard";
@@ -10,12 +10,45 @@ import { AiOutlineClose } from "react-icons/ai";
 import faqData from "../../data/FAQ.data.json";
 import SortComponent from "./Sort.component";
 import FilterComponent from "./Filter.component";
+import FilterController from "./FilterContoiller";
 // import useShopifyStore from "../../store/useShopifyStore";
 
-function CollectionComponent({products=[]}) {
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 30 });
-  // const products = useShopifyStore((state) => state.products);
+function CollectionComponent({ products = [] }) {
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 100 });
+  const [filterProduct, setFilterProduct] = useState(products);
+  const [filterOptions, setFilterOptions] = useState({
+    Gender: [],
+    "Product Categories": [],
+    "Frame Color": [],
+    "Filter by Brands": [],
+    "Product Status": []
+});
 
+  // const products = useShopifyStore((state) => state.products);
+  useEffect(() => {
+    // let filteredProducts = [...products];
+  
+    // filteredProducts = filteredProducts.filter(product => 
+    //   product.price >= priceRange.min && product.price <= priceRange.max
+    // );
+  
+    // Object.keys(filterOptions).forEach(key => {
+    //   if (filterOptions[key]?.length > 0) {
+    //     filteredProducts = filteredProducts.filter(product => 
+    //       filterOptions[key].some(option => product[key]?.includes(option))
+    //     );
+    //   }
+    // });
+    const filteredProducts = FilterController(products, filterOptions, priceRange);
+  
+    // Set the filtered products in the state
+    setFilterProduct(filteredProducts);
+    
+  
+    // setFilterProduct(filteredProducts);
+    // console.log("Filter Options", filterOptions);
+  }, [products, filterOptions, priceRange]);
+  
   const genderOptions = [
     "Men",
     "Women",
@@ -43,29 +76,46 @@ function CollectionComponent({products=[]}) {
       return newOpenIndexs;
     });
   };
-
   const handlePriceChange = (e, type) => {
-    const value = parseInt(e.target.value, 10) || 0;
-
-    setPriceRange((prev) => {
-      if (type === "min" && value > prev.max) {
-        return { ...prev, min: value, max: value };
-      }
-      if (type === "max" && value < prev.min) {
-        return { ...prev, max: value, min: value };
-      }
-
-      return { ...prev, [type]: value };
-    });
+    const value = parseInt(e.target.value, 10) || 0; // Get the input value
+    const step = 50; // Define step increment/decrement value
+    
+    let adjustedValue = value;
+  
+    if (type === "min") {
+      // Ensure min value is adjusted in multiples of 50
+      adjustedValue = value > priceRange.min ? value + step - (value % step) : value - step - (value % step);
+      adjustedValue = Math.min(adjustedValue, priceRange.max); // Prevent min from exceeding max
+    } else if (type === "max") {
+      // Ensure max value is adjusted in multiples of 50
+      adjustedValue = value > priceRange.max ? value + step - (value % step) : value - step - (value % step);
+      adjustedValue = Math.max(adjustedValue, priceRange.min); // Prevent max from being below min
+    }
+  
+    setPriceRange((prev) => ({
+      ...prev,
+      [type]: adjustedValue,
+    }));
   };
+  
+  
+  const handleFilterChange = (header, selectedOptions) => {
+    const parsedOptions = Array.isArray(selectedOptions) ? selectedOptions : JSON.parse(selectedOptions);
+
+    setFilterOptions((prevState) => ({
+        ...prevState,
+        [header]: parsedOptions
+    }));
+};
+
+
 
   return (
     <div className="flex flex-col lg:flex-row relative">
       {/* Sidebar for filters */}
       <div
-        className={`bg-slate-100 lg:block ${
-          isopen ? "block" : "hidden"
-        } lg:w-1/4`}
+        className={`bg-slate-100 lg:block ${isopen ? "block" : "hidden"
+          } lg:w-1/4`}
       >
         <div className="p-3">
           <div className="pl-9">
@@ -99,23 +149,37 @@ function CollectionComponent({products=[]}) {
           </div>
 
           <div className="p-4">
-            <FilterBoxComponent header="Gender" options={genderOptions} />
-            <FilterBoxComponent
-              header="Product Categories"
-              options={categoryOptions}
+          <FilterBoxComponent 
+                header="Gender" 
+                options={genderOptions} 
+                selectedOptions={filterOptions.Gender}
+                onFilterChange={handleFilterChange}
             />
             <FilterBoxComponent
-              header="Frame Color"
-              options={frameColorOptions}
+                header="Product Categories"
+                options={categoryOptions}
+                selectedOptions={filterOptions["Product Categories"]}
+                onFilterChange={handleFilterChange}
             />
             <FilterBoxComponent
-              header="Filter by Brands"
-              options={brandOptions}
+                header="Frame Color"
+                options={frameColorOptions}
+                selectedOptions={filterOptions["Frame Color"]}
+                onFilterChange={handleFilterChange}
             />
             <FilterBoxComponent
-              header="Product Status"
-              options={productStatusOptions}
+                header="Filter by Brands"
+                options={brandOptions}
+                selectedOptions={filterOptions["Filter by Brands"]}
+                onFilterChange={handleFilterChange}
             />
+            <FilterBoxComponent
+                header="Product Status"
+                options={productStatusOptions}
+                selectedOptions={filterOptions["Product Status"]}
+                onFilterChange={handleFilterChange}
+            />
+
           </div>
         </div>
       </div>
@@ -153,14 +217,14 @@ function CollectionComponent({products=[]}) {
               OurPrice={prodobj.OurPrice}
               off={prodobj.off}
             /> */}
-          {products?.length > 0 ? (
-            products.map(
-              (product) =>
-                product && <ProductCard key={product.id} product={product} />
+          {filterProduct && filterProduct.length > 0 ? (
+            filterProduct.map((product) =>
+              product ? <ProductCard key={product.id} product={product} /> : null
             )
           ) : (
             <p>No products available</p>
           )}
+
         </div>
         <div>
           <button className="w-full p-5 bg-slate-300 font-semibold">

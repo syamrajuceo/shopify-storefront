@@ -47,7 +47,7 @@ function FilterComponent({ SetSelectedFilter, SetFilterCount }) {
             0
         );
         SetFilterCount(selectedCount);
-    }, [selectedFilters, SetFilterCount]);
+    }, [selectedFilters]);
 
     return (
         <div className="bg-white rounded shadow-lg w-full lg:w-1/3">
