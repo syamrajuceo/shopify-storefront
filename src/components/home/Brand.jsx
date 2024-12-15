@@ -2,12 +2,23 @@ import { useState } from 'react';
 import DG from '../../assets/D&G.png'
 import Burberry from '../../assets/Burberry.png'
 import TiffanyCo from '../../assets/Tiffany&co.png'
+import TiffanyCologo from '../../assets/Tiffy.svg'
 import ArmaniExchange from '../../assets/ArmaniExange.png'
 import Vouge  from '../../assets/Vouge.png'
-import DgLoGO from '../../assets/dglogo3.png'
+import DgLoGO from '../../assets/dglogo2.png'
 import ArmaniXlogo from '../../assets/ArmaniXlogo.png'
 import Vougelogo from '../../assets/vougeLogo.png'
 import oakelylogo from '../../assets/oakleylogo.png'
+import BurberryLogo from '../../assets/BurberryLogo.svg'
+import versacelogo from '../../assets/versaceLogo.svg';
+import versaceBrand from '../../assets/versaceBrand.png'
+import michaelkrosBrand from '../../assets/michelkrosBrand.png'
+import michaelkrosLogo from '../../assets/michelkroslogo.svg'
+import raybanlogo from '../../assets/raybanLogo.svg';
+import raybanBrand from '../../assets/raybanBrand.png';
+import oakelyBrand from '../../assets/okleyabrand.png';
+import amaraBrand from '../../assets/amaraBrand.png';
+import amaralogo from '../../assets/AmaraLogo.svg';
 function Brand() {
   const brands = [
     {
@@ -17,19 +28,22 @@ function Brand() {
       },
       {
         name:'BURBERRY',
-        image:Burberry
+        image:Burberry,
+        logo:BurberryLogo
       },
       {
         name: 'D&G',
         image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=684&h=384',
       },
     {
-      name: 'BURBERRY',
+      name: 'tiffany&CO',
       image:TiffanyCo ,
+      logo:TiffanyCologo
     },
     {
-      name: 'TIFFANY & CO.',
-      image:TiffanyCo,
+      name: ':Vouge',
+      image:Vouge,
+      logo:Vougelogo
     },
     {
       name: 'ARMANI EXCHANGE',
@@ -37,13 +51,14 @@ function Brand() {
       logo:ArmaniXlogo
     },
     {
-      name: 'VOGUE',
-      image:Vouge,
-      logo:Vougelogo
+      name: 'versacelogo',
+      image:versaceBrand,
+      logo:versacelogo
     },
     {
-      name: 'VERSACE',
-      image: 'https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&q=80&w=684&h=384',
+      name: 'rayban',
+      image:raybanBrand,
+      logo:raybanlogo
     },
     {
       name: 'RAY-BAN',
@@ -51,16 +66,18 @@ function Brand() {
     },
     {
       name: 'OAKLEY',
-      image: 'https://images.unsplash.com/photo-1625591339971-4c9a87a66871?auto=format&fit=crop&q=80&w=684&h=384',
+      image: oakelyBrand,
       logo:oakelylogo
     },
     {
       name: 'AMARA',
-      image: 'https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&q=80&w=684&h=384',
+      image:amaraBrand,
+      logo:amaralogo
     },
     {
       name: 'MICHAEL KORS',
-      image: 'https://images.unsplash.com/photo-1582142306909-195724d33ffc?auto=format&fit=crop&q=80&w=684&h=384',
+      image:michaelkrosBrand,
+      logo:michaelkrosLogo
     },
   ];
 
@@ -82,14 +99,14 @@ function Brand() {
                   src={brand.image}
                   alt={brand.name}
                   className="w-full h-full object-cover"
-                  calss='logowhite'
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-40 transition-opacity duration-300 group-hover:bg-opacity-30" />
                 <div className="absolute inset-0 flex items-center justify-center  ">
                   <img
                     src={brand.logo}
                     alt="logo"
-                    className="object-cover w-auto h-auto"
+                    className="object-contain w-[80%] h-[80%]"
+                    style={{ filter: 'brightness(0) invert(1)' }}
                     />
                 </div>
               </div>
