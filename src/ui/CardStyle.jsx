@@ -119,13 +119,13 @@ export const CardImageContainer = styled.div`
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  padding : 10px;
 `;
 
 // Card Image inside Card
 export const CardImage = styled.img`
   width: 100%;
   height: 16rem;
-  object-fit: cover;
   border-radius: 0.625rem;
   background-position: center;
 
