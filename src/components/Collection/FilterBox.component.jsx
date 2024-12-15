@@ -1,16 +1,23 @@
 import { IoMdArrowDropdown } from "react-icons/io";
 import { useState, useEffect } from "react";
 
-function FilterBoxComponent({ header = "Gender", options = [], filterOptions, onFilterChange }) {
+function FilterBoxComponent({ header = "Gender", options = [], filterseletedOptions, onFilterChange, typeProductOption = [] }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedOptions, setSelectedOptions] = useState(new Set());
-    const [showMore, setShowMore] = useState(false);  // State to toggle "See More"
+    const [selectedOptions, setSelectedOptions] = useState(() => {
+        return new Set(Array.isArray(filterseletedOptions) ? filterseletedOptions : []);
+    });
+    const [showMore, setShowMore] = useState(false);
 
     const displayedOptions = options.filter(option =>
         option.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
+    useEffect(() => {
+        if (typeProductOption[header]?.length > 0) {
+            setSelectedOptions(new Set(typeProductOption[header]));
+        }
+    }, [typeProductOption, header]);
+    
     const handleCheckboxChange = (option) => {
         setSelectedOptions(prevSelectedOptions => {
             const newSelectedOptions = new Set(prevSelectedOptions);
@@ -23,15 +30,11 @@ function FilterBoxComponent({ header = "Gender", options = [], filterOptions, on
         });
     };
 
-    useEffect(() => {
-        if (filterOptions && filterOptions[header]) {
-            setSelectedOptions(new Set(filterOptions[header]));
-        }
-    }, [filterOptions, header]); // Dependency on filterOptions and header
-    
+
+
     useEffect(() => {
         onFilterChange(header, Array.from(selectedOptions));
-    }, [selectedOptions, header]); 
+    }, [selectedOptions, header]);
 
     return (
         <>

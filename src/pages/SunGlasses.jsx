@@ -16,7 +16,7 @@ function SunGlasses() {
 
   return (
     <div>
-      <CollectionComponent products={sunGlassesProducts} />
+      <CollectionComponent products={sunGlassesProducts}  type="Sunglasses"/>
     </div>
   );
 }

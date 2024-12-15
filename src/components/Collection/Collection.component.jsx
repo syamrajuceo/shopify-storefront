@@ -13,10 +13,16 @@ import FilterComponent from "./Filter.component";
 import FilterController from "./FilterContoiller";
 // import useShopifyStore from "../../store/useShopifyStore";
 
-function CollectionComponent({ products = [] }) {
+function CollectionComponent({ products = [], type = "Men" }) {
   const [priceRange, setPriceRange] = useState({ min: 0, max: 500 });
   const [temporarypriceRange, temporarysetPriceRange] = useState({ min: 0, max: 500 });
-
+  const [typeProductOption, SetTypeProductOption] = useState({
+    Gender: [],
+    "Product Categories": [],
+    "Frame Color": [],
+    "Filter by Brands": [],
+    "Product Status": []
+  })
   const [filterProduct, setFilterProduct] = useState(products);
   const [filterOptions, setFilterOptions] = useState({
     Gender: [],
@@ -24,16 +30,36 @@ function CollectionComponent({ products = [] }) {
     "Frame Color": [],
     "Filter by Brands": [],
     "Product Status": []
-});
+  });
+  useEffect(() => {
+    if (type === "Men") {
+      // setFilterOptions((prevState) => ({
+      //   ...prevState,
+      //   Gender: prevState.Gender ? [...prevState.Gender, "male"] : ["male"],
+      // }));
+      SetTypeProductOption((prevState) => ({
+        ...prevState,
+        Gender: prevState.Gender ? [...prevState.Gender, "male"] : ["male"],
+      }));
+    }
+    if (type === "Women") {
+      SetTypeProductOption((prevState) => ({
+        ...prevState,
+        Gender: prevState.Gender ? [...prevState.Gender, "female"] : ["female"],
+      }));
+    }
+
+  }, [])
+
 
   // const products = useShopifyStore((state) => state.products);
   useEffect(() => {
     // let filteredProducts = [...products];
-  
+
     // filteredProducts = filteredProducts.filter(product => 
     //   product.price >= priceRange.min && product.price <= priceRange.max
     // );
-  
+
     // Object.keys(filterOptions).forEach(key => {
     //   if (filterOptions[key]?.length > 0) {
     //     filteredProducts = filteredProducts.filter(product => 
@@ -42,15 +68,15 @@ function CollectionComponent({ products = [] }) {
     //   }
     // });
     const filteredProducts = FilterController(products, filterOptions, priceRange);
-  
+
     // Set the filtered products in the state
     setFilterProduct(filteredProducts);
-    
-  
+
+
     // setFilterProduct(filteredProducts);
     // console.log("Filter Options", filterOptions);
   }, [products, filterOptions, priceRange]);
-  
+
   const genderOptions = [
     "male",
     "female",
@@ -81,9 +107,9 @@ function CollectionComponent({ products = [] }) {
   const handlePriceChange = (e, type) => {
     const value = parseInt(e.target.value, 10) || 0; // Get the input value
     const step = 50; // Define step increment/decrement value
-    
+
     let adjustedValue = value;
-  
+
     if (type === "min") {
       // Ensure min value is adjusted in multiples of 50
       adjustedValue = value > temporarypriceRange.min ? value + step - (value % step) : value - step - (value % step);
@@ -93,22 +119,22 @@ function CollectionComponent({ products = [] }) {
       adjustedValue = value > temporarypriceRange.max ? value + step - (value % step) : value - step - (value % step);
       adjustedValue = Math.max(adjustedValue, temporarypriceRange.min); // Prevent max from being below min
     }
-  
+
     temporarysetPriceRange((prev) => ({
       ...prev,
       [type]: adjustedValue,
     }));
   };
-  
-  
+
+
   const handleFilterChange = (header, selectedOptions) => {
     const parsedOptions = Array.isArray(selectedOptions) ? selectedOptions : JSON.parse(selectedOptions);
 
     setFilterOptions((prevState) => ({
-        ...prevState,
-        [header]: parsedOptions
+      ...prevState,
+      [header]: parsedOptions
     }));
-};
+  };
 
 
 
@@ -144,42 +170,43 @@ function CollectionComponent({ products = [] }) {
               <div>
                 Price: ${temporarypriceRange.min} — ${temporarypriceRange.max}
               </div>
-              <button className="border bg-slate-200 px-3 py-2 hover:bg-slate-300 transition" onClick={()=>{setPriceRange(temporarypriceRange)}}>
+              <button className="border bg-slate-200 px-3 py-2 hover:bg-slate-300 transition" onClick={() => { setPriceRange(temporarypriceRange) }}>
                 Filter
               </button>
             </div>
           </div>
 
           <div className="p-4">
-          <FilterBoxComponent 
-                header="Gender" 
-                options={genderOptions} 
-                selectedOptions={filterOptions.Gender}
-                onFilterChange={handleFilterChange}
+            <FilterBoxComponent
+              header="Gender"
+              options={genderOptions}
+              filterseletedOptions={filterOptions.Gender}
+              onFilterChange={handleFilterChange}
+              typeProductOption={typeProductOption}
             />
             <FilterBoxComponent
-                header="Product Categories"
-                options={categoryOptions}
-                selectedOptions={filterOptions["Product Categories"]}
-                onFilterChange={handleFilterChange}
+              header="Product Categories"
+              options={categoryOptions}
+              filterseletedOptions={filterOptions["Product Categories"]}
+              onFilterChange={handleFilterChange}
             />
             <FilterBoxComponent
-                header="Frame Color"
-                options={frameColorOptions}
-                selectedOptions={filterOptions["Frame Color"]}
-                onFilterChange={handleFilterChange}
+              header="Frame Color"
+              options={frameColorOptions}
+              filterseletedOptions={filterOptions["Frame Color"]}
+              onFilterChange={handleFilterChange}
             />
             <FilterBoxComponent
-                header="Filter by Brands"
-                options={brandOptions}
-                selectedOptions={filterOptions["Filter by Brands"]}
-                onFilterChange={handleFilterChange}
+              header="Filter by Brands"
+              options={brandOptions}
+              filterseletedOptions={filterOptions["Filter by Brands"]}
+              onFilterChange={handleFilterChange}
             />
             <FilterBoxComponent
-                header="Product Status"
-                options={productStatusOptions}
-                selectedOptions={filterOptions["Product Status"]}
-                onFilterChange={handleFilterChange}
+              header="Product Status"
+              options={productStatusOptions}
+              filterseletedOptions={filterOptions["Product Status"]}
+              onFilterChange={handleFilterChange}
             />
 
           </div>
@@ -201,7 +228,7 @@ function CollectionComponent({ products = [] }) {
           <IoIosArrowForward />
           <span className="hover:text-blue-600 cursor-pointer">Eyewear</span>
           <IoIosArrowForward />
-          <span className="font-semibold">Sunglasses</span>
+          <span className="font-semibold">{type}</span>
         </div>
         <div className="bg-slate-300 p-3 text-sm text-gray-700">
           Showing all 16 results
@@ -262,7 +289,7 @@ function CollectionComponent({ products = [] }) {
           </div>
         </div>
       </div>
-       {/* mobile */}
+      {/* mobile */}
       {selectedfilter === null ? (
         <div className="flex lg:hidden fixed z-30 bottom-[75px] md:bottom-[0px] bg-slate-300 p-3 w-full justify-between">
           <button
@@ -290,7 +317,7 @@ function CollectionComponent({ products = [] }) {
       ) : (
         <div className="block lg:hidden fixed z-30 bottom-[75px] bg-slate-300 p-3 w-full">
           {selectedfilter === "sort" && (
-            <SortComponent SetSelectedFilter={SetSelectedFilter}  />
+            <SortComponent SetSelectedFilter={SetSelectedFilter} />
           )}
           {selectedfilter === "filter" && (
             <FilterComponent

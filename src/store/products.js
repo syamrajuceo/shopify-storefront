@@ -5,7 +5,7 @@ import useShopifyStore from "./useShopifyStore";
 export const fetchAllProducts = async () => {
   const query = `
       query {
-        products(first: 10) {
+        products(first: 100) {
           edges {
             node {
               id
@@ -19,7 +19,7 @@ export const fetchAllProducts = async () => {
                 name
                 values
               }
-              variants(first: 10) {
+              variants(first: 100) {
                 edges {
                   node {
                     id
@@ -37,7 +37,7 @@ export const fetchAllProducts = async () => {
                   }
                 }
               }
-              images(first: 10) {
+              images(first: 100) {
                 edges {
                   node {
                     id
