@@ -23,7 +23,6 @@ export const ProductDetails = () => {
   const { handle } = useParams();
   const [mainImg, setMainImg] = useState(null);
   const [subImgs, setSubImgs] = useState([]);
-
   useEffect(() => {
     // Find the product matching the handle
     const foundProduct = products.find((p) => p.handle === handle);
@@ -36,6 +35,8 @@ export const ProductDetails = () => {
   }, [handle, products]);
 
   console.log("product found : ", product);
+
+  let product_handle = handle;
 
   const {
     title = "",
@@ -58,7 +59,12 @@ export const ProductDetails = () => {
       ? ((originalPrice - discountPrice) / originalPrice) * 100
       : 0;
   const variantId = variants?.edges[0]?.node?.id || "";
-  const productImages = images?.edges?.map((edge) => edge.node.url) || [];
+  // const productImages = images?.edges?.map((edge) => edge.node.url) || [];
+
+  const numericId = id.split("/").pop();
+
+  console.log("numericId : " + numericId);
+
   // Handle Add to Cart
   const handleAddToCart = async () => {
     try {
@@ -302,9 +308,12 @@ export const ProductDetails = () => {
       </div>
 
       <div className="mt-10 w-full flex gap-2 flex-col-reverse md:flex-row h-auto">
-        <Review />
+        <Review product_handle={numericId} />
         <div className=" w-full">
-          <ProductDescription description = {description} metafields = {metafields} />
+          <ProductDescription
+            description={description}
+            metafields={metafields}
+          />
         </div>
       </div>
 

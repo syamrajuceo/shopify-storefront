@@ -51,7 +51,6 @@ function CollectionComponent({ products = [], type = "Men" }) {
 
   }, [])
 
-
   // const products = useShopifyStore((state) => state.products);
   useEffect(() => {
     // let filteredProducts = [...products];

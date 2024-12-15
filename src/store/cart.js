@@ -28,19 +28,19 @@ export const createCart = async (accessToken = null) => {
     ? {
         email: user.email,
         countryCode: user.countryCode || "IN", // Default to 'IN' if no country code
-        deliveryAddressPreferences: user.addresses.edges[0].node
-          ? {
-              firstName: user.addresses.edges[0].node.firstName, // Adjust fields to match valid fields
-              lastName: user.addresses.edges[0].node.lastName, // Ensure these are correct
-              address1: user.addresses.edges[0].node.address1,
-              address2: user.addresses.edges[0].node.address2,
-              city: user.addresses.edges[0].node.city,
-              province: user.addresses.edges[0].node.province,
-              country: user.addresses.edges[0].node.country,
-              zip: user.addresses.edges[0].node.zip,
-              phone: user.addresses.edges[0].node.phone,
-            }
-          : [],
+        // deliveryAddressPreferences: user.addresses.edges[0].node
+        //   ? {
+        //       firstName: user.addresses.edges[0].node.firstName, // Adjust fields to match valid fields
+        //       lastName: user.addresses.edges[0].node.lastName, // Ensure these are correct
+        //       address1: user.addresses.edges[0].node.address1,
+        //       address2: user.addresses.edges[0].node.address2,
+        //       city: user.addresses.edges[0].node.city,
+        //       province: user.addresses.edges[0].node.province,
+        //       country: user.addresses.edges[0].node.country,
+        //       zip: user.addresses.edges[0].node.zip,
+        //       phone: user.addresses.edges[0].node.phone,
+        //     }
+        //   : [],
         preferences: {
           delivery: {
             deliveryMethod: user.deliveryMethod || "SHIPPING", // Make sure this matches a valid delivery method
@@ -297,6 +297,10 @@ export const fetchCart = async () => {
                    amount
                    currencyCode
                  }
+                compareAtPriceV2 {
+                  amount
+                  currencyCode
+                }
                  product {
                    title
                    productType

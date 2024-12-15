@@ -1,14 +1,23 @@
 import { Rating } from "@mui/material";
 import ReviewForm from "./ReviewForm";
 import { useState } from "react";
+import useShopifyStore from "../../store/useShopifyStore";
+const { reviews } = useShopifyStore.getState();
+import moment from "moment";
 
-export const Review = () => {
+export const Review = ({ product_handle }) => {
   const overallRating = 4.5;
   const totalReviews = 1200;
-  const [isShow, SetIsShow] = useState(false)
+  const [isShow, SetIsShow] = useState(false);
+
+  console.log("product_handle", product_handle);
+
+  console.log("filteredReviews : ", reviews);
   return (
     <div className="w-full">
-      {isShow && <ReviewForm SetIsShow={SetIsShow} />}
+      {isShow && (
+        <ReviewForm SetIsShow={SetIsShow} product_handle={product_handle} />
+      )}
       <section className="">
         <div className="w-full max-w-7xl lg-6 mx-auto">
           <div className="w-full">
@@ -173,36 +182,44 @@ export const Review = () => {
                   className="font-bold text-blue-500 cursor-pointer"
                   onClick={() => {
                     SetIsShow(true);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                 >
                   + Add Review
                 </p>
-
               </div>
               <div className="w-full mt-5">
-                <div className="px-4 p-2">
-                  <h3 className="font-[700] uppercase">Syam Raju</h3>
-                  <div className="flex items-center gap-2 py-1">
-                    <Rating value={4} precision={0.5} readOnly />
-                    <p className="text-gray-500 text-sm">2022-01-01</p>
-                    <p className="text-gray-500 text-sm">12:00 PM</p>
-                  </div>
-                  <p className="text-gray-700 text-sm font-[600] mt-2">
-                    This is a sample review. This is a sample review. This is a
-                  </p>
-                </div>
-                <div className="px-4 p-2">
-                  <h3 className="font-[700] uppercase">Salih Km</h3>
-                  <div className="flex items-center gap-2 py-1">
-                    <Rating value={5} precision={0.5} readOnly />
-                    <p className="text-gray-500 text-sm">2022-01-01</p>
-                    <p className="text-gray-500 text-sm">12:00 PM</p>
-                  </div>
-                  <p className="text-gray-700 text-sm font-[600] mt-2">
-                    Good product
-                  </p>
-                </div>
+                {reviews.length > 0 ? (
+                  reviews.map((review, index) => (
+                    <div key={index} className="px-4 p-2">
+                      <h3 className="font-[700] uppercase">
+                        {review.reviewer.name}
+                      </h3>
+                      <div className="flex items-center gap-2 py-1">
+                        <Rating
+                          value={review.rating}
+                          precision={0.5}
+                          readOnly
+                        />
+                        {/* <p className="text-gray-500 text-sm">
+                          {new Date(review.created_at).toLocaleDateString()}
+                        </p>
+                        <p className="text-gray-500 text-sm">
+                          {new Date(review.created_at).toLocaleTimeString()}
+                        </p> */}
+                        <p className="text-gray-500 text-sm">
+                          {moment(review.created_at).fromNow()} ago
+                        </p>
+                      </div>
+                      <p className="text-gray-700 text-sm font-[600] mt-2">
+                        {review.body}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p>Reviews not available</p>
+                )}
+
                 <div className="flex items-center justify-center mt-6">
                   <button className="rounded px-3 py-1 font-[500] bg-orange-500 text-white">
                     Load more
