@@ -2,20 +2,33 @@ import { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaFilter } from "react-icons/fa";
 
-function FilterComponent({ SetSelectedFilter, SetFilterCount }) {
+function FilterComponent({
+    SetSelectedFilter,
+    SetFilterCount,
+    priceRange,
+    setPriceRange,
+    filterOptions,
+    onFilterChange,
+}) {
     const [type, setType] = useState("");
-    const [selectedFilters, setSelectedFilters] = useState({
+    const [selectedOptions, setSelectedOptions] = useState({
         Price: [],
         Category: [],
         Brand: [],
         Color: [],
-        Status: []
+        Status: [],
     });
 
-    const pricelist = ["Below 2000", "2000 - 3000", "3000 - 6000", "6000 - 10000", "10000 - 15000"];
+    const pricelist = [
+        "Below 2000",
+        "2000 - 3000",
+        "3000 - 6000",
+        "6000 - 10000",
+        "10000 - 15000",
+    ];
     const categories = ["Electronics", "Fashion", "Home Appliances", "Books", "Toys"];
     const brands = ["Apple", "Samsung", "Sony", "LG", "Nike"];
-    const colors = ["Red", "Blue", "Green", "Black", "White"];
+    const colors = ["pink", "black", "gray", "blue"];
     const statusOptions = ["Available", "Out of Stock", "Coming Soon"];
 
     const filters = {
@@ -27,27 +40,54 @@ function FilterComponent({ SetSelectedFilter, SetFilterCount }) {
     };
 
     const handleFilterChange = (filterType, option) => {
-        setSelectedFilters((prev) => {
-            const updatedFilters = { ...prev };
-            if (updatedFilters[filterType].includes(option)) {
-                updatedFilters[filterType] = updatedFilters[filterType].filter(
-                    (item) => item !== option
-                );
-            } else {
-                updatedFilters[filterType].push(option);
-            }
-            return updatedFilters;
-        });
-    };
+        setSelectedOptions((prev) => {
+            const newSelectedOptions = { ...prev };
+            const currentOptions = newSelectedOptions[filterType] || [];
 
-    // Update filter count when selectedFilters change
-    useEffect(() => {
-        const selectedCount = Object.values(selectedFilters).reduce(
-            (count, filterArray) => count + filterArray.length,
-            0
-        );
-        SetFilterCount(selectedCount);
-    }, [selectedFilters, SetFilterCount]);
+            if (currentOptions.includes(option)) {
+                newSelectedOptions[filterType] = currentOptions.filter((item) => item !== option);
+            } else {
+                newSelectedOptions[filterType] = [...currentOptions, option];
+            }
+
+            // Handle Price Range selection
+            if (filterType === "Price") {
+                let priceRange = {};
+                switch (option) {
+                    case "Below 2000":
+                        priceRange = { min: 0, max: 2000 };
+                        break;
+                    case "2000 - 3000":
+                        priceRange = { min: 2000, max: 3000 };
+                        break;
+                    case "3000 - 6000":
+                        priceRange = { min: 3000, max: 6000 };
+                        break;
+                    case "6000 - 10000":
+                        priceRange = { min: 6000, max: 10000 };
+                        break;
+                    case "10000 - 15000":
+                        priceRange = { min: 10000, max: 15000 };
+                        break;
+                    default:
+                        priceRange = { min: 0, max: 2000 };
+                        break;
+                }
+                setPriceRange(priceRange);
+            }
+
+            // Handle Color filter change
+            if (filterType === "Color") {
+                onFilterChange("Frame Color", newSelectedOptions["Color"] || []);
+            }
+
+            // Return the updated selected options
+            return newSelectedOptions;
+        });
+
+        // Update Filter Count
+        SetFilterCount(Object.values(selectedOptions).reduce((acc, options) => acc + options.length, 0));
+    };
 
     return (
         <div className="bg-white rounded shadow-lg w-full lg:w-1/3">
@@ -68,9 +108,8 @@ function FilterComponent({ SetSelectedFilter, SetFilterCount }) {
                         <button
                             key={head}
                             onClick={() => setType(head)}
-                            className={`w-full text-left py-2 px-3 rounded ${
-                                type === head ? "bg-blue-600 text-white" : "hover:bg-gray-200"
-                            }`}
+                            className={`w-full text-left py-2 px-3 rounded ${type === head ? "bg-blue-600 text-white" : "hover:bg-gray-200"
+                                }`}
                         >
                             {head}
                         </button>
@@ -79,7 +118,7 @@ function FilterComponent({ SetSelectedFilter, SetFilterCount }) {
 
                 {/* Filter Options */}
                 <div className="w-2/3">
-                    {type && (
+                    {type ? (
                         <div className="space-y-2">
                             <h3 className="text-lg font-semibold">{type} Options</h3>
                             {filters[type]?.map((option, index) => (
@@ -87,16 +126,22 @@ function FilterComponent({ SetSelectedFilter, SetFilterCount }) {
                                     <input
                                         type="checkbox"
                                         className="accent-blue-600 h-5 w-5"
-                                        checked={selectedFilters[type]?.includes(option)}
+                                        checked={
+                                            type === "Color"
+                                                ? filterOptions["Frame Color"]?.includes(option) 
+                                                : selectedOptions[type]?.includes(option) 
+                                        }
                                         onChange={() => handleFilterChange(type, option)}
                                     />
                                     <span>{option}</span>
                                 </label>
                             ))}
                         </div>
+                    ) : (
+                        <p className="text-gray-500">Select a filter type to view options.</p>
                     )}
-                    {!type && <p className="text-gray-500">Select a filter type to view options.</p>}
                 </div>
+
             </div>
         </div>
     );

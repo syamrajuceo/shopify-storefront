@@ -1,10 +1,11 @@
 import { shopifyClient } from "../config/shopifyClient";
+import Metacontroller from "../utils/Metacontroller";
 import useShopifyStore from "./useShopifyStore";
 
 export const fetchAllProducts = async () => {
   const query = `
       query {
-        products(first: 10) {
+        products(first: 100) {
           edges {
             node {
               id
@@ -18,7 +19,7 @@ export const fetchAllProducts = async () => {
                 name
                 values
               }
-              variants(first: 10) {
+              variants(first: 100) {
                 edges {
                   node {
                     id
@@ -36,7 +37,7 @@ export const fetchAllProducts = async () => {
                   }
                 }
               }
-              images(first: 10) {
+              images(first: 100) {
                 edges {
                   node {
                     id
@@ -89,11 +90,13 @@ export const fetchAllProducts = async () => {
         metafields,
       };
     });
+   
+    const newProduct = await Metacontroller(products);
 
     // Store products in Zustand
-    useShopifyStore.getState().setProducts(products);
+    useShopifyStore.getState().setProducts(newProduct);
 
-    return products;
+    return newProduct;
   } catch (error) {
     console.error("Error fetching products:", error.message);
     throw error;

@@ -11,6 +11,9 @@ import ProtectedRoute from "../utils/ProtectedRoute";
 import Navlayout from "../layout/Navlayout";
 import SunGlasses from "../pages/SunGlasses";
 import { ContactPage } from "../pages/ContactPage";
+import MenPage from "../pages/MenPage";
+import WoMenPage from "../pages/WoMenPage";
+import EyeGlasses from "../pages/EyeGlasses";
 
 export const router = createBrowserRouter([
   {
@@ -51,7 +54,20 @@ export const router = createBrowserRouter([
       {
         path: "/sunglasses",
         element:<SunGlasses/>
-      },{
+      },
+      {
+        path: "/eyeglasses",
+        element:<EyeGlasses/>
+      },
+      {
+        path: "/Men",
+        element:<MenPage/>
+      },
+      {
+        path: "/Women",
+        element:<WoMenPage/>
+      },
+      {
 
       },
       // User routes
