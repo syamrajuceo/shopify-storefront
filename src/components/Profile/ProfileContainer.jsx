@@ -141,14 +141,14 @@ function ProfileContainer() {
         {pageShow === "Add Address" && (
           <AddSettings
             user={user}
-            onSave={(updatedAddress) => {
+            onSave={(newAddress) => {
               setUser((prevUser) => ({
                 ...prevUser,
                 addresses: {
-                  edges: prevUser.addresses.edges.map((a) =>
-                    a.node.id === updatedAddress.id ? { node: updatedAddress } : a
-                  ),
-                },
+                  edges: [...prevUser.addresses.edges,{
+                    node: newAddress
+                  }]
+                }
               }));
               setEditingAddress(null);
               setPageShow("Address");
