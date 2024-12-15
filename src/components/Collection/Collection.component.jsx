@@ -12,7 +12,7 @@ import SortComponent from "./Sort.component";
 import FilterComponent from "./Filter.component";
 // import useShopifyStore from "../../store/useShopifyStore";
 
-function CollectionComponent({products=[]}) {
+function CollectionComponent({ products = [] }) {
   const [priceRange, setPriceRange] = useState({ min: 0, max: 30 });
   // const products = useShopifyStore((state) => state.products);
 

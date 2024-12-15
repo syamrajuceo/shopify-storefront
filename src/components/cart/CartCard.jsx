@@ -13,34 +13,30 @@ import {
   Title,
 } from "../../ui/CartCardStyle";
 import CircularProgress from "@mui/material/CircularProgress";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
-export const CartCard = ({
-  product,
-  handleQuantityChange,
-  handleRemove,
-}) => {
+export const CartCard = ({ product, handleQuantityChange, handleRemove }) => {
   const { quantity, id } = product;
 
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
-  const originalPrice = product.merchandise?.compareAtPriceV2?.amount 
-  const discountPrice = product.merchandise?.priceV2?.amount 
+  const originalPrice = product.merchandise?.compareAtPriceV2?.amount;
+  const discountPrice = product.merchandise?.priceV2?.amount;
 
   const offerPercentage =
     originalPrice && discountPrice
       ? ((originalPrice - discountPrice) / originalPrice) * 100
       : 0;
 
-    const handleQtyUpdate = async (qty, id) => {
-      setLoading(true)
-      try {
-        await handleQuantityChange(qty,id)
-        setLoading(false)
-      } catch (error) {
-        toast.error('Failed to update quantity')
-      }
+  const handleQtyUpdate = async (qty, id) => {
+    setLoading(true);
+    try {
+      await handleQuantityChange(qty, id);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Failed to update quantity");
     }
+  };
   return (
     <CartCardWrapper>
       <div className="flex flex-col gap-2">
