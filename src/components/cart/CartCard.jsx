@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import deliveryIcon from "../../assets/Group.png";
 import {
   CartCardWrapper,
@@ -13,52 +13,18 @@ import {
   Title,
 } from "../../ui/CartCardStyle";
 import { updateCart } from "../../store/cart";
+import CircularProgress from '@mui/material/CircularProgress';
 
-export const CartCard = ({ product, onCartUpdate }) => {
-  const handleQuantityChange = async (newQuantity) => {
-    if (newQuantity < 1) return; // Prevent quantity from going below 1
 
-    try {
-      const updatedCart = await updateCart(product.id, newQuantity);
-      console.log("Cart updated:", updatedCart);
-      onCartUpdate(updatedCart);
-    } catch (error) {
-      console.error("Failed to update cart:", error.message);
-    }
-  };
-
-  const handleRemove = async () => {
-    try {
-      const updatedCart = await updateCart(product.id, 0);
-      console.log("Item removed:", updatedCart);
-      onCartUpdate(updatedCart);
-    } catch (error) {
-      console.error("Failed to remove item:", error.message);
-    }
-  };
-
-  // const handleQuantityChange = async (newQuantity) => {
-  //     if (newQuantity < 1) return; // Prevent quantity from going below 1
-
-  //     try {
-  //       const updatedCart = await updateCart(product.id, newQuantity);
-  //       console.log("Cart updated:", updatedCart);
-  //       onCartUpdate(updatedCart); // Notify parent component of the updated cart
-  //     } catch (error) {
-  //       console.error("Failed to update cart:", error.message);
-  //     }
-  //   };
-
-  //   const handleRemove = async () => {
-  //     try {
-  //       const updatedCart = await updateCart(product.id, 0);
-  //       console.log("Item removed:", updatedCart);
-  //       onCartUpdate(updatedCart); // Notify parent component of the updated cart
-  //     } catch (error) {
-  //       console.error("Failed to remove item:", error.message);
-  //     }
-  //   };
-
+export const CartCard = ({
+  product,
+  onCartUpdate,
+  handleQuantityChange,
+  handleRemove,
+  qtyLoading,
+}) => {
+  // const [quantity, setQuantity] = useState(product.quantity)
+  const { quantity, id } = product;
   return (
     <CartCardWrapper>
       <div className="flex flex-col gap-2">
@@ -74,14 +40,20 @@ export const CartCard = ({ product, onCartUpdate }) => {
         <QuantityMobile>
           <span
             className="control"
-            onClick={() => handleQuantityChange(product.quantity - 1)}
+            onClick={() => handleQuantityChange(quantity - 1, id)}
           >
             -
           </span>
-          <span className="value">{product.quantity}</span>
+          {qtyLoading ? (
+            <div className="px-[5px] flex justify-center items-center">
+            <CircularProgress size="20px" />
+            </div>
+          ) : (
+            <span className="value font-bold">{quantity}</span>
+          )}
           <span
             className="control"
-            onClick={() => handleQuantityChange(product.quantity + 1)}
+            onClick={() => handleQuantityChange(quantity + 1, id)}
           >
             +
           </span>
@@ -123,19 +95,19 @@ export const CartCard = ({ product, onCartUpdate }) => {
           <div className="quantity">
             <span
               className="control"
-              onClick={() => handleQuantityChange(product.quantity - 1)}
+              onClick={() => handleQuantityChange(quantity - 1, id)}
             >
               -
             </span>
             <span className="value">{product.quantity}</span>
             <span
               className="control"
-              onClick={() => handleQuantityChange(product.quantity + 1)}
+              onClick={() => handleQuantityChange(quantity + 1, id)}
             >
               +
             </span>
           </div>
-          <div className="remove" onClick={handleRemove}>
+          <div className="remove" onClick={() => handleRemove(id)}>
             <i className="fa-solid fa-trash"></i>
             <p>Remove</p>
           </div>

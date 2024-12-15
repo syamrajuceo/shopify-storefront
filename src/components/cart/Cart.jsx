@@ -9,15 +9,18 @@ import tamaraIcon from "../../assets/image 1.png";
 import tabbyIcon from "../../assets/image 2.png";
 import cartIcon from "../../assets/Vector (1).png";
 import { shopifyClient } from "../../config/shopifyClient";
-import { fetchCart } from "../../store/cart";
+import { fetchCart, updateCart } from "../../store/cart";
 import { Link } from "react-router-dom";
 import { CartCard } from "./CartCard";
 import useShopifyStore from "../../store/useShopifyStore";
+import { Discount } from "@mui/icons-material";
 // import SimilarProductsCarousel from "../carousel/Carousel";
 
 export const Cart = () => {
   const [cartData, setCartData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [qtyLoading, setQtyoading] = useState(false);
+
   const [error, setError] = useState(null);
   const [discountCode, setDiscountCode] = useState("");
   const [totalAmount, setTotalAmount] = useState(0);
@@ -26,42 +29,51 @@ export const Cart = () => {
   const [totalItems, setTotalItems] = useState(0);
   const { cart, setCart } = useShopifyStore();
 
+  const cartId = localStorage.getItem("cartId");
 
-  
-  
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const fetchedCart = await fetchCart();
-        console.log("fetchedCart : ", fetchedCart);
+  const loadData = async () => {
+    try {
+      const fetchedCart = await fetchCart();
+      console.log("fetchedCart : ", fetchedCart);
 
-        if (fetchedCart) {
-          setCartData(fetchedCart);
-          const total = fetchedCart.lines.edges
-            .map((node) => parseFloat(node.node.merchandise.priceV2.amount * node.node.quantity)) 
-            .reduce((acc, curr) => acc + curr, 0); 
-          setTotalAmount(total); 
+      if (fetchedCart) {
+        setCartData(fetchedCart);
+        const total = fetchedCart.lines.edges
+          .map((node) =>
+            parseFloat(
+              node.node.merchandise.priceV2.amount * node.node.quantity
+            )
+          )
+          .reduce((acc, curr) => acc + curr, 0);
+        setTotalAmount(total);
 
-          const totalItems = fetchedCart.lines.edges
-            .map((node) => parseFloat(node.node.quantity)) 
-            .reduce((acc, curr) => acc + curr, 0); 
-            setTotalItems(totalItems); 
+        const totalItems = fetchedCart.lines.edges
+          .map((node) => parseFloat(node.node.quantity))
+          .reduce((acc, curr) => acc + curr, 0);
+        setTotalItems(totalItems);
 
-            const totalDiscount = fetchedCart.lines.edges
-            .map((node) => parseFloat(node.node.merchandise.compareAtPriceV2.amount * node.node.quantity)) 
-            .reduce((acc, curr) => acc + curr, 0); 
-            setTotalDiscount(totalDiscount); 
-        } else {
-          setCartData(null);
-        }
-      } catch (error) {
-        console.error("Error during initial fetch:", error.message);
-        setError(error.message);
-      } finally {
-        setLoading(false);
+        const totalDiscount = fetchedCart.lines.edges
+          .map((node) =>
+            parseFloat(
+              node.node.merchandise.compareAtPriceV2.amount *
+                node.node.quantity
+            )
+          )
+          .reduce((acc, curr) => acc + curr, 0);
+        setTotalDiscount(totalDiscount);
+      } else {
+        setCartData(null);
       }
-    };
-    loadData();
+    } catch (error) {
+      console.error("Error during initial fetch:", error.message);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+     loadData();
   }, []);
   console.log("fetchedCart : ", totalAmount);
   // Apply discount code
@@ -71,37 +83,73 @@ export const Cart = () => {
         mutation checkoutDiscountCodeApplyV2($checkoutId: ID!, $discountCode: String!) {
           checkoutDiscountCodeApplyV2(checkoutId: $checkoutId, discountCode: $discountCode) {
             checkout {
-              id
               discountApplications(first: 10) {
                 edges {
                   node {
-                    code
-                    value {
-                      ... on DiscountAmount {
-                        amount
-                      }
-                    }
+                    allocationMethod
+                    targetSelection
+                    targetType
                   }
                 }
+              }
+              checkoutUserErrors {
+                message
+                code
+                field
               }
             }
           }
         }
       `;
-
+  
       const response = await shopifyClient.post("", {
         query,
         variables: {
-          checkoutId: cartData.id,
-          discountCode,
+          checkoutId: cartId,
+          discountCode: discountCode,
         },
       });
-
-      console.log("Discount applied", response.data);
+  
+      console.log("GraphQL Response:", response.data); 
+  
+      if (response.data?.checkoutDiscountCodeApplyV2?.checkoutUserErrors?.length > 0) {
+        console.error("Error applying discount:", response.data.checkoutDiscountCodeApplyV2.checkoutUserErrors);
+      } else {
+        console.log("Discount applied successfully:", response.data);
+      }
     } catch (error) {
       console.error("Error applying discount code:", error.message);
     }
   };
+  
+
+
+  const handleQuantityChange = async (newQuantity, id) => {
+    if (newQuantity < 1) return;
+    try {
+      setQtyoading(true)
+      await updateCart(id, newQuantity);
+      console.log("Cart quantity updated.");
+      await loadData(); 
+      setQtyoading(false)
+    } catch (error) {
+      console.error("Failed to update cart quantity:", error.message);
+    }
+  };
+  
+  
+  const handleRemove = async (id) => {
+    try {
+      await updateCart(id, 0);
+      console.log("Item removed from cart.");
+      await loadData();
+    } catch (error) {
+      console.error("Failed to remove item from cart:", error.message);
+    }
+  };
+  
+  
+
   const handleCheckoutButtonClick = async () => {
     try {
       const checkoutUrl = localStorage.getItem("checkoutUrl");
@@ -161,6 +209,9 @@ export const Cart = () => {
                   key={node.id}
                   product={node}
                   onCartUpdate={handleCartUpdate}
+                  handleQuantityChange = {handleQuantityChange}
+                  handleRemove = {handleRemove}
+                  qtyLoading = {qtyLoading}
                 />
               ))}
             </div>
@@ -199,7 +250,9 @@ export const Cart = () => {
               {/* ------------------Summary------------------ */}
               <div className="mt-6 text-[#5A5A5A]">
                 <div className="flex justify-between items-center">
-                  <p className="text-[18px] font-normal">Subtotal ({totalItems} item)</p>
+                  <p className="text-[18px] font-normal">
+                    Subtotal ({totalItems} item)
+                  </p>
                   <p className="text-[18px] font-semibold">AED {totalAmount}</p>
                 </div>
                 <div className="flex justify-between items-center mt-1">

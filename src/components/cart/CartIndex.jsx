@@ -1,142 +1,142 @@
-import React, { useEffect, useState } from "react";
-import { shopifyClient } from "../../config/shopifyClient";
-import { fetchCart } from "../../store/cart";
+// import React, { useEffect, useState } from "react";
+// import { shopifyClient } from "../../config/shopifyClient";
+// import { fetchCart } from "../../store/cart";
 
-export const CartIndex = () => {
-  const [cartData, setCartData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [discountCode, setDiscountCode] = useState(""); // To store the entered discount code
-  const [userEmail, setUserEmail] = useState(""); // To store the user's email
+// export const CartIndex = () => {
+//   const [cartData, setCartData] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const [discountCode, setDiscountCode] = useState(""); // To store the entered discount code
+//   const [userEmail, setUserEmail] = useState(""); // To store the user's email
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const fetchedCart = await fetchCart();
-        console.log("fetchedCart : ", fetchedCart)
+//   useEffect(() => {
+//     const loadData = async () => {
+//       try {
+//         const fetchedCart = await fetchCart();
+//         console.log("fetchedCart : ", fetchedCart)
 
-        if (fetchedCart) {
-          setCartData(fetchedCart);
-        } else {
-          setCartData(null);
-        }
-      } catch (error) {
-        console.error("Error during initial fetch:", error.message);
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+//         if (fetchedCart) {
+//           setCartData(fetchedCart);
+//         } else {
+//           setCartData(null);
+//         }
+//       } catch (error) {
+//         console.error("Error during initial fetch:", error.message);
+//         setError(error.message);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
 
-    loadData();
-  }, []);
+//     loadData();
+//   }, []);
 
-  // Apply discount code
-  const handleApplyDiscountCode = async () => {
-    try {
-      const query = `
-        mutation checkoutDiscountCodeApplyV2($checkoutId: ID!, $discountCode: String!) {
-          checkoutDiscountCodeApplyV2(checkoutId: $checkoutId, discountCode: $discountCode) {
-            checkout {
-              id
-              discountApplications(first: 10) {
-                edges {
-                  node {
-                    code
-                    value {
-                      ... on DiscountAmount {
-                        amount
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      `;
+//   // Apply discount code
+//   const handleApplyDiscountCode = async () => {
+//     try {
+//       const query = `
+//         mutation checkoutDiscountCodeApplyV2($checkoutId: ID!, $discountCode: String!) {
+//           checkoutDiscountCodeApplyV2(checkoutId: $checkoutId, discountCode: $discountCode) {
+//             checkout {
+//               id
+//               discountApplications(first: 10) {
+//                 edges {
+//                   node {
+//                     code
+//                     value {
+//                       ... on DiscountAmount {
+//                         amount
+//                       }
+//                     }
+//                   }
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       `;
 
-      const response = await shopifyClient.post("", {
-        query,
-        variables: {
-          checkoutId: cartData.id,
-          discountCode,
-        },
-      });
+//       const response = await shopifyClient.post("", {
+//         query,
+//         variables: {
+//           checkoutId: cartData.id,
+//           discountCode,
+//         },
+//       });
 
-      console.log("Discount applied", response.data);
-    } catch (error) {
-      console.error("Error applying discount code:", error.message);
-    }
-  };
+//       console.log("Discount applied", response.data);
+//     } catch (error) {
+//       console.error("Error applying discount code:", error.message);
+//     }
+//   };
 
-  const handleCheckoutButtonClick = async () => {  
-    try {
-      const checkoutUrl = localStorage.getItem("checkoutUrl");
-      window.location.href = checkoutUrl;
-    } catch (error) {
-      console.error("Error during checkout:", error.message);
-    }
-  };
+//   const handleCheckoutButtonClick = async () => {  
+//     try {
+//       const checkoutUrl = localStorage.getItem("checkoutUrl");
+//       window.location.href = checkoutUrl;
+//     } catch (error) {
+//       console.error("Error during checkout:", error.message);
+//     }
+//   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+//   if (loading) {
+//     return <div>Loading...</div>;
+//   }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+//   if (error) {
+//     return <div>Error: {error}</div>;
+//   }
 
-  if (!cartData) {
-    return <div>No cart data available</div>;
-  }
+//   if (!cartData) {
+//     return <div>No cart data available</div>;
+//   }
 
-  return (
-    <div>
-      <h1>Your Cart</h1>
-      <div>
-        {cartData.lines.edges.map(({ node }) => (
-          <div key={node.id}>
-            <p>Product: {node.merchandise.product.title}</p>
-            <p>Variant: {node.merchandise.title}</p>
-            <p>Quantity: {node.quantity}</p>
-            <p>
-              Price: {node.merchandise.priceV2.amount}
-              {node.merchandise.priceV2.currencyCode}
-            </p>
-            <p>Category: {node.merchandise.product.productType}</p>
-            <div>
-              <img
-                src={node.merchandise.product.images.edges[0]?.node.src}
-                alt={
-                  node.merchandise.product.images.edges[0]?.node.altText ||
-                  "Product image"
-                }
-                style={{ width: "100px", height: "100px" }}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
+//   return (
+//     <div>
+//       <h1>Your Cart</h1>
+//       <div>
+//         {cartData.lines.edges.map(({ node }) => (
+//           <div key={node.id}>
+//             <p>Product: {node.merchandise.product.title}</p>
+//             <p>Variant: {node.merchandise.title}</p>
+//             <p>Quantity: {node.quantity}</p>
+//             <p>
+//               Price: {node.merchandise.priceV2.amount}
+//               {node.merchandise.priceV2.currencyCode}
+//             </p>
+//             <p>Category: {node.merchandise.product.productType}</p>
+//             <div>
+//               <img
+//                 src={node.merchandise.product.images.edges[0]?.node.src}
+//                 alt={
+//                   node.merchandise.product.images.edges[0]?.node.altText ||
+//                   "Product image"
+//                 }
+//                 style={{ width: "100px", height: "100px" }}
+//               />
+//             </div>
+//           </div>
+//         ))}
+//       </div>
 
-      {/* Discount and Gift Card Form */}
-      <div>
-        <input
-          type="text"
-          placeholder="Enter discount code"
-          value={discountCode}
-          onChange={(e) => setDiscountCode(e.target.value)}
-        />
-        <button onClick={handleApplyDiscountCode}>Apply Discount</button>
-      </div>
+//       {/* Discount and Gift Card Form */}
+//       <div>
+//         <input
+//           type="text"
+//           placeholder="Enter discount code"
+//           value={discountCode}
+//           onChange={(e) => setDiscountCode(e.target.value)}
+//         />
+//         <button onClick={handleApplyDiscountCode}>Apply Discount</button>
+//       </div>
 
-      {/* Checkout Button */}
-      <div>
-        <button onClick={handleCheckoutButtonClick}>Proceed to Checkout</button>
-      </div>
-    </div>
-  );
-};
+//       {/* Checkout Button */}
+//       <div>
+//         <button onClick={handleCheckoutButtonClick}>Proceed to Checkout</button>
+//       </div>
+//     </div>
+//   );
+// };
 
 // import React, { useEffect, useState } from "react";
 // import { shopifyClient } from "../../config/shopifyClient";
