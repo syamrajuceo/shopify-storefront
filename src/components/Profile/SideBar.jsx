@@ -37,7 +37,7 @@ function SideBar({ pageShow, setPageShow }) {
             <AddLocationAlt className="mr-3" /> Add Address
           </button>
         </li>
-        <li>
+        {pageShow === "Edit Settings"&&<li>
           <button
             onClick={() => handlePageChange("Edit Settings")}
             className={`flex items-center px-4 py-2 rounded-lg transition-all w-full ${pageShow === "Edit Settings" ? "bg-gray-700" : "hover:bg-gray-700"
@@ -45,7 +45,7 @@ function SideBar({ pageShow, setPageShow }) {
           >
             <Settings className="mr-3" /> Edit Settings
           </button>
-        </li>
+        </li>}
 
         <li>
           <button

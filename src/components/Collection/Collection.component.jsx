@@ -198,7 +198,7 @@ function CollectionComponent({products=[]}) {
       </div>
 
       {selectedfilter === null ? (
-        <div className="flex lg:hidden fixed z-30 bottom-[75px] bg-slate-300 p-3 w-full justify-between">
+        <div className="flex lg:hidden fixed z-30 bottom-[75px] md:bottom-[0px] bg-slate-300 p-3 w-full justify-between">
           <button
             className="flex flex-col items-center w-[50%] border-r-2"
             onClick={() => SetSelectedFilter("sort")}
