@@ -160,8 +160,10 @@ export function ProductCarousel({ Promoimage }) {
         </div>
 
         {/* Scroll Buttons */}
+        <div className="md:hidden">
         <ScrollButton direction="left" onClick={() => scroll("left")} />
-        <ScrollButton direction="right" onClick={() => scroll("right")} />
+        <ScrollButton direction="right" onClick={() => scroll("right")}  />
+        </div>
       </div>
    
   );

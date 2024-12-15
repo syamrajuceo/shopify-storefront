@@ -16,7 +16,7 @@ import { useParams } from "react-router-dom";
 import useShopifyStore from "../../store/useShopifyStore";
 import { useEffect, useState } from "react";
 import { addToCart } from "../../store/cart";
-
+import { ProductCarousel2 } from "../home/ProductCarousel2";
 export const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const products = useShopifyStore((state) => state.products);
@@ -317,10 +317,10 @@ export const ProductDetails = () => {
         </div>
       </div>
 
-      <div className="w-full ">
+      <div className="">
         <ProductList title={"Similar Products"} />
       </div>
-      <div className="w-full ">
+      <div className="">
         <ProductList title={"Popular Products"} />
       </div>
 

@@ -69,7 +69,7 @@ function ProductCategories() {
       <div className="w-full p-4 flex flex-col gap-3 md:hidden ">
         <div className="flex">
           <div className="flex items-center justify-center gap-2 h-[150px] bg-custom-gray w-[40%] rounded-tl-xl rounded-bl-xl ">
-            <h1>sunglass </h1>
+            <h1 className="text-md">sunglass </h1>
             <IoMdArrowForward />
           </div>
 
@@ -86,19 +86,19 @@ function ProductCategories() {
           <div className="flex items-center justify-center gap-2 h-[150px]  w-[60%] ">
             <img
               src={eyeglass2}
-              alt="sunglass"
+              alt="eyeglass"
               className="w-full h-full  object-cover rounded-tl-xl rounded-bl-xl"
             />
           </div>
           <div className="flex items-center justify-center gap-2 h-[150px] bg-custom-gray w-[40%] rounded-tr-xl rounded-br-xl ">
-            <h1>Eyeglass</h1>
+            <h1 className="text-md">Eyeglass</h1>
             <IoMdArrowForward />
           </div>
         </div>
 
         <div className="flex">
           <div className="flex items-center justify-center gap-2 h-[150px] bg-custom-gray w-[40%] rounded-tl-xl rounded-bl-xl ">
-            <h1>sunglass </h1>
+            <h1 className="text-md">Contact lenses </h1>
             <IoMdArrowForward />
           </div>
 
