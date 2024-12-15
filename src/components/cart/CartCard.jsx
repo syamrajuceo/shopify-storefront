@@ -93,7 +93,7 @@ export const CartCard = ({ product, onCartUpdate }) => {
           <PriceWrapper>
             <p className="original">
               {product.merchandise?.priceV2?.currencyCode}
-              {product.merchandise?.priceV2?.amount}
+              {product.merchandise?.compareAtPriceV2?.amount}
             </p>
             <p className="discount">45% off</p>
           </PriceWrapper>
@@ -111,7 +111,7 @@ export const CartCard = ({ product, onCartUpdate }) => {
         <PriceWrapperMobile>
           <p className="original">
             {product.merchandise?.priceV2?.currencyCode}
-            {product.merchandise?.priceV2?.amount}
+            {product.merchandise?.compareAtPriceV2?.amount}
           </p>
           <p className="discount">45% off</p>
         </PriceWrapperMobile>

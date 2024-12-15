@@ -1,7 +1,8 @@
 import { shopifyClient } from "../config/shopifyClient";
-import { createCart, createPreAuthenticatedCheckoutUrl, fetchCart, updateCartBuyerIdentity } from "./cart";
+import { createCart, fetchCart, updateCartBuyerIdentity } from "./cart";
 import useShopifyStore from "./useShopifyStore";
 
+const { setUser } = useShopifyStore.getState();
 //  --------------------- user sign in----------------------------
 export const signIn = async (email, password) => {
   const query = `
@@ -43,6 +44,36 @@ export const signIn = async (email, password) => {
 
       // Update the state with the new user token (using Zustand)
       useShopifyStore.getState().setUserToken(accessToken);
+
+            // Fetch user details
+            const userQuery = `
+            query {
+              customer(customerAccessToken: "${accessToken}") {
+                email
+                firstName
+                lastName
+              }
+            }
+          `;
+    
+          const userResponse = await shopifyClient.post("", { query: userQuery });
+          const user = userResponse.data.data.customer;
+    
+          if (user) {
+            setUser({
+              email: user.email,
+              firstName: user.firstName,
+              lastName: user.lastName,
+            });
+          }
+    
+          const localUser = {
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          };
+    
+          localStorage.setItem("user", JSON.stringify(localUser));
 
       // Step 4: Check if the user has an existing cart
       const cart = await fetchCart(); // Retrieve existing cart

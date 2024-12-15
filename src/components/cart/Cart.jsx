@@ -12,6 +12,7 @@ import { shopifyClient } from "../../config/shopifyClient";
 import { fetchCart } from "../../store/cart";
 import { Link } from "react-router-dom";
 import { CartCard } from "./CartCard";
+import useShopifyStore from "../../store/useShopifyStore";
 // import SimilarProductsCarousel from "../carousel/Carousel";
 
 export const Cart = () => {
@@ -19,7 +20,15 @@ export const Cart = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [discountCode, setDiscountCode] = useState("");
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [totalDiscount, setTotalDiscount] = useState(0);
+  const [currency, setCurrency] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
+  const { cart, setCart } = useShopifyStore();
 
+
+  
+  
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -28,6 +37,20 @@ export const Cart = () => {
 
         if (fetchedCart) {
           setCartData(fetchedCart);
+          const total = fetchedCart.lines.edges
+            .map((node) => parseFloat(node.node.merchandise.priceV2.amount * node.node.quantity)) 
+            .reduce((acc, curr) => acc + curr, 0); 
+          setTotalAmount(total); 
+
+          const totalItems = fetchedCart.lines.edges
+            .map((node) => parseFloat(node.node.quantity)) 
+            .reduce((acc, curr) => acc + curr, 0); 
+            setTotalItems(totalItems); 
+
+            const totalDiscount = fetchedCart.lines.edges
+            .map((node) => parseFloat(node.node.merchandise.compareAtPriceV2.amount * node.node.quantity)) 
+            .reduce((acc, curr) => acc + curr, 0); 
+            setTotalDiscount(totalDiscount); 
         } else {
           setCartData(null);
         }
@@ -40,7 +63,7 @@ export const Cart = () => {
     };
     loadData();
   }, []);
-
+  console.log("fetchedCart : ", totalAmount);
   // Apply discount code
   const handleApplyDiscountCode = async () => {
     try {
@@ -122,11 +145,6 @@ export const Cart = () => {
               Create New Account
             </Link>
           </p>
-          {/* <Link to="/products">
-            <button className="bg-[#464646] w-[287px] px-3 py-2 text-[#fff] mt-3 rounded">
-              Continue Shopping
-            </button>
-          </Link> */}
         </div>
       </div>
     );
@@ -181,19 +199,25 @@ export const Cart = () => {
               {/* ------------------Summary------------------ */}
               <div className="mt-6 text-[#5A5A5A]">
                 <div className="flex justify-between items-center">
-                  <p className="text-[18px] font-normal">Subtotal (1 item)</p>
-                  <p className="text-[18px] font-semibold">AED 2999.00</p>
+                  <p className="text-[18px] font-normal">Subtotal ({totalItems} item)</p>
+                  <p className="text-[18px] font-semibold">AED {totalAmount}</p>
                 </div>
                 <div className="flex justify-between items-center mt-1">
                   <p className="text-[18px] font-normal">Coupon</p>
                   <p className="text-[18px] font-semibold text-[#228944]">
-                    - AED 2999.00
+                    - AED 00.00
                   </p>
                 </div>
                 <div className="flex justify-between items-center mt-1">
                   <p className="text-[18px] font-normal">Shipping Fee</p>
                   <p className="text-[18px] font-semibold text-[#228944]">
                     FREE
+                  </p>
+                </div>
+                <div className="flex justify-between items-center mt-1">
+                  <p className="text-[18px] font-normal">Total Discount</p>
+                  <p className="text-[18px] font-semibold text-[#228944]">
+                    -AED {totalDiscount}
                   </p>
                 </div>
                 <div className="flex justify-between items-center mt-4">
@@ -203,7 +227,7 @@ export const Cart = () => {
                       (Inclusive of VAT)
                     </span>
                   </p>
-                  <p className="text-[20px] font-bold">AED 2999.00</p>
+                  <p className="text-[20px] font-bold">AED {totalAmount}</p>
                 </div>
               </div>
 
