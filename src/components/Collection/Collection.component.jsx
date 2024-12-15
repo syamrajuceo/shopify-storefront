@@ -24,14 +24,6 @@ function CollectionComponent({ products = [], type = "Men" }) {
     "Product Status": []
   })
   const [filterProduct, setFilterProduct] = useState(products);
-  const [pagenatedProduct, setPagenatedProduct] = useState(filterProduct.slice(0, 8));
-  const [visibleCount, setVisibleCount] = useState(8);
-
-  const loadMore = () => {
-    const newCount = visibleCount + 4; 
-    setVisibleCount(newCount);
-    setPagenatedProduct(filterProduct.slice(0, newCount));
-  };  
   const [filterOptions, setFilterOptions] = useState({
     Gender: [],
     "Product Categories": [],
@@ -253,8 +245,8 @@ function CollectionComponent({ products = [], type = "Men" }) {
               OurPrice={prodobj.OurPrice}
               off={prodobj.off}
             /> */}
-          {pagenatedProduct && pagenatedProduct.length > 0 ? (
-  pagenatedProduct.map((product) =>
+          {filterProduct && filterProduct.length > 0 ? (
+  filterProduct.map((product) =>
     product ? <ProductCard key={product.id} product={product} /> : null
   )
 ) : type === "ContactLenses" ? (
@@ -265,14 +257,9 @@ function CollectionComponent({ products = [], type = "Men" }) {
 
         </div>
         <div>
-        {visibleCount < filterProduct.length && (
-        <button
-          className="w-full p-5 bg-slate-300 font-semibold mt-4"
-          onClick={loadMore}
-        >
-          Load More
-        </button>
-      )}
+          <button className="w-full p-5 bg-slate-300 font-semibold">
+            Load More
+          </button>
           <div className="text-center p-14">
           النظارات الواقية الصناعية ضرورية لحماية العمال في البيئات التي تشكل”
             فيها الغبار والحطام والمواد الكيميائية والمخاطر العالية التأثير
