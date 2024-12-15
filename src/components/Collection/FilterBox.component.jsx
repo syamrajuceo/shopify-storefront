@@ -64,7 +64,7 @@ function FilterBoxComponent({ header = "Gender", options = [], filterOptions, on
                             checked={selectedOptions.has(option)}
                             onChange={() => handleCheckboxChange(option)}
                         />
-                        <label htmlFor={option}>{option}</label>
+                        <label htmlFor={option} className="capitalize">{option}</label>
                     </div>
                 ))}
                 {displayedOptions.length > 5 && !showMore && (

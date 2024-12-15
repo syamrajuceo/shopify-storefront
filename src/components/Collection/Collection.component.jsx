@@ -14,7 +14,9 @@ import FilterController from "./FilterContoiller";
 // import useShopifyStore from "../../store/useShopifyStore";
 
 function CollectionComponent({ products = [] }) {
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 100 });
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 500 });
+  const [temporarypriceRange, temporarysetPriceRange] = useState({ min: 0, max: 500 });
+
   const [filterProduct, setFilterProduct] = useState(products);
   const [filterOptions, setFilterOptions] = useState({
     Gender: [],
@@ -50,15 +52,15 @@ function CollectionComponent({ products = [] }) {
   }, [products, filterOptions, priceRange]);
   
   const genderOptions = [
-    "Men",
-    "Women",
-    "Unisex",
-    "Kids",
-    "Elderly",
-    "Teenagers",
+    "male",
+    "female",
+    "unisex",
+    // "Kids",
+    // "Elderly",
+    // "Teenagers",
   ];
   const categoryOptions = ["Sunglasses", "Eyeglasses", "Contact Lenses"];
-  const frameColorOptions = ["Black", "Blue", "Brown", "Gold", "Silver"];
+  const frameColorOptions = ["pink", "black", "gray", "blue"];
   const brandOptions = ["Ray-Ban", "Oakley", "Gucci", "Prada", "Versace"];
   const productStatusOptions = ["Available", "Out of Stock", "New Arrival"];
   const [appliedfilter, SetAppliedFilter] = useState(0);
@@ -84,15 +86,15 @@ function CollectionComponent({ products = [] }) {
   
     if (type === "min") {
       // Ensure min value is adjusted in multiples of 50
-      adjustedValue = value > priceRange.min ? value + step - (value % step) : value - step - (value % step);
-      adjustedValue = Math.min(adjustedValue, priceRange.max); // Prevent min from exceeding max
+      adjustedValue = value > temporarypriceRange.min ? value + step - (value % step) : value - step - (value % step);
+      adjustedValue = Math.min(adjustedValue, temporarypriceRange.max); // Prevent min from exceeding max
     } else if (type === "max") {
       // Ensure max value is adjusted in multiples of 50
-      adjustedValue = value > priceRange.max ? value + step - (value % step) : value - step - (value % step);
-      adjustedValue = Math.max(adjustedValue, priceRange.min); // Prevent max from being below min
+      adjustedValue = value > temporarypriceRange.max ? value + step - (value % step) : value - step - (value % step);
+      adjustedValue = Math.max(adjustedValue, temporarypriceRange.min); // Prevent max from being below min
     }
   
-    setPriceRange((prev) => ({
+    temporarysetPriceRange((prev) => ({
       ...prev,
       [type]: adjustedValue,
     }));
@@ -125,7 +127,7 @@ function CollectionComponent({ products = [] }) {
                 type="number"
                 className="border w-[125px] py-1 px-3"
                 min={0}
-                value={priceRange.min}
+                value={temporarypriceRange.min}
                 onChange={(e) => handlePriceChange(e, "min")}
               />
               <span>-</span>
@@ -133,16 +135,16 @@ function CollectionComponent({ products = [] }) {
                 type="number"
                 className="border w-[125px]  py-1 px-3"
                 min={1}
-                value={priceRange.max}
+                value={temporarypriceRange.max}
                 onChange={(e) => handlePriceChange(e, "max")}
               />
             </div>
 
             <div className="flex gap-10 mt-3 items-center">
               <div>
-                Price: ${priceRange.min} — ${priceRange.max}
+                Price: ${temporarypriceRange.min} — ${temporarypriceRange.max}
               </div>
-              <button className="border bg-slate-200 px-3 py-2 hover:bg-slate-300 transition">
+              <button className="border bg-slate-200 px-3 py-2 hover:bg-slate-300 transition" onClick={()=>{setPriceRange(temporarypriceRange)}}>
                 Filter
               </button>
             </div>
@@ -260,7 +262,7 @@ function CollectionComponent({ products = [] }) {
           </div>
         </div>
       </div>
-
+       {/* mobile */}
       {selectedfilter === null ? (
         <div className="flex lg:hidden fixed z-30 bottom-[75px] md:bottom-[0px] bg-slate-300 p-3 w-full justify-between">
           <button
@@ -288,12 +290,15 @@ function CollectionComponent({ products = [] }) {
       ) : (
         <div className="block lg:hidden fixed z-30 bottom-[75px] bg-slate-300 p-3 w-full">
           {selectedfilter === "sort" && (
-            <SortComponent SetSelectedFilter={SetSelectedFilter} />
+            <SortComponent SetSelectedFilter={SetSelectedFilter}  />
           )}
           {selectedfilter === "filter" && (
             <FilterComponent
               SetSelectedFilter={SetSelectedFilter}
               SetFilterCount={SetAppliedFilter}
+              filterOptions={filterOptions}
+              onFilterChange={handleFilterChange}
+              priceRange={priceRange} setPriceRange={setPriceRange}
             />
           )}
         </div>
