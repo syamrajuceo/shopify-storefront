@@ -4,7 +4,7 @@ import Burberry from '../../assets/Burberry.png'
 import TiffanyCo from '../../assets/Tiffany&co.png'
 import ArmaniExchange from '../../assets/ArmaniExange.png'
 import Vouge  from '../../assets/Vouge.png'
-import DgLoGO from '../../assets/dglogo2.png'
+import DgLoGO from '../../assets/dglogo3.png'
 import ArmaniXlogo from '../../assets/ArmaniXlogo.png'
 import Vougelogo from '../../assets/vougeLogo.png'
 import oakelylogo from '../../assets/oakleylogo.png'
@@ -82,6 +82,7 @@ function Brand() {
                   src={brand.image}
                   alt={brand.name}
                   className="w-full h-full object-cover"
+                  calss='logowhite'
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-40 transition-opacity duration-300 group-hover:bg-opacity-30" />
                 <div className="absolute inset-0 flex items-center justify-center  ">

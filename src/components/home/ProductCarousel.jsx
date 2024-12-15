@@ -119,12 +119,12 @@ export function ProductCarousel({ Promoimage }) {
   };
 
   return (
-    <div className="relative p-4 md:p-8 mx-4 mt-5">
-      {/* Carousel Container */}
-      <div className="relative md:mx-10">
+  
+      
+      <div className="relative p-4 md:p-8 ">
         <div
           ref={scrollContainerRef}
-          className="flex gap-12 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide "
+          className="flex overflow-x-auto gap-6 xl:gap-0 scroll-smooth snap-x snap-mandatory scrollbar-hide bg-custom-gray justify-between p-4 rounded-xl"
           style={{
             scrollbarWidth: "none", // For Firefox
             msOverflowStyle: "none", // For IE/Edge
@@ -137,27 +137,18 @@ export function ProductCarousel({ Promoimage }) {
             subtitle="50% OFF"
             buttonText="View all"
             imageUrl={Promoimage}
-            className="snap-start w-[200px] md:w-[300px] rounded-xl flex-shrink-0"
-          />):(  <div className="snap-start bg-red-200  md:w-[300px] rounded-xl flex-shrink-0 w-[200px]">
+            className="snap-start w-[200px] md:w-[370px] rounded-xl flex-shrink-0"
+          />):(  <div className="snap-start   md:w-[370px] rounded-xl flex-shrink-0 w-[200px] h-[454px]">
             <img
               src={evervaImg}
               alt="everva"
               className="object-cover rounded-xl w-full h-full"
             />
           </div>) }
-
-
-
-        
-
-
-
-
-          {/* Everva Image Div */}
+{/* Everva Image Div */}
          
-
           {/* Product Cards */}
-          {Products.slice(0, 4).map((product) => (
+          {Products.slice(0, 3).map((product) => (
             <div key={product.id} className="snap-start">
               <ProductCard product={product} />
             </div>
@@ -168,6 +159,6 @@ export function ProductCarousel({ Promoimage }) {
         <ScrollButton direction="left" onClick={() => scroll("left")} />
         <ScrollButton direction="right" onClick={() => scroll("right")} />
       </div>
-    </div>
+   
   );
 }

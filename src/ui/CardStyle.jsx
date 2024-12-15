@@ -39,9 +39,8 @@ export const AdCardMobileImage = styled.img`
 // Individual Card
 export const Card = styled.div`
   flex: 0 0 auto;
-  background: #ffffff;
   border-radius: 0.625rem;
-  width: 15.125rem;
+  width:350px;
   scroll-snap-align: center;
   position: relative;
 `;
