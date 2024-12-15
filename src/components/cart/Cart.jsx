@@ -142,6 +142,7 @@ export const Cart = () => {
   //     console.error("Error applying discount code:", error.message);
   //   }
   // };
+  //
 
   const handleQuantityChange = async (newQuantity, id) => {
     if (newQuantity < 1) return;
