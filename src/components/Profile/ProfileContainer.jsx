@@ -71,7 +71,7 @@ function ProfileContainer() {
   return (
     <div className="h-[80vh] flex">
       {/* Sidebar */}
-      <div className="w-64 bg-gray-800 text-white">
+      <div className="w-64 bg-white text-black">
         <UserData user={user} />
         <SideBar pageShow={pageShow} setPageShow={setPageShow} />
       </div>

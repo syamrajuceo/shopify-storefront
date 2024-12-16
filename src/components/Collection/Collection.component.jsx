@@ -204,8 +204,8 @@ function CollectionComponent({ products = [], type = "Men" }) {
               <div>
                 Price: ${temporarypriceRange.min} — ${temporarypriceRange.max}
               </div>
-              <button className="border bg-slate-200 px-3 py-2 hover:bg-slate-300 transition" onClick={() => { setPriceRange(temporarypriceRange) }}>
-                Filter
+              <button className="border  px-3 py-2 bg-blue-200  transition" onClick={() => { setPriceRange(temporarypriceRange) }}>
+                Apply
               </button>
             </div>
           </div>
@@ -256,7 +256,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
             </button> */}
 
       {/* Main product section */}
-      <div className="w-full lg:w-3/4 bg-slate-200">
+      <div className="w-full lg:w-3/4 ">
         <div className="flex items-center space-x-2 text-sm text-gray-700 p-4">
           <span className="hover:text-blue-600 cursor-pointer">Shop</span>
           <IoIosArrowForward />
@@ -264,8 +264,11 @@ function CollectionComponent({ products = [], type = "Men" }) {
           <IoIosArrowForward />
           <span className="font-semibold">{type}</span>
         </div>
+
         <div className="bg-slate-300 p-3 text-sm text-gray-700">
+        
           Showing {pagenatedProduct.length} of {filterProduct.length} results
+
         </div>
 
         {/* Product grid */}
@@ -295,7 +298,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
         <div>
           {visibleCount < filterProduct.length && (
             <button
-              className="w-full p-5 bg-slate-300 font-semibold mt-4"
+              className="w-full p-5  font-semibold mt-4"
               onClick={loadMore}
             >
               Load More
