@@ -46,7 +46,7 @@ function FilterBoxComponent({ header = "Gender", options = [], filterseletedOpti
                     <IoMdArrowDropdown />
                 </span>
             </div>
-            <div className={`${isOpen ? "block" : "hidden"} ml-2`}>
+            <div className={`${isOpen ? "block" : "hidden"} ml-2 p-2`}>
                 {options.length >= 5 && (
                     <div className="mb-2">
                         <input
