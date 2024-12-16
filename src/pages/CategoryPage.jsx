@@ -11,7 +11,7 @@ const CategoryPage = () => {
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        height: '100vh',
+        height: '50vh',
         padding: 2,
         gap: 2,
       }}
@@ -35,12 +35,12 @@ const CategoryPage = () => {
             borderRadius: 2,
             padding: '12px 24px',
             fontSize: '16px',
-            backgroundColor: '#1d4ed8',
+            backgroundColor: '',
             boxShadow: 3,
             '&:hover': {
-              backgroundColor: '#1d4ed8', 
+              backgroundColor: '#', 
             },
-            color: 'white',
+            color: 'black',
           }}
         >
           <FaGlasses style={{ marginRight: '8px' }} />
@@ -67,12 +67,12 @@ const CategoryPage = () => {
             borderRadius: 2,
             padding: '12px 24px',
             fontSize: '16px',
-            backgroundColor: '#16a34a',
+            backgroundColor: '',
             boxShadow: 3,
             '&:hover': {
-              backgroundColor: '#16a34a', 
+              backgroundColor: '', 
             },
-            color: 'white',
+            color: 'black',
           }}
         >
           <FaGlasses style={{ marginRight: '8px' }} />
@@ -97,14 +97,14 @@ const CategoryPage = () => {
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: 2,
-            padding: '12px 24px',
+            padding: '11px 24px',
             fontSize: '16px',
-            backgroundColor: '#9333ea',
+            backgroundColor: '',
             boxShadow: 3,
             '&:hover': {
-              backgroundColor: '#9333ea', 
+              backgroundColor: '', 
             },
-            color: 'white',
+            color: 'black',
           }}
         >
           <FaRegEye style={{ marginRight: '8px' }} />
