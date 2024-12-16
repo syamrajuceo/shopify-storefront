@@ -79,7 +79,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 export const ProductCard = ({ product = {} }) => {
   const userObject = localStorage.getItem("user");
-  const user = JSON.parse(userObject);
+  const user = userObject ? JSON.parse(userObject):{email:""};
   const [loading, setLoading] = useState(false)
   const {
     title = "",
