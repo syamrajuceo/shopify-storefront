@@ -28,6 +28,9 @@ export const Cart = () => {
   const [totalItems, setTotalItems] = useState(0);
   // const cartId = localStorage.getItem("cartId");
 
+  const userObject = localStorage.getItem("user");
+    const user = JSON.parse(userObject);
+
   const Products = useShopifyStore((state) => state.products);
 
   const loadData = async () => {
@@ -145,7 +148,7 @@ export const Cart = () => {
   const handleQuantityChange = async (newQuantity, id) => {
     if (newQuantity < 1) return;
     try {
-      await updateCart(id, newQuantity);
+      await updateCart(id, newQuantity,user.email);
       console.log("Cart quantity updated.");
       await loadData();
     } catch (error) {
@@ -155,7 +158,7 @@ export const Cart = () => {
 
   const handleRemove = async (id) => {
     try {
-      await updateCart(id, 0);
+      await updateCart(id, 0,user.email);
       console.log("Item removed from cart.");
       await loadData();
     } catch (error) {
@@ -453,7 +456,7 @@ export const Cart = () => {
       </div>
       {/* ------------------Checkout Button for mobile------------------ */}
       {cartData?.lines?.edges?.length > 0 && (
-        <div className="fixed lg:hidden bottom-[70px] w-full text-[#5A5A5A] flex justify-between items-center bg-[#fff] px-4 py-2">
+        <div className="fixed lg:hidden bottom-[70px] md:bottom-[0px] w-full text-[#5A5A5A] flex justify-between items-center bg-[#fff] px-4 py-2">
           <div className="flex flex-col">
             <p className="text-[14px]">
               Total :

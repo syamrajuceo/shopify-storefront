@@ -28,7 +28,7 @@ export const Register = () => {
       const customer = await signUp(firstName, lastName, email, password);
       console.log("Customer ", customer);
 
-      const { accessToken } = customer;
+      const { accessToken} = customer;
 
       localStorage.setItem("accessToken", accessToken);
 

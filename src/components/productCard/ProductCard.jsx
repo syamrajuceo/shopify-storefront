@@ -78,6 +78,8 @@ import toast from "react-hot-toast";
 import CircularProgress from "@mui/material/CircularProgress";
 
 export const ProductCard = ({ product = {} }) => {
+  const userObject = localStorage.getItem("user");
+  const user = JSON.parse(userObject);
   const [loading, setLoading] = useState(false)
   const {
     title = "",
@@ -107,7 +109,7 @@ export const ProductCard = ({ product = {} }) => {
       }
       setLoading(true)
       const quantity = 1;
-      const cart = await addToCart(variantId, quantity);
+      const cart = await addToCart(variantId, quantity,user.email);
       setLoading(false)
       console.log("Cart updated:", cart);
       if (cart.id) {
@@ -117,6 +119,9 @@ export const ProductCard = ({ product = {} }) => {
       console.error("Failed to add product to cart:", error.message);
     }
   };
+
+
+  console.log("user", (user.email));
 
   return (
     <Card>

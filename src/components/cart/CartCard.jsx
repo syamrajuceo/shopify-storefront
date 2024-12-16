@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 
 export const CartCard = ({ product, handleQuantityChange, handleRemove }) => {
   const { quantity, id, handle } = product;
+  
 
   const [loading, setLoading] = useState(false);
 
