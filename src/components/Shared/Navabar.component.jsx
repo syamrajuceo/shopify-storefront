@@ -15,6 +15,7 @@ import { FaHome, FaShoppingCart } from "react-icons/fa";
 import { BiSolidOffer } from "react-icons/bi";
 import { BiSolidTagAlt } from "react-icons/bi";
 import ProductSearchList from "./ProductSeatchlist";
+
 const iconMapping = {
   FaHome: <FaHome className="text-yellow-500 text-2xl" />,
   FaOffer: <BiSolidOffer className="text-red-600 text-2xl" />,
@@ -59,12 +60,16 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
           <Link to={"/login"}>
             <img src={user} alt="user" />
           </Link>
-          <Link className="relative" to={"/cart"}>
-            <img src={cart} alt="cart" />
-            <span className="absolute top-[-13px] bg-red-500 rounded-[100%] p-1 text-xs text-slate-50">
-              {cartnumber}
-            </span>
+          <Link className="relative inline-block" to="/cart">
+            {/* <img src={cart} alt="Go to cart" className="w-6 h-6" /> */}
+            <FaShoppingCart className="text-2xl text-gray-700" />
+            {cartnumber > 0 && (
+              <span className={`absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full px-${cartnumber > 99 ? '3' : '2'} py-1 text-xs bg-red-500 text-white`}>
+                {cartnumber > 99 ? "99+" : cartnumber}
+              </span>
+            )}
           </Link>
+
         </div>
       </div>
       <div className="flex sm:hidden  bg-slate-200 items-center h-[40px] w-[90%] mx-auto my-3 relative">
