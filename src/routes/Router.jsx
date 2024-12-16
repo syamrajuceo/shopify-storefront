@@ -18,6 +18,7 @@ import ContactLenses from "../pages/ContactLenses";
 import CategoryPage from "../pages/CategoryPage";
 import Offers from "../pages/Offers";
 import SearchPage from "../pages/SearchPage";
+import Orderpage from "../components/Order/Orderpage";
 
 export const router = createBrowserRouter([
   {
@@ -94,9 +95,14 @@ export const router = createBrowserRouter([
             path: "/cart",
             element: <CartPage />,
           },
+          
           {
             path: "/profile",
             element: <ProfilePage />,
+          },
+          {
+            path: "/order",
+            element: <Orderpage />,
           },
         ],
       },]
