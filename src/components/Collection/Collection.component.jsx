@@ -24,14 +24,39 @@ function CollectionComponent({ products = [], type = "Men" }) {
     "Product Status": []
   })
   const [filterProduct, setFilterProduct] = useState(products);
-  const [pagenatedProduct, setPagenatedProduct] = useState(filterProduct.slice(0, 8));
+  const [pagenatedProduct, setPagenatedProduct] = useState(() => {
+    if (!filterProduct || filterProduct.length === 0) {
+      return [];
+    }
+    if (filterProduct.length < 8) {
+      return filterProduct;
+    }
+    return filterProduct.slice(0, 8);
+  });
+
+  useEffect(() => {
+    if (!filterProduct || filterProduct.length === 0) {
+      setPagenatedProduct([]);
+    } else if (filterProduct.length < 8) {
+      setPagenatedProduct(filterProduct);
+    } else {
+      setPagenatedProduct(filterProduct.slice(0, 8));
+    }
+  }, [filterProduct]);
+
   const [visibleCount, setVisibleCount] = useState(8);
 
   const loadMore = () => {
-    const newCount = visibleCount + 4; 
+    const newCount = visibleCount + 4;
     setVisibleCount(newCount);
-    setPagenatedProduct(filterProduct.slice(0, newCount));
-  };  
+    
+    if (filterProduct.length >= newCount) {
+      setPagenatedProduct(filterProduct.slice(0, newCount));
+    } else {
+      setPagenatedProduct(filterProduct);
+    }
+  };
+  
   const [filterOptions, setFilterOptions] = useState({
     Gender: [],
     "Product Categories": [],
@@ -254,33 +279,33 @@ function CollectionComponent({ products = [], type = "Men" }) {
               off={prodobj.off}
             /> */}
           {pagenatedProduct && pagenatedProduct.length > 0 ? (
-  pagenatedProduct.map((product) =>
-    product ? <ProductCard key={product.id} product={product} /> : null
-  )
-) : type === "ContactLenses" ? (
-  <p>Coming soon</p>
-) : (
-  <p>No product available</p>
-)}
+            pagenatedProduct.map((product) =>
+              product ? <ProductCard key={product.id} product={product} /> : null
+            )
+          ) : type === "ContactLenses" ? (
+            <p>Coming soon</p>
+          ) : (
+            <p>No product available</p>
+          )}
 
         </div>
         <div>
-        {visibleCount < filterProduct.length && (
-        <button
-          className="w-full p-5 bg-slate-300 font-semibold mt-4"
-          onClick={loadMore}
-        >
-          Load More
-        </button>
-      )}
+          {visibleCount < filterProduct.length && (
+            <button
+              className="w-full p-5 bg-slate-300 font-semibold mt-4"
+              onClick={loadMore}
+            >
+              Load More
+            </button>
+          )}
           <div className="text-center p-14">
-          النظارات الواقية الصناعية ضرورية لحماية العمال في البيئات التي تشكل”
+            النظارات الواقية الصناعية ضرورية لحماية العمال في البيئات التي تشكل”
             فيها الغبار والحطام والمواد الكيميائية والمخاطر العالية التأثير
             تهديدًا. تلبي مجموعتنا من النظارات الواقية المعتمدة أعلى المعايير
             العالمية، بما في ذلك ANSI Z87.1 و EN166، لضمان حماية كاملة للعينين.
             تتوفر النظارات بعدسات مع أو بدون قوة تصحيحية، ونقدم أنماطًا تناسب كل
             احتياج صناعي، بدءًا من البناء إلى التصنيع。”
-            
+
             {faqData.map((faq, index) => (
               <div key={index} className="p-2 m-2 border-slate-500 ">
                 <h1
