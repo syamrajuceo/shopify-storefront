@@ -107,7 +107,7 @@ import { useState, useEffect } from 'react';
 import RatingContainer from './RatingContainer';
 import { addReview } from "../../store/review";
 
-function ReviewForm({ SetIsShow,product_handle}) {
+function ReviewForm({ SetIsShow,product_handle , handleReview}) {
   const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm();
   const [rating, setRating] = useState(0);
   const user = JSON.parse(localStorage.getItem("user")); 
@@ -125,20 +125,10 @@ function ReviewForm({ SetIsShow,product_handle}) {
       reviewer_email,
       reviewer_name
     };
-
     console.log(reviewData)
     try {
-      // Replace this with your actual API endpoint
-    //   const response = await axios.post("https://shopify-backend-w6d5.onrender.com/api/reviews", reviewData);
-    //     console.log("Got response :", response)
-      // Handle successful submission
-
-      const res = await addReview(reviewData)
-      console.log("Got response :", res)
-      if (response.status === 201) {
-        alert("Review submitted successfully!");
-        SetIsShow(false); // Close the review form
-      }
+      const res = await handleReview(reviewData)
+      SetIsShow(false);
     } catch (error) {
       console.error("Error submitting review:", error.message);
     }

@@ -16,23 +16,27 @@ import { useParams } from "react-router-dom";
 import useShopifyStore from "../../store/useShopifyStore";
 import { useEffect, useState } from "react";
 import { addToCart } from "../../store/cart";
+import toast from "react-hot-toast";
+import { addReview } from "../../store/review";
 import { ProductCarousel2 } from "../home/ProductCarousel2";
 export const ProductDetails = () => {
+  const { reviews } = useShopifyStore.getState();
   const [product, setProduct] = useState(null);
   const products = useShopifyStore((state) => state.products);
   const { handle } = useParams();
   const [mainImg, setMainImg] = useState(null);
   const [subImgs, setSubImgs] = useState([]);
-  useEffect(() => {
-    // Find the product matching the handle
-    const foundProduct = products.find((p) => p.handle === handle);
-    setProduct(foundProduct);
-    if (foundProduct?.images?.edges) {
-      const allImages = foundProduct.images.edges.map((edge) => edge.node.url);
-      setMainImg(allImages[0] || null); // Set the first image as the main image
-      setSubImgs(allImages);
-    }
-  }, [handle, products]);
+  const [ratingCount, setRatingCount] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [filteredReviews, setFilteredReviews] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
+  const [ratingDistribution, setRatingDistribution] = useState({
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+  });
 
   console.log("product found : ", product);
 
@@ -72,14 +76,102 @@ export const ProductDetails = () => {
         console.error("Variant ID not found.");
         return;
       }
-      const quantity = 1;
       const cart = await addToCart(variantId, quantity);
       console.log("Cart updated:", cart);
-      alert("Product added to cart!");
+      toast.success("Product added to cart!");
     } catch (error) {
       console.error("Failed to add product to cart:", error.message);
     }
   };
+  console.log("Reviews : ", reviews);
+
+  const filterReviewsByProductId = (reviews, productId) => {
+    if (!reviews || reviews.length === 0) {
+      console.error("Reviews array is empty or undefined!");
+      return [];
+    }
+
+    console.log("Filtering reviews with productId:", productId);
+    return reviews.filter(
+      (review) => String(review.product_external_id) === String(productId)
+    );
+  };
+
+  const calculateReviewStats = (filteredReviews) => {
+    setRatingCount(filteredReviews.length);
+    if (filteredReviews.length === 0) {
+      setAverageRating(0);
+      setRatingDistribution({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
+      return;
+    }
+
+    // Calculate average rating
+    const totalRating = filteredReviews.reduce(
+      (sum, review) => sum + review.rating,
+      0
+    );
+    const average = totalRating / filteredReviews.length;
+
+    // Calculate distribution of ratings
+    const distribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    filteredReviews.forEach((review) => {
+      distribution[review.rating] = (distribution[review.rating] || 0) + 1;
+    });
+
+    setAverageRating(Number(average.toFixed(1)));
+    setRatingDistribution(distribution);
+  };
+
+  const handleQty = (qty) => {
+    setQuantity(qty);
+  };
+
+  const handleReview = async (reviewData) => {
+    try {
+      const res = await addReview(reviewData);
+      console.log("Got response :", res);
+      if (response.status === 201) {
+        toast.success("Review submitted successfully!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const foundProduct = products.find((p) => p.handle === handle);
+        if (!foundProduct) {
+          console.error("Product not found!");
+          return;
+        }
+        setProduct(foundProduct);
+
+        if (foundProduct?.images?.edges) {
+          const allImages = foundProduct.images.edges.map(
+            (edge) => edge.node.url
+          );
+          setMainImg(allImages[0] || null);
+          setSubImgs(allImages);
+        }
+
+        const filteredReviews = await filterReviewsByProductId(
+          reviews,
+          numericId
+        );
+        calculateReviewStats(filteredReviews);
+        setFilteredReviews(filteredReviews);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [handle, products, reviews, numericId]);
+
+  console.log("ratingDistribution : " + JSON.stringify(ratingDistribution));
+
   return (
     <div className="px-4 mb-[160px] md:mb-[30px]">
       <div className="block md:hidden">
@@ -110,11 +202,11 @@ export const ProductDetails = () => {
         <div className="flex space-x-2 mt-4">
           <Rating
             name="half-rating-read"
-            defaultValue={4.5}
+            value={averageRating}
             precision={0.5}
             readOnly
           />
-          <h4 className="text-gray-800 text-base">500 Reviews</h4>
+          <h4 className="text-gray-800 text-base">{ratingCount} Reviews</h4>
         </div>
       </div>
       <div className="flex flex-col md:flex-row gap-10 mt-4">
@@ -141,16 +233,17 @@ export const ProductDetails = () => {
           {/* Quantity and Add to Cart Section */}
           <div className="mt-2 h-[50px] w-full hidden sm:flex justify-center items-center gap-2">
             <div className="flex w-[30%] justify-around items-center gap-4 bg-gray-200 py-2 px-4 rounded-md">
-              <p>-</p>
+              <p onClick={() => handleQty(quantity - 1)}>-</p>
               {/* <span className="text-gray-400">|</span> */}
-              <p className="text-lg font-bold">1</p>
+              <p className="text-lg font-bold">{quantity}</p>
               {/* <span className="text-gray-400">|</span> */}
-              <p>+</p>
+              <p onClick={() => handleQty(quantity + 1)}>+</p>
             </div>
             <div className="w-full">
               <button
                 type="button"
                 className="w-full bg-orange-500 py-2.5 px-4 hover:bg-orange-600 text-white text-sm font-semibold rounded-md disabled:opacity-60"
+                onClick={() => handleAddToCart()}
               >
                 Add to cart
               </button>
@@ -189,11 +282,11 @@ export const ProductDetails = () => {
             <div className="flex space-x-2 mt-4">
               <Rating
                 name="half-rating-read"
-                defaultValue={4.5}
+                value={averageRating}
                 precision={0.5}
                 readOnly
               />
-              <h4 className="text-gray-800 text-base">500 Reviews</h4>
+              <h4 className="text-gray-800 text-base">{ratingCount} Reviews</h4>
             </div>
           </div>
           <div className="flex flex-col flex-wrap gap-1 mt-4">
@@ -308,7 +401,14 @@ export const ProductDetails = () => {
       </div>
 
       <div className="mt-10 w-full flex gap-2 flex-col-reverse md:flex-row h-auto">
-        <Review product_handle={numericId} />
+        <Review
+          product_handle={numericId}
+          filteredReviews={filteredReviews}
+          handleReview={handleReview}
+          ratingDistribution={ratingDistribution}
+          averageRating= {averageRating}
+          ratingCount= {ratingCount}
+        />
         <div className=" w-full">
           <ProductDescription
             description={description}
@@ -327,15 +427,16 @@ export const ProductDetails = () => {
       {/* Mobile fixed bottom Add to Cart */}
       <div className="fixed bottom-[65px] left-0 w-full sm:hidden bg-white border-t p-4 flex justify-between items-center gap-2 shadow-md">
         <div className="flex w-[45%] justify-around items-center gap-4 bg-gray-200 py-2 px-4 rounded-md">
-          <p>-</p>
+          <p onClick={() => handleQty(quantity - 1)}>-</p>
           <span className="text-gray-400">|</span>
-          <p className="text-lg font-bold">1</p>
+          <p className="text-lg font-bold">{quantity}</p>
           <span className="text-gray-400">|</span>
-          <p>+</p>
+          <p onClick={() => handleQty(quantity - 1)}>+</p>
         </div>
         <button
           type="button"
           className="w-full bg-orange-500 py-2.5 px-4 hover:bg-orange-600 text-white text-sm font-semibold rounded-md disabled:opacity-60"
+          onClick={() => handleAddToCart()}
         >
           Add to cart
         </button>

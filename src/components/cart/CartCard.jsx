@@ -14,9 +14,10 @@ import {
 } from "../../ui/CartCardStyle";
 import CircularProgress from "@mui/material/CircularProgress";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 export const CartCard = ({ product, handleQuantityChange, handleRemove }) => {
-  const { quantity, id } = product;
+  const { quantity, id, handle } = product;
 
   const [loading, setLoading] = useState(false);
 
@@ -40,15 +41,17 @@ export const CartCard = ({ product, handleQuantityChange, handleRemove }) => {
   return (
     <CartCardWrapper>
       <div className="flex flex-col gap-2">
-        <ImageWrapper>
-          <img
-            src={product?.merchandise?.product?.images?.edges[0]?.node?.src}
-            alt={
-              product?.merchandise?.product?.images?.edges[0]?.node?.altText ||
-              "Product image"
-            }
-          />
-        </ImageWrapper>
+        <Link to={`/product/${product.merchandise.product.handle}`}>
+          <ImageWrapper>
+            <img
+              src={product?.merchandise?.product?.images?.edges[0]?.node?.src}
+              alt={
+                product?.merchandise?.product?.images?.edges[0]?.node
+                  ?.altText || "Product image"
+              }
+            />
+          </ImageWrapper>
+        </Link>
         <QuantityMobile>
           <span
             className="control"
@@ -72,16 +75,18 @@ export const CartCard = ({ product, handleQuantityChange, handleRemove }) => {
         </QuantityMobile>
       </div>
       <ContentWrapper>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Title>{product.merchandise?.product?.title}</Title>
-          <PriceWrapper>
-            <p className="original">
-              {product.merchandise?.priceV2?.currencyCode}
-              {product.merchandise?.compareAtPriceV2?.amount}
-            </p>
-            <p className="discount">{offerPercentage.toFixed(2)}% off</p>
-          </PriceWrapper>
-        </div>
+        <Link to={`/product/${product.merchandise.product.handle}`}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Title>{product.merchandise?.product?.title}</Title>
+            <PriceWrapper>
+              <p className="original">
+                {product.merchandise?.priceV2?.currencyCode}
+                {product.merchandise?.compareAtPriceV2?.amount}
+              </p>
+              <p className="discount">{offerPercentage.toFixed(2)}% off</p>
+            </PriceWrapper>
+          </div>
+        </Link>
         <DeliveryWrapper>
           <div className="delivery-info">
             <img src={deliveryIcon} alt="Free Delivery" />

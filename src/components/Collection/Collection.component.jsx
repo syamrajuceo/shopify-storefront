@@ -24,6 +24,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
     "Product Status": []
   })
   const [filterProduct, setFilterProduct] = useState(products);
+  
   const [pagenatedProduct, setPagenatedProduct] = useState(() => {
     if (!filterProduct || filterProduct.length === 0) {
       return [];
@@ -57,6 +58,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
     }
   };
   
+
   const [filterOptions, setFilterOptions] = useState({
     Gender: [],
     "Product Categories": [],
@@ -278,6 +280,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
               OurPrice={prodobj.OurPrice}
               off={prodobj.off}
             /> */}
+            
           {pagenatedProduct && pagenatedProduct.length > 0 ? (
             pagenatedProduct.map((product) =>
               product ? <ProductCard key={product.id} product={product} /> : null
@@ -298,6 +301,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
               Load More
             </button>
           )}
+
           <div className="text-center p-14">
             النظارات الواقية الصناعية ضرورية لحماية العمال في البيئات التي تشكل”
             فيها الغبار والحطام والمواد الكيميائية والمخاطر العالية التأثير
