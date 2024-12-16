@@ -17,6 +17,7 @@ import EyeGlasses from "../pages/EyeGlasses";
 import ContactLenses from "../pages/ContactLenses";
 import CategoryPage from "../pages/CategoryPage";
 import Offers from "../pages/Offers";
+import SearchPage from "../pages/SearchPage";
 
 export const router = createBrowserRouter([
   {
@@ -80,6 +81,10 @@ export const router = createBrowserRouter([
       {
         path: "/category",
         element:<CategoryPage/>
+      },
+      {
+        path: "/query",
+        element:<SearchPage/>
       },
       // User routes
       {

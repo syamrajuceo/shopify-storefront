@@ -46,12 +46,13 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
             placeholder="Search for products, categories or brands..."
             className="w-full bg-slate-200 h-[40px] px-3"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)} 
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <button className="w-[40px] p-2">
+          <Link className="w-[40px] p-2" to={`/query?query=${searchQuery}`} onClick={() => setSearchQuery('')}>
             <IoIosSearch />
-          </button>
-          <ProductSearchList searchQuery={searchQuery} searchResult={searchResult}/>
+          </Link>
+
+          <ProductSearchList searchQuery={searchQuery} searchResult={searchResult} />
         </div>
         <div className="flex items-center gap-2">
           <Link className="hidden md:block" to={"/contact"}>Contact</Link>
@@ -72,12 +73,13 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
           placeholder="Search for products, categories or brands..."
           className="w-full bg-slate-200 h-[40px] px-3"
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)} 
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button className="w-[40px] p-2">
+        <Link className="w-[40px] p-2" to={`/query?query=${searchQuery}`} onClick={() => setSearchQuery(null)}>
           <IoIosSearch />
-        </button>
-        <ProductSearchList searchQuery={searchQuery} small={true} searchResult={searchResult}/>
+        </Link>
+
+        <ProductSearchList searchQuery={searchQuery} small={true} searchResult={searchResult} />
       </div>
       {/* Bottom Section */}
       <div className="hidden md:flex items-center justify-between border-t px-4 py-2 relative">
