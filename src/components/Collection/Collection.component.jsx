@@ -24,7 +24,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
     "Product Status": []
   })
   const [filterProduct, setFilterProduct] = useState(products);
-  
+
   const [pagenatedProduct, setPagenatedProduct] = useState(() => {
     if (!filterProduct || filterProduct.length === 0) {
       return [];
@@ -50,14 +50,14 @@ function CollectionComponent({ products = [], type = "Men" }) {
   const loadMore = () => {
     const newCount = visibleCount + 4;
     setVisibleCount(newCount);
-    
+
     if (filterProduct.length >= newCount) {
       setPagenatedProduct(filterProduct.slice(0, newCount));
     } else {
       setPagenatedProduct(filterProduct);
     }
   };
-  
+
 
   const [filterOptions, setFilterOptions] = useState({
     Gender: [],
@@ -264,8 +264,11 @@ function CollectionComponent({ products = [], type = "Men" }) {
           <IoIosArrowForward />
           <span className="font-semibold">{type}</span>
         </div>
-        <div className=" p-3 text-sm text-gray-700">
-          Showing all  results
+
+        <div className="bg-slate-300 p-3 text-sm text-gray-700">
+        
+          Showing {pagenatedProduct.length} of {filterProduct.length} results
+
         </div>
 
         {/* Product grid */}
@@ -280,7 +283,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
               OurPrice={prodobj.OurPrice}
               off={prodobj.off}
             /> */}
-            
+
           {pagenatedProduct && pagenatedProduct.length > 0 ? (
             pagenatedProduct.map((product) =>
               product ? <ProductCard key={product.id} product={product} /> : null

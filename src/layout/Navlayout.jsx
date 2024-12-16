@@ -21,9 +21,19 @@ function Navlayout() {
   useEffect(() => {
     setFilterProducts(() => {
       if (searchQuery) {
-        return products.filter((product) => {
-          return product.title.toLowerCase().includes(searchQuery.toLowerCase());
-        });
+        const searchQueryNumber = parseFloat(searchQuery);
+        const isValidNumber = !isNaN(searchQueryNumber) && !isNaN(parseFloat(searchQuery));
+
+        if (isValidNumber) {
+          return products.filter((product) => {
+            return product.variants.edges[0].node.priceV2.amount.includes(searchQueryNumber.toString());
+          });
+        } else {
+          // If searchQuery is a string, filter by title
+          return products.filter((product) => {
+            return product.title.toLowerCase().includes(searchQuery.toLowerCase());
+          });
+        }
       }
       return products; // Return all products if no search query
     });
