@@ -107,6 +107,8 @@ const getCartFromLocalStorage = () => {
 //   }
 // };
 
+
+
 export const createCart = async (accessToken = null) => {
   // Retrieve user details from localStorage
   const user = JSON.parse(localStorage.getItem("user"));
@@ -114,17 +116,14 @@ export const createCart = async (accessToken = null) => {
   // Set default buyer identity if no user details are available
   const buyerIdentity = user
     ? {
-
         email: user.email,
         countryCode: user.countryCode || "IN",
         preferences: {
           delivery: {
             deliveryMethod: user.deliveryMethod || "SHIPPING",
           },
-
         },
-      },
-    }
+      }
     : {};
 
   const query = `
@@ -144,6 +143,7 @@ export const createCart = async (accessToken = null) => {
       buyerIdentity: buyerIdentity,
       attributes: [
         {
+
           key: "cart_attribute",
           value: "This is a cart attribute",
         },
