@@ -6,12 +6,12 @@ function SideBar({ pageShow, setPageShow }) {
   };
 
   return (
-    <div className="w-64 bg-gray-800 text-white h-[80%] p-6 flex flex-col">
+    <div className="w-64 bg-white text-black h-[80%] p-6 flex flex-col">
       <ul className="space-y-4">
         <li>
           <button
             onClick={() => handlePageChange("Dashboard")}
-            className={`flex items-center px-4 py-2 rounded-lg transition-all w-full ${pageShow === "Dashboard" ? "bg-gray-700" : "hover:bg-gray-700"
+           className={`flex items-center px-4 py-2 rounded-lg transition-all w-full ${pageShow === "Dashboard" ? "bg-gray-700 text-white" : "hover:bg-gray-700 hover:text-white text-black"
               }`}
           >
             <Home className="mr-3" /> Dashboard
@@ -19,19 +19,23 @@ function SideBar({ pageShow, setPageShow }) {
         </li>
 
         <li>
-          <button
-            onClick={() => handlePageChange("Address")}
-            className={`flex items-center px-4 py-2 rounded-lg transition-all w-full ${pageShow === "Address" ? "bg-gray-700" : "hover:bg-gray-700"
-              }`}
-          >
-            <AccountCircle className="mr-3" /> Address
-          </button>
+        <button
+  onClick={() => handlePageChange("Address")}
+  className={`flex items-center px-4 py-2 rounded-lg transition-all w-full ${
+    pageShow === "Address" 
+      ? "bg-gray-700 text-white" 
+      : "hover:bg-gray-700 hover:text-white text-black"
+  }`}
+>
+  <AccountCircle className="mr-3" /> Address
+</button>
+
         </li>
 
         <li>
           <button
             onClick={() => handlePageChange("Add Address")}
-            className={`flex items-center px-4 py-2 rounded-lg transition-all w-full ${pageShow === "Add Address" ? "bg-gray-700" : "hover:bg-gray-700"
+            className={`flex items-center px-4 py-2 rounded-lg transition-all w-full ${pageShow === "Add Address" ? "bg-gray-700 text-white" : "hover:bg-gray-700 hover:text-white text-black"
               }`}
           >
             <AddLocationAlt className="mr-3" /> Add Address
@@ -40,7 +44,7 @@ function SideBar({ pageShow, setPageShow }) {
         {pageShow === "Edit Settings"&&<li>
           <button
             onClick={() => handlePageChange("Edit Settings")}
-            className={`flex items-center px-4 py-2 rounded-lg transition-all w-full ${pageShow === "Edit Settings" ? "bg-gray-700" : "hover:bg-gray-700"
+            className={`flex items-center px-4 py-2 rounded-lg transition-all w-full ${pageShow === "Edit Settings" ? "bg-gray-700 text-white" : "hover:bg-gray-700 hover:text-white text-black"
               }`}
           >
             <Settings className="mr-3" /> Edit Settings
@@ -50,7 +54,7 @@ function SideBar({ pageShow, setPageShow }) {
         <li>
           <button
             onClick={() => handlePageChange("My Orders")}
-            className={`flex items-center px-4 py-2 rounded-lg transition-all w-full ${pageShow === "My Orders" ? "bg-gray-700" : "hover:bg-gray-700"
+            className={`flex items-center px-4 py-2 rounded-lg transition-all w-full ${pageShow === "My Orders" ? "bg-gray-700 text-white" : "hover:bg-gray-700 hover:text-white text-black"
               }`}
           >
             <Home className="mr-3" /> My Orders
@@ -60,7 +64,7 @@ function SideBar({ pageShow, setPageShow }) {
         <li>
           <button
             onClick={() => handlePageChange("Logout")}
-            className={`flex items-center px-4 py-2 rounded-lg transition-all w-full ${pageShow === "Logout" ? "bg-gray-700" : "hover:bg-gray-700"
+            className={`flex items-center px-4 py-2 rounded-lg transition-all w-full ${pageShow === "Logout" ? "bg-gray-700 text-white" : "hover:bg-gray-700 hover:text-white text-black"
               }`}
           >
             <ExitToApp className="mr-3" /> Logout
