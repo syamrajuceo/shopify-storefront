@@ -19,6 +19,10 @@ import raybanBrand from '../../assets/raybanBrand.png';
 import oakelyBrand from '../../assets/okleyabrand.png';
 import amaraBrand from '../../assets/amaraBrand.png';
 import amaralogo from '../../assets/AmaraLogo.svg';
+import gucciBrand from '../../assets/gucciBrand2.jpg'
+import gucciLogo from '../../assets/gucci-4.svg'
+import pradaBrand  from '../../assets/pradaBrand2.jpg'
+import pradaLogo from '../../assets/prada-logo-1.svg'
 function Brand() {
   const brands = [
     {
@@ -32,8 +36,9 @@ function Brand() {
         logo:BurberryLogo
       },
       {
-        name: 'D&G',
-        image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=684&h=384',
+        name: 'Gucci',
+        image:gucciBrand,
+        logo:gucciLogo
       },
     {
       name: 'tiffany&CO',
@@ -61,8 +66,9 @@ function Brand() {
       logo:raybanlogo
     },
     {
-      name: 'RAY-BAN',
-      image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=684&h=384',
+      name:'prada',
+      image:pradaBrand,
+      logo:pradaLogo
     },
     {
       name: 'OAKLEY',
