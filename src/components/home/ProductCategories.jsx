@@ -47,6 +47,7 @@ const ProductCard = ({ title, image,path}) => {
 };
 
 function ProductCategories() {
+  const navigate = useNavigate();
   return (
     <>
       {/* //desktop */}
