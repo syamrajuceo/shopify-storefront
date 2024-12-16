@@ -140,7 +140,7 @@ export function ProductCarousel({ Promoimage }) {
             buttonText="View all"
             imageUrl={Promoimage}
             className="snap-start w-[200px] md:w-[370px] rounded-xl flex-shrink-0"
-          />):(  <div className="snap-start   md:w-[370px] rounded-xl flex-shrink-0 w-[200px] h-[454px]">
+          />):(  <div className="snap-start   md:w-[370px] rounded-xl flex-shrink-0 w-[200px] h-[345px] md:h-[440px]">
             <img
               src={evervaImg}
               alt="everva"
@@ -151,7 +151,7 @@ export function ProductCarousel({ Promoimage }) {
          
           {/* Product Cards */}
 
-          {Products.slice(0, 3).map((product) => (
+          {Products.slice(0, 4).map((product) => (
 
             <div key={product.id} className="snap-start">
               <ProductCard product={product} />
@@ -160,8 +160,10 @@ export function ProductCarousel({ Promoimage }) {
         </div>
 
         {/* Scroll Buttons */}
+        <div className="md:hidden">
         <ScrollButton direction="left" onClick={() => scroll("left")} />
-        <ScrollButton direction="right" onClick={() => scroll("right")} />
+        <ScrollButton direction="right" onClick={() => scroll("right")}  />
+        </div>
       </div>
    
   );

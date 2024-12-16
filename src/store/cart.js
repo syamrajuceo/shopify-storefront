@@ -114,14 +114,17 @@ export const createCart = async (accessToken = null) => {
   // Set default buyer identity if no user details are available
   const buyerIdentity = user
     ? {
+
         email: user.email,
         countryCode: user.countryCode || "IN",
         preferences: {
           delivery: {
             deliveryMethod: user.deliveryMethod || "SHIPPING",
           },
+
         },
-      }
+      },
+    }
     : {};
 
   const query = `
@@ -791,7 +794,13 @@ export const fetchCart = async () => {
     // Store cart in localStorage and update Zustand
     storeCartInLocalStorage(cart.id, cart.checkoutUrl);
     useShopifyStore.getState().setCart(cart.id, cart.checkoutUrl);
+    cart.quantity = cart.lines.edges.length; 
 
+    cart.itemquantity = cart.lines.edges.reduce((total, edge) => {
+      return total + edge.node.quantity;
+    }, 0);
+
+    console.log("getcart:", JSON.stringify(cart))
     return cart;
   } catch (error) {
     console.error("Error fetching cart:", error.message);

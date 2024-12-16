@@ -71,7 +71,7 @@ export const AdCardMobileImage = styled.img`
 export const Card = styled.div`
   flex: 0 0 auto;
   border-radius: 0.625rem;
-  width:350px;
+  width:260px;
   scroll-snap-align: center;
   position: relative;
   @media screen and (max-width: 71.8125rem) {

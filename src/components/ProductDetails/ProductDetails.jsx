@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { addToCart } from "../../store/cart";
 import toast from "react-hot-toast";
 import { addReview } from "../../store/review";
-
+import { ProductCarousel2 } from "../home/ProductCarousel2";
 export const ProductDetails = () => {
   const { reviews } = useShopifyStore.getState();
   const [product, setProduct] = useState(null);
@@ -242,7 +242,7 @@ export const ProductDetails = () => {
             <div className="w-full">
               <button
                 type="button"
-                className="w-full bg-orange-500 py-2.5 px-4 hover:bg-orange-600 text-white text-sm font-semibold rounded-md disabled:opacity-60"
+                className="w-full bg-slate-950 py-2.5 px-4 hover:bg-slate-800 text-white text-sm font-semibold rounded-md disabled:opacity-60"
                 onClick={() => handleAddToCart()}
               >
                 Add to cart
@@ -417,10 +417,10 @@ export const ProductDetails = () => {
         </div>
       </div>
 
-      <div className="w-full ">
+      <div className="">
         <ProductList title={"Similar Products"} />
       </div>
-      <div className="w-full ">
+      <div className="">
         <ProductList title={"Popular Products"} />
       </div>
 

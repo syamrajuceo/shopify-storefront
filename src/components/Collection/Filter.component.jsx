@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaFilter } from "react-icons/fa";
 
@@ -26,8 +26,14 @@ function FilterComponent({
         "6000 - 10000",
         "10000 - 15000",
     ];
-    const categories = ["Electronics", "Fashion", "Home Appliances", "Books", "Toys"];
-    const brands = ["Apple", "Samsung", "Sony", "LG", "Nike"];
+    const categories = [
+        "Prescription Glasses",
+        "Sunglasses",
+        "Reading Glasses",
+        "Sports Glasses",
+        "Kids' Glasses",
+    ];
+    const brands = ["Ray-Ban", "Oakley", "Titan", "Vogue", "Fastrack"];
     const colors = ["pink", "black", "gray", "blue"];
     const statusOptions = ["Available", "Out of Stock", "Coming Soon"];
 
@@ -42,51 +48,43 @@ function FilterComponent({
     const handleFilterChange = (filterType, option) => {
         setSelectedOptions((prev) => {
             const newSelectedOptions = { ...prev };
-            const currentOptions = newSelectedOptions[filterType] || [];
 
-            if (currentOptions.includes(option)) {
-                newSelectedOptions[filterType] = currentOptions.filter((item) => item !== option);
-            } else {
-                newSelectedOptions[filterType] = [...currentOptions, option];
-            }
-
-            // Handle Price Range selection
             if (filterType === "Price") {
-                let priceRange = {};
-                switch (option) {
-                    case "Below 2000":
-                        priceRange = { min: 0, max: 2000 };
-                        break;
-                    case "2000 - 3000":
-                        priceRange = { min: 2000, max: 3000 };
-                        break;
-                    case "3000 - 6000":
-                        priceRange = { min: 3000, max: 6000 };
-                        break;
-                    case "6000 - 10000":
-                        priceRange = { min: 6000, max: 10000 };
-                        break;
-                    case "10000 - 15000":
-                        priceRange = { min: 10000, max: 15000 };
-                        break;
-                    default:
-                        priceRange = { min: 0, max: 2000 };
-                        break;
+                // Exclusive selection for Price
+                newSelectedOptions[filterType] = [option];
+                const priceMap = {
+                    "Below 2000": { min: 0, max: 2000 },
+                    "2000 - 3000": { min: 2000, max: 3000 },
+                    "3000 - 6000": { min: 3000, max: 6000 },
+                    "6000 - 10000": { min: 6000, max: 10000 },
+                    "10000 - 15000": { min: 10000, max: 15000 },
+                };
+                setPriceRange(priceMap[option]);
+            } else {
+                const currentOptions = newSelectedOptions[filterType] || [];
+                if (currentOptions.includes(option)) {
+                    newSelectedOptions[filterType] = currentOptions.filter(
+                        (item) => item !== option
+                    );
+                } else {
+                    newSelectedOptions[filterType] = [...currentOptions, option];
                 }
-                setPriceRange(priceRange);
             }
 
-            // Handle Color filter change
             if (filterType === "Color") {
-                onFilterChange("Frame Color", newSelectedOptions["Color"] || []);
+                onFilterChange("Frame Color", newSelectedOptions.Color || []);
             }
 
-            // Return the updated selected options
+            // Update the filter count
+            SetFilterCount(
+                Object.values(newSelectedOptions).reduce(
+                    (acc, options) => acc + options.length,
+                    0
+                )
+            );
+
             return newSelectedOptions;
         });
-
-        // Update Filter Count
-        SetFilterCount(Object.values(selectedOptions).reduce((acc, options) => acc + options.length, 0));
     };
 
     return (
@@ -104,14 +102,17 @@ function FilterComponent({
             <div className="p-4 flex space-x-4">
                 {/* Filter Types */}
                 <div className="w-1/3 border-r pr-4">
-                    {["Price", "Category", "Brand", "Color", "Status"].map((head) => (
+                    {Object.keys(filters).map((filter) => (
                         <button
-                            key={head}
-                            onClick={() => setType(head)}
-                            className={`w-full text-left py-2 px-3 rounded ${type === head ? "bg-blue-600 text-white" : "hover:bg-gray-200"
-                                }`}
+                            key={filter}
+                            onClick={() => setType(filter)}
+                            className={`w-full text-left py-2 px-3 rounded ${
+                                type === filter
+                                    ? "bg-blue-600 text-white"
+                                    : "hover:bg-gray-200"
+                            }`}
                         >
-                            {head}
+                            {filter}
                         </button>
                     ))}
                 </div>
@@ -121,27 +122,36 @@ function FilterComponent({
                     {type ? (
                         <div className="space-y-2">
                             <h3 className="text-lg font-semibold">{type} Options</h3>
-                            {filters[type]?.map((option, index) => (
-                                <label key={index} className="flex items-center gap-2">
+                            {filters[type].map((option, index) => (
+                                <label
+                                    key={index}
+                                    className="flex items-center gap-2"
+                                >
                                     <input
-                                        type="checkbox"
-                                        className="accent-blue-600 h-5 w-5"
-                                        checked={
-                                            type === "Color"
-                                                ? filterOptions["Frame Color"]?.includes(option) 
-                                                : selectedOptions[type]?.includes(option) 
+                                        type={
+                                            type === "Price" ? "radio" : "checkbox"
                                         }
-                                        onChange={() => handleFilterChange(type, option)}
+                                        className="accent-blue-600 h-5 w-5"
+                                        name={type}
+                                        checked={
+                                            type === "Price"
+                                                ? selectedOptions.Price.includes(option)
+                                                : selectedOptions[type]?.includes(option)
+                                        }
+                                        onChange={() =>
+                                            handleFilterChange(type, option)
+                                        }
                                     />
                                     <span>{option}</span>
                                 </label>
                             ))}
                         </div>
                     ) : (
-                        <p className="text-gray-500">Select a filter type to view options.</p>
+                        <p className="text-gray-500">
+                            Select a filter type to view options.
+                        </p>
                     )}
                 </div>
-
             </div>
         </div>
     );
