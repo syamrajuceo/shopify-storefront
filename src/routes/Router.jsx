@@ -15,6 +15,7 @@ import MenPage from "../pages/MenPage";
 import WoMenPage from "../pages/WoMenPage";
 import EyeGlasses from "../pages/EyeGlasses";
 import ContactLenses from "../pages/ContactLenses";
+import CategoryPage from "../pages/CategoryPage";
 
 export const router = createBrowserRouter([
   {
@@ -73,7 +74,8 @@ export const router = createBrowserRouter([
         element:<WoMenPage/>
       },
       {
-
+        path: "/category",
+        element:<CategoryPage/>
       },
       // User routes
       {
