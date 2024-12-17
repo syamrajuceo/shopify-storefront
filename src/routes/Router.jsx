@@ -18,9 +18,13 @@ import ContactLenses from "../pages/ContactLenses";
 import CategoryPage from "../pages/CategoryPage";
 import Offers from "../pages/Offers";
 import SearchPage from "../pages/SearchPage";
+<<<<<<< HEAD
 import Orderpage from "../components/Order/Orderpage.jsx";
 
 
+=======
+import OrdersPage from "../pages/OrdersPage";
+>>>>>>> 969c52a48986cafcc7e77f1ded12a0a38de5914e
 
 export const router = createBrowserRouter([
   {
@@ -104,7 +108,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "/order",
-            element: <Orderpage />,
+            element: <OrdersPage />,
           },
         ],
       },]

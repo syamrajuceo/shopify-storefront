@@ -38,7 +38,7 @@ function FilterBoxComponent({ header = "Gender", options = [], filterseletedOpti
 
     return (
         <>
-            <div className="flex justify-between text-lg font-semibold border-t-2 p-2 m-2 cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
+            <div className="flex justify-between text-lg font-semibold border-t-2 py-2 my-2 cursor-pointer items-center" onClick={() => setIsOpen(!isOpen)}>
                 <h1>
                     {header} <span className="font-light text-sm">({options.length})</span>
                 </h1>
