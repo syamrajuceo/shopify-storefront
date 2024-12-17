@@ -46,7 +46,7 @@ const OrderItem = ({ item }) => (
     <img
       src={item.image}
       alt={item.name}
-      className="w-16 h-16 object-cover rounded-md"
+      className="w-16 h-16 object-contain rounded-md"
     />
     <div className="flex-1">
       <h4 className="font-medium">{item.title}</h4>
@@ -59,8 +59,8 @@ const OrderItem = ({ item }) => (
 );
 
 // OrderCard Component
-const OrderCard = ({ orderId, date, status, items, total }) => (
-  <Link to={`/profile?activetab=ordersummary&id=${orderId}`}>
+const OrderCard = ({ orderId, date, status, items, total,Id }) => (
+  <Link to={`/profile?activetab=ordersummary&id=${Id}`}>
     <div className="bg-white rounded-lg shadow-md p-6 mb-4">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
         <div>
@@ -90,7 +90,7 @@ const OrderCard = ({ orderId, date, status, items, total }) => (
 
 // Fetch orders
 const orders = await fetchOrders();
-console.log(orders);
+
 
 // OrderPage Component
 const OrderPage = () => (
@@ -109,6 +109,7 @@ const OrderPage = () => (
               <OrderCard
                 key={index}
                 orderId={order?.name}
+                Id={order?.id}
                 date={order?.processedAt}
                 status={order?.fulfillmentStatus}
                 items={order?.items}

@@ -126,7 +126,9 @@ export const ProductDetails = () => {
       console.log("Got response :", res);
       if (res.status === 201) {
         toast.success("Review submitted successfully!");
-        HandleFetchReview();
+        fetchData()
+        setReviewData((prevData) => [...prevData, reviews]);
+  
       }
     } catch (error) {
       console.log(error);
