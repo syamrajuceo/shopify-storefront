@@ -268,8 +268,8 @@ function CollectionComponent({ products = [], type = "Men" }) {
         <div className="flex items-center space-x-2 text-sm text-gray-700 p-4">
           <span className="hover:text-blue-600 cursor-pointer">Shop</span>
           <IoIosArrowForward />
-          <span className="hover:text-blue-600 cursor-pointer">Eyewear</span>
-          <IoIosArrowForward />
+          {/* <span className="hover:text-blue-600 cursor-pointer">Eyewear</span>
+          <IoIosArrowForward /> */}
           <span className="font-semibold">{type}</span>
         </div>
 
