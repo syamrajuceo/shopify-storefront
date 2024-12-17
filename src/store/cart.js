@@ -328,7 +328,7 @@ export const addToCart = async (variantId, quantity, userEmail) => {
   }
 };
 
-export const updateCart = async (lineItemId, quantity,userEmail) => {
+export const updateCart = async (lineItemId, quantity, userEmail) => {
   const query = `
     mutation updateCartLineItem($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
       cartLinesUpdate(cartId: $cartId, lines: $lines) {
@@ -773,7 +773,7 @@ export const fetchCart = async () => {
 
     const cart = response?.data?.data?.cart;
 
-    console.log("Caaaaart : ",response)
+    console.log("Caaaaart : ", response);
 
     if (!cart) {
       throw new Error("Cart not found.");

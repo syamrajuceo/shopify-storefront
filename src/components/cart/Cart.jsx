@@ -17,7 +17,8 @@ import { Discount } from "@mui/icons-material";
 // import SimilarProductsCarousel from "../carousel/Carousel";
 
 export const Cart = () => {
-  const [cartData, setCartData] = useState(null);
+  const { cart } = useShopifyStore.getState();
+  const [cartData, setCartData] = useState(cart);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   // const [discountCode, setDiscountCode] = useState("");
@@ -29,15 +30,13 @@ export const Cart = () => {
   // const cartId = localStorage.getItem("cartId");
 
   const userObject = localStorage.getItem("user");
-    const user = JSON.parse(userObject);
+  const user = JSON.parse(userObject);
 
   const Products = useShopifyStore((state) => state.products);
 
   const loadData = async () => {
     try {
       const fetchedCart = await fetchCart();
-      console.log("fetchedCart : ", fetchedCart);
-
       if (fetchedCart) {
         setCartData(fetchedCart);
         if (fetchedCart.lines.edges.length > 0) {
@@ -148,8 +147,7 @@ export const Cart = () => {
   const handleQuantityChange = async (newQuantity, id) => {
     if (newQuantity < 1) return;
     try {
-      await updateCart(id, newQuantity,user.email);
-      console.log("Cart quantity updated.");
+      await updateCart(id, newQuantity, user.email);
       await loadData();
     } catch (error) {
       console.error("Failed to update cart quantity:", error.message);
@@ -158,8 +156,7 @@ export const Cart = () => {
 
   const handleRemove = async (id) => {
     try {
-      await updateCart(id, 0,user.email);
-      console.log("Item removed from cart.");
+      await updateCart(id, 0, user.email);
       await loadData();
     } catch (error) {
       console.error("Failed to remove item from cart:", error.message);
@@ -269,15 +266,15 @@ export const Cart = () => {
                     Subtotal ({totalItems} item)
                   </p>
                   <p className="text-[18px] font-semibold">
-                    {currency} {subTotal}
+                    {currency} {Number(subTotal).toFixed(2)}
                   </p>
                 </div>
-                <div className="flex justify-between items-center mt-1">
+                {/* <div className="flex justify-between items-center mt-1">
                   <p className="text-[18px] font-normal">Coupon</p>
                   <p className="text-[18px] font-semibold text-[#228944]">
                     - {currency} 00.00
                   </p>
-                </div>
+                </div> */}
                 <div className="flex justify-between items-center mt-1">
                   <p className="text-[18px] font-normal">Shipping Fee</p>
                   <p className="text-[18px] font-semibold text-[#228944]">
@@ -287,7 +284,7 @@ export const Cart = () => {
                 <div className="flex justify-between items-center mt-1">
                   <p className="text-[18px] font-normal">Total Discount</p>
                   <p className="text-[18px] font-semibold text-[#228944]">
-                    - {currency} {subTotal - discountedTotal}
+                    - {currency} {Number(subTotal - discountedTotal).toFixed(2)}
                   </p>
                 </div>
                 <div className="flex justify-between items-center mt-4">
@@ -298,7 +295,7 @@ export const Cart = () => {
                     </span>
                   </p>
                   <p className="text-[20px] font-bold">
-                    {currency} {discountedTotal}
+                    {currency} {Number(discountedTotal).toFixed(2)}
                   </p>
                 </div>
               </div>
@@ -369,19 +366,25 @@ export const Cart = () => {
                     Subtotal ({totalItems} item)
                   </p>
                   <p className="text-[16px] font-semibold">
-                    {currency} {subTotal}
+                    {currency} {Number(subTotal).toFixed(2)}
                   </p>
                 </div>
-                <div className="flex justify-between items-center mt-1">
+                {/* <div className="flex justify-between items-center mt-1">
                   <p className="text-[16px] font-normal">Coupon</p>
                   <p className="text-[16px] font-semibold text-[#228944]">
                     - {currency} 00.00
                   </p>
-                </div>
+                </div> */}
                 <div className="flex justify-between items-center mt-1">
                   <p className="text-[16px] font-normal">Shipping Fee</p>
                   <p className="text-[16px] font-semibold text-[#228944]">
                     FREE
+                  </p>
+                </div>
+                <div className="flex justify-between items-center mt-1">
+                  <p className="text-[18px] font-normal">Total Discount</p>
+                  <p className="text-[18px] font-semibold text-[#228944]">
+                    - {currency} {Number(subTotal - discountedTotal).toFixed(2)}
                   </p>
                 </div>
                 <hr className="mt-2 border-[#a0a0a0ab]" />
@@ -393,7 +396,7 @@ export const Cart = () => {
                     </span>
                   </div>
                   <p className="text-[18px] font-bold">
-                    {currency} {discountedTotal}
+                    {currency} {Number(discountedTotal).toFixed(2)}
                   </p>
                 </div>
               </div>
@@ -461,11 +464,11 @@ export const Cart = () => {
             <p className="text-[14px]">
               Total :
               <span className="text-[13px] line-through">
-                {currency} {subTotal}
+                {currency} {Number(subTotal).toFixed(2)}
               </span>
             </p>
             <p className="text-[20px] font-bold">
-              {currency} {discountedTotal}
+              {currency} {Number(discountedTotal).toFixed(2)}
             </p>
           </div>
           <button

@@ -1,4 +1,7 @@
 
+<<<<<<< HEAD
+const ProductDescription = ({description,metafields}) => {
+=======
 const ProductDescription = ({ description, metafields = [] }) => {
 
   console.log(metafields)
@@ -15,6 +18,7 @@ const ProductDescription = ({ description, metafields = [] }) => {
     return acc ? `${acc}, ${val.handle}` : val.handle;
   }, "");
 
+>>>>>>> b39d5656dfa86b7d654e8beb8b122f591948191a
   return (
     <div className="max-w-4xl mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Product Description</h2>
