@@ -119,10 +119,6 @@ export const ProductCard = ({ product = {} }) => {
       console.error("Failed to add product to cart:", error.message);
     }
   };
-
-
-  console.log("user", (user.email));
-
   return (
     <Card>
       <CardOff>

@@ -17,6 +17,7 @@ const App = () => {
         const reviews = await fetchReviews();
         console.log(reviews);
         setLoading(false);
+        const fetchedCart = await fetchCart();
       } catch (error) {
         console.error("Error during initial fetch:", error.message);
       }

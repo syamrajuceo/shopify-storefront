@@ -17,10 +17,11 @@ import useShopifyStore from "../../store/useShopifyStore";
 import { useEffect, useState } from "react";
 import { addToCart } from "../../store/cart";
 import toast from "react-hot-toast";
-import { addReview } from "../../store/review";
+import { addReview, fetchReviews } from "../../store/review";
 
 export const ProductDetails = () => {
   const { reviews } = useShopifyStore.getState();
+  const [reviewsData, setReviewData] = useState(reviews);
   const [product, setProduct] = useState(null);
   const products = useShopifyStore((state) => state.products);
   const { handle } = useParams();
@@ -38,9 +39,7 @@ export const ProductDetails = () => {
     5: 0,
   });
 
-  console.log("product found : ", product);
-
-  let product_handle = handle;
+  // let product_handle = handle;
 
   const {
     title = "",
@@ -67,8 +66,6 @@ export const ProductDetails = () => {
 
   const numericId = id.split("/").pop();
 
-  console.log("numericId : " + numericId);
-
   // Handle Add to Cart
   const handleAddToCart = async () => {
     try {
@@ -83,15 +80,12 @@ export const ProductDetails = () => {
       console.error("Failed to add product to cart:", error.message);
     }
   };
-  console.log("Reviews : ", reviews);
 
   const filterReviewsByProductId = (reviews, productId) => {
     if (!reviews || reviews.length === 0) {
       console.error("Reviews array is empty or undefined!");
       return [];
     }
-
-    console.log("Filtering reviews with productId:", productId);
     return reviews.filter(
       (review) => String(review.product_external_id) === String(productId)
     );
@@ -126,51 +120,59 @@ export const ProductDetails = () => {
     setQuantity(qty);
   };
 
-  const handleReview = async (reviewData) => {
+  const handleAddReview = async (reviews) => {
     try {
-      const res = await addReview(reviewData);
+      const res = await addReview(reviews);
       console.log("Got response :", res);
-      if (response.status === 201) {
+      if (res.status === 201) {
         toast.success("Review submitted successfully!");
+        HandleFetchReview()
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const foundProduct = products.find((p) => p.handle === handle);
-        if (!foundProduct) {
-          console.error("Product not found!");
-          return;
-        }
-        setProduct(foundProduct);
+  const HandleFetchReview = async () => {
+    const fetchedRev = await fetchReviews();
+    setReviewData(fetchedRev);
+  };
 
-        if (foundProduct?.images?.edges) {
-          const allImages = foundProduct.images.edges.map(
-            (edge) => edge.node.url
-          );
-          setMainImg(allImages[0] || null);
-          setSubImgs(allImages);
-        }
-
-        const filteredReviews = await filterReviewsByProductId(
-          reviews,
-          numericId
-        );
-        calculateReviewStats(filteredReviews);
-        setFilteredReviews(filteredReviews);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+  const fetchData = async () => {
+    try {
+      const foundProduct = products.find((p) => p.handle === handle);
+      if (!foundProduct) {
+        console.error("Product not found!");
+        return;
       }
-    };
+      setProduct(foundProduct);
 
+      if (foundProduct?.images?.edges) {
+        const allImages = foundProduct.images.edges.map(
+          (edge) => edge.node.url
+        );
+        setMainImg(allImages[0] || null);
+        setSubImgs(allImages);
+      }
+      HandleFetchReview();
+      const filteredReviews = await filterReviewsByProductId(
+        reviewsData,
+        numericId
+      );
+      calculateReviewStats(filteredReviews);
+      setFilteredReviews(filteredReviews);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
-  }, [handle, products, reviews, numericId]);
+  }, [handle, products, numericId]);
 
-  console.log("ratingDistribution : " + JSON.stringify(ratingDistribution));
+  useEffect(() => {
+    HandleFetchReview();
+  }, []);
 
   return (
     <div className="px-4 mb-[160px] md:mb-[30px]">
@@ -242,7 +244,7 @@ export const ProductDetails = () => {
             <div className="w-full">
               <button
                 type="button"
-                className="w-full bg-orange-500 py-2.5 px-4 hover:bg-orange-600 text-white text-sm font-semibold rounded-md disabled:opacity-60"
+                className="w-full bg-black py-2.5 px-4 hover:bg-black text-white text-sm font-semibold rounded-md disabled:opacity-60"
                 onClick={() => handleAddToCart()}
               >
                 Add to cart
@@ -404,10 +406,10 @@ export const ProductDetails = () => {
         <Review
           product_handle={numericId}
           filteredReviews={filteredReviews}
-          handleReview={handleReview}
+          handleReview={handleAddReview}
           ratingDistribution={ratingDistribution}
-          averageRating= {averageRating}
-          ratingCount= {ratingCount}
+          averageRating={averageRating}
+          ratingCount={ratingCount}
         />
         <div className=" w-full">
           <ProductDescription

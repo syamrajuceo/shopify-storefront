@@ -15,7 +15,6 @@ export const Review = ({
   // const { reviews } = useShopifyStore.getState();
   const [isShow, SetIsShow] = useState(false);
   const [loadmore, setLoadmore] = useState(3);
-  console.log("filteredReviews : ", filteredReviews);
 
   const handleLoadmore = (loadmore) => {
     setLoadmore(loadmore);
