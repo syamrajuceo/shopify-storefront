@@ -58,7 +58,7 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
   };
 
   return (
-    <div className="bg-[#0000001C] p-1">
+    <div className="bg-white p-1">
       {/* Top Section */}
       <div className="flex justify-between p-4 items-center text-md lg:text-xl">
         <img src={logo} alt="logo" className="hidden sm:block cursor-pointer" onClick={() => navigate('/')}
