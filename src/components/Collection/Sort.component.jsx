@@ -11,7 +11,7 @@ function SortComponent({ SetSelectedFilter, onSortChange, selectedSort }) {
   ];
 
   return (
-    <div className="bg-white rounded shadow-lg w-full lg:w-1/3">
+    <div className="border-r-1 bg-[#FFFFFF] rounded  w-full lg:w-1/3">
       <div className="flex items-center justify-between p-4 text-xl border-b">
         <div className="flex items-center gap-2">
           <BiSortAlt2 />
