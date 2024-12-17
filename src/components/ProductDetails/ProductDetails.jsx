@@ -249,11 +249,7 @@ export const ProductDetails = () => {
             <div className="w-full">
               <button
                 type="button"
-<<<<<<< HEAD
-                className="w-full bg-black py-2.5 px-4 hover:bg-black text-white text-sm font-semibold rounded-md disabled:opacity-60"
-=======
                 className="w-full bg-slate-950 py-2.5 px-4 hover:bg-slate-800 text-white text-sm font-semibold rounded-md disabled:opacity-60"
->>>>>>> b39d5656dfa86b7d654e8beb8b122f591948191a
                 onClick={() => handleAddToCart()}
               >
                 Add to cart
