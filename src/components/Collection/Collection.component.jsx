@@ -273,7 +273,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
           <span className="font-semibold">{type}</span>
         </div>
 
-        <div className="bg-[#F3F4F6] p-3 text-sm text-gray-700">
+        <div className="bg-white p-3 text-sm text-gray-700">
         
           Showing {pagenatedProduct.length} of {filterProduct.length} results
 
