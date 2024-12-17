@@ -72,7 +72,7 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
             <IoIosSearch />
           </Link>
 
-          <ProductSearchList searchQuery={searchQuery} searchResult={searchResult} querytype={querytype} selectedIndex={selectedIndex}/>
+          <ProductSearchList searchQuery={searchQuery} searchResult={searchResult} setSearchQuery={setSearchQuery} querytype={querytype} selectedIndex={selectedIndex}/>
         </div>
         <div className="flex items-center gap-2">
           <Link className="hidden md:block" to={"/contact"}>Contact</Link>
@@ -138,7 +138,7 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
           <img src={tabby} alt="Tabby" className="h-6" />
         </div>
       </div>
-      <div className="block md:hidden fixed bottom-[0%] z-20 w-full p-3 bg-slate-300">
+      <div className="block md:hidden fixed bottom-[0%] z-20 w-full p-3 bg-white">
 
         <div className="flex justify-between w-full">
           {MobileLinkData.map((linkobj, index) => (

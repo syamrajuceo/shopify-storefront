@@ -9,8 +9,9 @@ import { router } from "./routes/Router";
 import { fetchCart } from "./store/cart";
 import { fetchReviews } from "./store/review";
 import { Loading } from "./components/loading/Loading";
-import useShopifyStore from "./store/useShopifyStore";
 
+import useShopifyStore from "./store/useShopifyStore";
+import { fetchOrders } from "./store/orders";
 const App = () => {
   const setLoading = useShopifyStore((state) => state.setLoading);
   const loading = useShopifyStore((state) => state.loading);
@@ -22,8 +23,8 @@ const App = () => {
         const products = await fetchAllProducts();
         const cart = await fetchCart();
         const reviews = await fetchReviews();
-        console.log(products);
         setLoading(false);
+        const orders =await fetchOrders()
         const fetchedCart = await fetchCart();
         const fetchedCollections = await fetchCollectionsWithProducts();
       } catch (error) {

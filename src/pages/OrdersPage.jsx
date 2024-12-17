@@ -1,9 +1,9 @@
 import React from 'react'
-import OrderPage from '../../../orderPage'
+import OrderPage from '../components/Order/Orderpage.jsx'
 function OrdersPage() {
   return (
     <div>
-   <OrderPage/>
+      <OrderPage />
     </div>
   )
 }
