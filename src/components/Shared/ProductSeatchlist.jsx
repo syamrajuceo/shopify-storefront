@@ -6,7 +6,7 @@ function ProductSearchList({ searchQuery = "", setSearchQuery, searchResult: pro
     if (searchQuery === null || searchQuery.trim() === "") return null;
 
     return (
-        <div className={`absolute w-full bg-slate-200 z-30 ${small ? "p-1" : "p-2"} max-h-[200px] overflow-y-auto top-[45px] transition-all duration-300`}>
+        <div className={`absolute w-full bg-[#F3F4F6] z-30 ${small ? "p-1" : "p-2"} max-h-[200px] overflow-y-auto top-[45px] transition-all duration-300`}>
             {products.length > 0 ? (
                 products.map((product,index) => (
                     <Link to={`/product/${product.handle}`}

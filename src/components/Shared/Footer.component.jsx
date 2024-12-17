@@ -147,7 +147,7 @@ const PaymentMethods = () => (
 // Main Footer Component
 const FooterComponent = () => {
   return (
-    <footer className="bg-gray-50 p-5">
+    <footer className="bg-[#F3F4F6] p-5">
       {/* Desktop Footer */}
       <div className="hidden md:block max-w-7xl mx-auto py-12 px-4  border-t border-gray-300 border-b ">
         <div className="grid grid-cols-4 gap-8">
