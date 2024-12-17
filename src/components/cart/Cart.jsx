@@ -36,6 +36,7 @@ export const Cart = () => {
   const Products = useShopifyStore((state) => state.products);
 
   const loadData = async () => {
+    setLoading(true);
     try {
       const fetchedCart = await fetchCart();
       if (fetchedCart) {
@@ -178,7 +179,7 @@ export const Cart = () => {
   };
 
   if (loading) {
-    return <CartPageSkeleton/>;
+    return <CartPageSkeleton />;
   }
 
   if (error) {

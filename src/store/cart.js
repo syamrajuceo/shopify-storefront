@@ -112,7 +112,7 @@ const getCartFromLocalStorage = () => {
 export const createCart = async (accessToken = null) => {
   // Retrieve user details from localStorage
   const user = JSON.parse(localStorage.getItem("user"));
-  
+
   // Set default buyer identity if no user details are available
   const buyerIdentity = user
     ? {
@@ -795,7 +795,7 @@ export const fetchCart = async () => {
 
     // Store cart in localStorage and update Zustand
     storeCartInLocalStorage(cart.id, cart.checkoutUrl);
-    useShopifyStore.getState().setCart(cart.id, cart.checkoutUrl);
+    useShopifyStore.getState().setCart(cart,cart.id, cart.checkoutUrl);
     cart.quantity = cart.lines.edges.length; 
 
     cart.itemquantity = cart.lines.edges.reduce((total, edge) => {

@@ -8,10 +8,11 @@ const useShopifyStore = create((set) => ({
   user: null,
   loading: false,
   reviews: [],
+  cart : [],
 
   setReview: (reviews) => set({ reviews }),
   setUser: (user) => set({ user }),
-  setCart: (cartId, checkoutUrl) => set({ cartId, checkoutUrl }),
+  setCart: (cart ,cartId, checkoutUrl) => set({cart, cartId, checkoutUrl }),
   setUserToken: (token) => set({ userToken: token }),
   setProducts: (products) => set({ products }),
   resetCart: () => set({ cartId: null, checkoutUrl: null }),

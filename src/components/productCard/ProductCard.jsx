@@ -234,7 +234,7 @@ export const ProductCard = ({ product = {} }) => {
               ) : (
                 <>
                   <img src={deliveryLogo} alt="Delivery" />
-                  <CardDeliveryText>Standard Delivery</CardDeliveryText>
+                  <CardDeliveryText className="mt-[3px]">Standard Delivery</CardDeliveryText>
                 </>
               )}
             </CardDeliverySpan>
