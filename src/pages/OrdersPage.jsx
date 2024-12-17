@@ -1,5 +1,5 @@
 import React from 'react'
-import OrderPage from '../components/Order/orderPage'
+import OrderPage from '../components/Order/Orderpage.jsx'
 function OrdersPage() {
   return (
     <div>
