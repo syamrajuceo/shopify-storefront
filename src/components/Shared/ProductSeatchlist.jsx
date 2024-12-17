@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import highlightSearchQuery from "./Helper";
 
-function ProductSearchList({ searchQuery = "", searchResult: products = [], small = false, querytype = "Product" ,  selectedIndex = -1, }) {
+function ProductSearchList({ searchQuery = "", setSearchQuery, searchResult: products = [], small = false, querytype = "Product" ,  selectedIndex = -1, }) {
     // Only render the list if searchQuery is not empty
     if (searchQuery === null || searchQuery.trim() === "") return null;
 
@@ -13,7 +13,9 @@ function ProductSearchList({ searchQuery = "", searchResult: products = [], smal
                         key={product.id}
                         className={`flex p-3 w-full items-center border-b-2 border-slate-100 rounded-md transition-transform transform hover:scale-105 ${
                             index === selectedIndex ? "bg-blue-200 scale-105" : "hover:bg-slate-200"
-                        }`}>
+                        }`}
+                        onClick={() => setSearchQuery('')}
+                        >
                         <img
                             src={product.images.edges[0].node.url}
                             alt={`${product.title} img`}
