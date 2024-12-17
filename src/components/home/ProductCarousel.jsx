@@ -126,7 +126,7 @@ export function ProductCarousel({ Promoimage }) {
 
         <div
           ref={scrollContainerRef}
-          className="flex overflow-x-auto gap-6 xl:gap-0 scroll-smooth snap-x snap-mandatory scrollbar-hide bg-custom-gray justify-between p-4 rounded-xl"
+          className="flex overflow-x-auto gap-6 scroll-smooth snap-x snap-mandatory scrollbar-hide bg-custom-gray justify-between p-4 rounded-xl"
           style={{
             scrollbarWidth: "none", // For Firefox
             msOverflowStyle: "none", // For IE/Edge
@@ -144,7 +144,7 @@ export function ProductCarousel({ Promoimage }) {
             <img
               src={evervaImg}
               alt="everva"
-              className="object-cover rounded-xl w-full h-full"
+              className="object-cover rounded-xl w-full h-full mr-2"
             />
           </div>) }
 {/* Everva Image Div */}

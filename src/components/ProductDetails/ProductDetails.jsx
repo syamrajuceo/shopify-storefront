@@ -200,7 +200,7 @@ export const ProductDetails = () => {
         </Breadcrumbs>
         <h2 className="text-sm font-normal text-gray-400">Urban Utility</h2>
 
-        <p className="text-xl font-normal text-gray-700">{title}</p>
+        <p className="text-xl font-normal text-gray-700 font-bold">{title}</p>
         <div className="flex space-x-2 mt-4">
           <Rating
             name="half-rating-read"
@@ -288,7 +288,7 @@ export const ProductDetails = () => {
 
             <h2 className="text-sm font-normal text-gray-400">Urban Utility</h2>
 
-            <p className="text-xl font-normal text-gray-700">{title}</p>
+            <p className="text-xl font-normal text-gray-700 font-extrabold">{title}</p>
             <div className="flex space-x-2 mt-4">
               <Rating
                 name="half-rating-read"
