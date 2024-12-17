@@ -176,41 +176,49 @@ function CollectionComponent({ products = [], type = "Men" }) {
     <div className="flex flex-col lg:flex-row relative">
       {/* Sidebar for filters */}
       <div
-        className={`bg-slate-100 lg:block ${isopen ? "block" : "hidden"
-          } lg:w-1/4`}
+        className={`bg-[#FFFFFF] lg:block ${isopen ? "block" : "hidden"
+          } lg:w-1/5`}
       >
         <div className="p-3">
-          <div className="pl-9">
-            <h1 className="font-semibold text-xl">Widget Price Filter</h1>
-            <div className="flex  lg:flex-col xl:flex-row gap-2 mt-3">
+          <div className="pl-3">
+            <h1 className="font-semibold text-xl">Price</h1>
+            <div className="flex  lg:flex-col xl:flex-row gap-2 mt-3 items-center">
+              <div>
+                <h1 className="text-[12px]">Min Price</h1>
               <input
                 type="number"
-                className="border w-[125px] py-1 px-3"
+                className="border w-[116.44px] h-[38px] py-1 px-3"
                 min={0}
                 value={temporarypriceRange.min}
                 onChange={(e) => handlePriceChange(e, "min")}
               />
-              <span>-</span>
+              </div>
+             
+              <span className="text-[14px] text-[#030712]">-</span>
+              <div>
+              <h1 className="text-[12px]">Max Price</h1>
               <input
                 type="number"
-                className="border w-[125px]  py-1 px-3"
+                className="border w-[116.44px] h-[38px]  py-1 px-3"
                 min={1}
                 value={temporarypriceRange.max}
                 onChange={(e) => handlePriceChange(e, "max")}
               />
+              </div>
+             
             </div>
 
-            <div className="flex gap-10 mt-3 items-center">
+            <div className="flex  mt-3 items-center justify-between">
               <div>
                 Price: ${temporarypriceRange.min} — ${temporarypriceRange.max}
               </div>
-              <button className="border  px-3 py-2 bg-blue-200  transition" onClick={() => { setPriceRange(temporarypriceRange) }}>
+              <button className="border  px-3 py-2 bg-[#E5E7EB]  transition" onClick={() => { setPriceRange(temporarypriceRange) }}>
                 Apply
               </button>
             </div>
           </div>
 
-          <div className="p-4">
+          <div className="p-3">
             <FilterBoxComponent
               header="Gender"
               options={genderOptions}
@@ -256,7 +264,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
             </button> */}
 
       {/* Main product section */}
-      <div className="w-full lg:w-3/4 ">
+      <div className="w-full lg:w-4/5 px-5">
         <div className="flex items-center space-x-2 text-sm text-gray-700 p-4">
           <span className="hover:text-blue-600 cursor-pointer">Shop</span>
           <IoIosArrowForward />
@@ -265,7 +273,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
           <span className="font-semibold">{type}</span>
         </div>
 
-        <div className="bg-slate-300 p-3 text-sm text-gray-700">
+        <div className="bg-[#F3F4F6] p-3 text-sm text-gray-700">
         
           Showing {pagenatedProduct.length} of {filterProduct.length} results
 
@@ -298,7 +306,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
         <div>
           {visibleCount < filterProduct.length && (
             <button
-              className="w-full p-5  font-semibold mt-4"
+              className="w-full p-5 bg-[#3C424221]  font-semibold mt-4"
               onClick={loadMore}
             >
               Load More
@@ -338,7 +346,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
       </div>
       {/* mobile */}
       {selectedfilter === null ? (
-        <div className="flex lg:hidden fixed z-30 bottom-[75px] md:bottom-[0px] bg-slate-300 p-3 w-full justify-between">
+        <div className="flex lg:hidden fixed z-30 bottom-[70px] md:bottom-[0px] border-r-1 bg-[#FFFFFF] p-3 w-full justify-between">
           <button
             className="flex flex-col items-center w-[50%] border-r-2"
             onClick={() => SetSelectedFilter("sort")}
@@ -347,7 +355,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
               <BiSortAlt2 className="text-xl text-blue-600" />
               <p className="mt-1">Sort</p>
             </div>
-            <p>Recommended</p>
+            <p className="text-[#9C9C9C] text-[11px]">Recommended</p>
           </button>
           <button
             className="flex flex-col items-center w-[50%] "
@@ -358,11 +366,11 @@ function CollectionComponent({ products = [], type = "Men" }) {
               <p className="mt-1">Filter</p>
             </div>
 
-            <p>{appliedfilter} Applied</p>
+            <p className="text-[#9C9C9C] text-[11px]">{appliedfilter} Applied</p>
           </button>
         </div>
       ) : (
-        <div className="block lg:hidden fixed z-30 bottom-[75px] bg-slate-300 p-3 w-full">
+        <div className="block lg:hidden fixed z-30 bottom-[70px]  bg-[#FFFFFF]  w-full">
           {selectedfilter === "sort" && (
             <SortComponent SetSelectedFilter={SetSelectedFilter} />
           )}
