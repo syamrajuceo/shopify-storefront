@@ -44,7 +44,39 @@ function SearchPage() {
             );
             if (filteredProducts.length > 0) {
               setResultType("ProductType");
+            }else{
+             // Search by specific metafields (color-pattern, age-group, etc.)
+             const keysToSearch = [
+              "color-pattern", 
+              "age-group", 
+              "eyewear-frame-design", 
+              "target-gender", 
+              "fabric"
+            ];
+
+            let found = false;
+            for (let key of keysToSearch) {
+              filteredProducts = products.filter((product) =>
+                product.metafields.some((metafield) =>
+                  metafield.key === key && 
+                  metafield.metavalue.some((metaValue) =>
+                    metaValue.handle.toLowerCase().includes(searchQuery.toLowerCase())
+                  )
+                )
+              );
+
+              if (filteredProducts.length > 0) {
+                setResultType(`Metafield > ${key}`);
+                found = true;
+                break; // Stop once a match is found for a key
+              }
             }
+
+            // If no metafield matches found, fall back to "Metafield" search
+            if (!found) {
+              setResultType("Metafield");
+            }
+          }
           }
         } else {
           setResultType("Product");

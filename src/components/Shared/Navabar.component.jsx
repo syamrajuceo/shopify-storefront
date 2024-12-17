@@ -30,10 +30,28 @@ const iconMapping = {
 
 
 
-function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, searchQuery }) {
+function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, searchQuery,querytype }) {
   const navigate = useNavigate();
   const [hidden, setHidden] = useState(true);
-
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const handleKeyDown = (e) => {
+    if (e.key === "ArrowDown") {
+        setSelectedIndex((prevIndex) => (prevIndex + 1) % searchResult.length);
+    } else if (e.key === "ArrowUp") {
+        setSelectedIndex((prevIndex) =>
+            prevIndex <= 0 ? searchResult.length - 1 : prevIndex - 1
+        );
+    } else if (e.key === "Enter") {
+        if (selectedIndex >= 0 && searchResult[selectedIndex]) {
+            // Navigate to the selected item's link
+            const selectedItem = searchResult[selectedIndex];
+            window.location.href = `/product/${selectedItem.handle}`;
+        } else if (searchQuery?.trim() !== "") {
+            // If no item is selected, navigate to the query page
+            window.location.href = `/query?query=${searchQuery}`;
+        }
+    }
+};
 
   return (
     <div className="bg-slate-100">
@@ -48,12 +66,13 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
             className="w-full bg-slate-200 h-[40px] px-3"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
           <Link className="w-[40px] p-2" to={`/query?query=${searchQuery}`} onClick={() => setSearchQuery('')}>
             <IoIosSearch />
           </Link>
 
-          <ProductSearchList searchQuery={searchQuery} searchResult={searchResult} />
+          <ProductSearchList searchQuery={searchQuery} searchResult={searchResult} querytype={querytype} selectedIndex={selectedIndex}/>
         </div>
         <div className="flex items-center gap-2">
           <Link className="hidden md:block" to={"/contact"}>Contact</Link>
