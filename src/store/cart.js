@@ -179,12 +179,14 @@ export const createCart = async (accessToken = null) => {
     console.log("Cart created successfully:", cart);
 
     // Step 2: Send cart details to your backend
-    await sendCartDetailsToBackend({
-      user_email: buyerIdentity.email || "", // Use default email if not available
+    const backendRes = await sendCartDetailsToBackend({
+      user_email: user.email || "",
       cartId: cart.id,
       checkoutUrl: cart.checkoutUrl,
-      phone: user?.phone || "", // Use user phone if available
+      phone: user?.phone || "",
     });
+
+    console.log("backendRes : ",backendRes)
 
     return cart;
   } catch (error) {
@@ -793,7 +795,7 @@ export const fetchCart = async () => {
 
     // Store cart in localStorage and update Zustand
     storeCartInLocalStorage(cart.id, cart.checkoutUrl);
-    useShopifyStore.getState().setCart(cart.id, cart.checkoutUrl);
+    useShopifyStore.getState().setCart(cart,cart.id, cart.checkoutUrl);
     cart.quantity = cart.lines.edges.length; 
 
     cart.itemquantity = cart.lines.edges.reduce((total, edge) => {
