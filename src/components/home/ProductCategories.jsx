@@ -27,7 +27,7 @@ const categories = [
 const ProductCard = ({ title, image,path}) => {
   const navigate = useNavigate();
   return (
-    <div className="relative overflow-hidden rounded-2xl group cursor-pointer h-[320px]" onClick={() => navigate(path)}>
+    <div className="relative overflow-hidden rounded-[18px] group cursor-pointer h-[320px]" onClick={() => navigate(path)}>
       <div className="aspect-square w-full overflow-hidden relative block">
         <img
           src={image}
@@ -105,7 +105,7 @@ function ProductCategories() {
         </div>
 
         <div className="flex"  onClick={()=>{navigate('/eyeglasses')}}>
-          <div className="flex items-center justify-center gap-2 h-[150px] bg-custom-gray w-[40%] rounded-tl-xl rounded-bl-xl ">
+          <div className="flex items-center justify-center gap-2 h-[150px] bg-custom-gray w-[40%] rounded-tl-[18px] rounded-bl-[18px] ">
             <h1 className="text-md">Contact lenses </h1>
             <IoMdArrowForward />
           </div>

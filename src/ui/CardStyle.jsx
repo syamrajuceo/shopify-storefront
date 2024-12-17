@@ -127,6 +127,7 @@ export const CardImage = styled.img`
   height: 17rem;
   border-radius: 0.625rem;
   background-position: center;
+ object-fit: contain;
   /* transform: scale(0.9);  */
   @media screen and (max-width: 40.9375rem) {
     height: 14rem;
