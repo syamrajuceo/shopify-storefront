@@ -138,7 +138,14 @@ function ReviewForm({ SetIsShow,product_handle , handleReview}) {
   const handleRatingChange = (newRating) => {
     setRating(newRating);
   };
-
+  useEffect(() => {
+    // Disable scrolling 
+    document.body.style.overflow = 'hidden';
+    // Clean up when the component unmounts
+    return () => {
+        document.body.style.overflow = 'auto';
+    };
+}, []);
   return (
     <div className="z-40 absolute top-0 left-0 right-0 bottom-0 bg-slate-500 bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-8 rounded-lg w-4/5 md:w-1/3 shadow-lg">

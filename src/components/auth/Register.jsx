@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { signUp } from "../../store/auth";
@@ -12,23 +12,25 @@ export const Register = () => {
     watch,
   } = useForm();
 
-  // Check if user is already logged in
-//   useEffect(() => {
-//     const accessToken = localStorage.getItem("accessToken");
-//     if (accessToken) {
-//       navigate("/"); // Redirect to home page if already logged in
-//     }
-//   }, [navigate]);
+  const [loading, setLoading] = useState(false);
 
+  // Check if user is already logged in
+  //   useEffect(() => {
+  //     const accessToken = localStorage.getItem("accessToken");
+  //     if (accessToken) {
+  //       navigate("/"); // Redirect to home page if already logged in
+  //     }
+  //   }, [navigate]);
 
   const onSubmit = async (data) => {
     console.log("Data ", data);
     try {
       const { firstName, lastName, email, password } = data;
+      setLoading(true);
       const customer = await signUp(firstName, lastName, email, password);
       console.log("Customer ", customer);
-
-      const { accessToken} = customer;
+      setLoading(false);
+      const { accessToken } = customer;
 
       localStorage.setItem("accessToken", accessToken);
 
@@ -216,7 +218,7 @@ export const Register = () => {
                   type="submit"
                   className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
                 >
-                  Create account
+                  {loading ? "Loading..." : "Create Account"}
                 </button>
               </span>
             </div>

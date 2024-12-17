@@ -88,7 +88,7 @@ function FilterComponent({
     };
 
     return (
-        <div className="bg-white rounded shadow-lg w-full lg:w-1/3">
+        <div className="border-r-1 bg-[#CFCFCF] rounded shadow-lg w-full  lg:w-1/3">
             <div className="flex items-center justify-between p-4 text-xl border-b">
                 <div className="flex items-center gap-2">
                     <FaFilter />
@@ -99,17 +99,17 @@ function FilterComponent({
                     onClick={() => SetSelectedFilter(null)}
                 />
             </div>
-            <div className="p-4 flex space-x-4">
+            <div className="flex  bg-[#F3F4F6] h-[70vh]">
                 {/* Filter Types */}
-                <div className="w-1/3 border-r pr-4">
+                <div className="w-1/3 border-r">
                     {Object.keys(filters).map((filter) => (
                         <button
                             key={filter}
                             onClick={() => setType(filter)}
-                            className={`w-full text-left py-2 px-3 rounded ${
+                            className={`w-full h-[48px] pl-2 text-left rounded ${
                                 type === filter
-                                    ? "bg-blue-600 text-white"
-                                    : "hover:bg-gray-200"
+                                    ? "bg-[#E2E3E7] text-[#424242]"
+                                    : "hover:bg-[#E2E3E7]"
                             }`}
                         >
                             {filter}
@@ -118,14 +118,14 @@ function FilterComponent({
                 </div>
 
                 {/* Filter Options */}
-                <div className="w-2/3">
+                <div className="w-2/3 bg-[#FFFFFF]">
                     {type ? (
-                        <div className="space-y-2">
-                            <h3 className="text-lg font-semibold">{type} Options</h3>
+                        <div className="space-y-2  px-2 bg-[#DFDFDF7D]">
+                            {/* <h3 className="text-lg font-semibold">{type} Options</h3> */}
                             {filters[type].map((option, index) => (
                                 <label
                                     key={index}
-                                    className="flex items-center gap-2"
+                                    className="flex items-center gap-2 h-[56px] border-b-2"
                                 >
                                     <input
                                         type={
@@ -147,7 +147,7 @@ function FilterComponent({
                             ))}
                         </div>
                     ) : (
-                        <p className="text-gray-500">
+                        <p className="text-gray-500  px-2">
                             Select a filter type to view options.
                         </p>
                     )}

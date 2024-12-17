@@ -118,16 +118,17 @@ export const CardImageContainer = styled.div`
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding : 10px;
+  /* padding : 10px; */
 `;
 
 // Card Image inside Card
 export const CardImage = styled.img`
-  width: 100%;
-  height: 16rem;
+  width: auto;
+  height: 17rem;
   border-radius: 0.625rem;
   background-position: center;
  object-fit: contain;
+  /* transform: scale(0.9);  */
   @media screen and (max-width: 40.9375rem) {
     height: 14rem;
   }
