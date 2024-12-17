@@ -17,13 +17,8 @@ import useShopifyStore from "../../store/useShopifyStore";
 import { useEffect, useState } from "react";
 import { addToCart } from "../../store/cart";
 import toast from "react-hot-toast";
-<<<<<<< HEAD
 import { addReview, fetchReviews } from "../../store/review";
-
-=======
-import { addReview } from "../../store/review";
 import { ProductCarousel2 } from "../home/ProductCarousel2";
->>>>>>> b39d5656dfa86b7d654e8beb8b122f591948191a
 export const ProductDetails = () => {
   const { reviews } = useShopifyStore.getState();
   const [reviewsData, setReviewData] = useState(reviews);
@@ -131,7 +126,7 @@ export const ProductDetails = () => {
       console.log("Got response :", res);
       if (res.status === 201) {
         toast.success("Review submitted successfully!");
-        HandleFetchReview()
+        HandleFetchReview();
       }
     } catch (error) {
       console.log(error);
