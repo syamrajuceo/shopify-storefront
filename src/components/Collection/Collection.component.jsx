@@ -24,6 +24,41 @@ function CollectionComponent({ products = [], type = "Men" }) {
     "Product Status": []
   })
   const [filterProduct, setFilterProduct] = useState(products);
+
+  const [pagenatedProduct, setPagenatedProduct] = useState(() => {
+    if (!filterProduct || filterProduct.length === 0) {
+      return [];
+    }
+    if (filterProduct.length < 8) {
+      return filterProduct;
+    }
+    return filterProduct.slice(0, 8);
+  });
+
+  useEffect(() => {
+    if (!filterProduct || filterProduct.length === 0) {
+      setPagenatedProduct([]);
+    } else if (filterProduct.length < 8) {
+      setPagenatedProduct(filterProduct);
+    } else {
+      setPagenatedProduct(filterProduct.slice(0, 8));
+    }
+  }, [filterProduct]);
+
+  const [visibleCount, setVisibleCount] = useState(8);
+
+  const loadMore = () => {
+    const newCount = visibleCount + 4;
+    setVisibleCount(newCount);
+
+    if (filterProduct.length >= newCount) {
+      setPagenatedProduct(filterProduct.slice(0, newCount));
+    } else {
+      setPagenatedProduct(filterProduct);
+    }
+  };
+
+
   const [filterOptions, setFilterOptions] = useState({
     Gender: [],
     "Product Categories": [],
@@ -169,8 +204,8 @@ function CollectionComponent({ products = [], type = "Men" }) {
               <div>
                 Price: ${temporarypriceRange.min} — ${temporarypriceRange.max}
               </div>
-              <button className="border bg-slate-200 px-3 py-2 hover:bg-slate-300 transition" onClick={() => { setPriceRange(temporarypriceRange) }}>
-                Filter
+              <button className="border  px-3 py-2 bg-blue-200  transition" onClick={() => { setPriceRange(temporarypriceRange) }}>
+                Apply
               </button>
             </div>
           </div>
@@ -221,7 +256,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
             </button> */}
 
       {/* Main product section */}
-      <div className="w-full lg:w-3/4 bg-slate-200">
+      <div className="w-full lg:w-3/4 ">
         <div className="flex items-center space-x-2 text-sm text-gray-700 p-4">
           <span className="hover:text-blue-600 cursor-pointer">Shop</span>
           <IoIosArrowForward />
@@ -229,8 +264,11 @@ function CollectionComponent({ products = [], type = "Men" }) {
           <IoIosArrowForward />
           <span className="font-semibold">{type}</span>
         </div>
+
         <div className="bg-slate-300 p-3 text-sm text-gray-700">
-          Showing all 16 results
+        
+          Showing {pagenatedProduct.length} of {filterProduct.length} results
+
         </div>
 
         {/* Product grid */}
@@ -245,26 +283,36 @@ function CollectionComponent({ products = [], type = "Men" }) {
               OurPrice={prodobj.OurPrice}
               off={prodobj.off}
             /> */}
-          {filterProduct && filterProduct.length > 0 ? (
-            filterProduct.map((product) =>
+
+          {pagenatedProduct && pagenatedProduct.length > 0 ? (
+            pagenatedProduct.map((product) =>
               product ? <ProductCard key={product.id} product={product} /> : null
             )
+          ) : type === "ContactLenses" ? (
+            <p>Coming soon</p>
           ) : (
-            <p>No products available</p>
+            <p>No product available</p>
           )}
 
         </div>
         <div>
-          <button className="w-full p-5 bg-slate-300 font-semibold">
-            Load More
-          </button>
-          <div className="text-center p-14 ">
-            “النظارات الواقية الصناعية ضرورية لحماية العمال في البيئات التي تشكل
+          {visibleCount < filterProduct.length && (
+            <button
+              className="w-full p-5  font-semibold mt-4"
+              onClick={loadMore}
+            >
+              Load More
+            </button>
+          )}
+
+          <div className="text-center p-14">
+            النظارات الواقية الصناعية ضرورية لحماية العمال في البيئات التي تشكل”
             فيها الغبار والحطام والمواد الكيميائية والمخاطر العالية التأثير
             تهديدًا. تلبي مجموعتنا من النظارات الواقية المعتمدة أعلى المعايير
             العالمية، بما في ذلك ANSI Z87.1 و EN166، لضمان حماية كاملة للعينين.
             تتوفر النظارات بعدسات مع أو بدون قوة تصحيحية، ونقدم أنماطًا تناسب كل
             احتياج صناعي، بدءًا من البناء إلى التصنيع。”
+
             {faqData.map((faq, index) => (
               <div key={index} className="p-2 m-2 border-slate-500 ">
                 <h1

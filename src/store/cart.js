@@ -107,6 +107,8 @@ const getCartFromLocalStorage = () => {
 //   }
 // };
 
+
+
 export const createCart = async (accessToken = null) => {
   // Retrieve user details from localStorage
   const user = JSON.parse(localStorage.getItem("user"));
@@ -141,6 +143,7 @@ export const createCart = async (accessToken = null) => {
       buyerIdentity: buyerIdentity,
       attributes: [
         {
+
           key: "cart_attribute",
           value: "This is a cart attribute",
         },
@@ -791,7 +794,13 @@ export const fetchCart = async () => {
     // Store cart in localStorage and update Zustand
     storeCartInLocalStorage(cart.id, cart.checkoutUrl);
     useShopifyStore.getState().setCart(cart.id, cart.checkoutUrl);
+    cart.quantity = cart.lines.edges.length; 
 
+    cart.itemquantity = cart.lines.edges.reduce((total, edge) => {
+      return total + edge.node.quantity;
+    }, 0);
+
+    console.log("getcart:", JSON.stringify(cart))
     return cart;
   } catch (error) {
     console.error("Error fetching cart:", error.message);

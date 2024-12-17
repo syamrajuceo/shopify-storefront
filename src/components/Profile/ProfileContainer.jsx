@@ -8,13 +8,39 @@ import MyOrders from "./MyOrders";
 import { fetchUserData, deleteUserAddress } from "./ProfileController";
 import AddSettings from "./AddSettings";
 import AddressList from "./AddressList";
+import TopBar from "./TopBar";
 
-function ProfileContainer() {
+
+function ProfileContainer({ activeTab = "" }) {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
-  const [pageShow, setPageShow] = useState("Dashboard");
+  const [pageShow, setPageShow] = useState(activeTab === "/" ? "Dashboard" : activeTab);
   const [editingAddress, setEditingAddress] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    // Default to "Dashboard" if activeTab is not provided or is empty
+    const defaultTab = activeTab || "Dashboard";
+
+    // Set the pageShow based on the activeTab
+    switch (defaultTab) {
+      case "address":
+        setPageShow("Address");
+        break;
+      case "edit-address":
+        setPageShow("Edit Settings");
+        break;
+      case "order":
+        setPageShow("My Orders");
+        break;
+      case "add-address":
+        setPageShow("Add Address");
+        break;
+      default:
+        setPageShow("Dashboard");
+        break;
+    }
+  }, [activeTab]);
+
 
   useEffect(() => {
     const getUserData = async () => {
@@ -40,7 +66,7 @@ function ProfileContainer() {
   const handleEditAddress = (address) => {
     setEditingAddress(address);
     setPageShow("Edit Settings");
-    setSearchParams({ id: address.id });
+    setSearchParams({ activetab: "edit-address", id: address.id });
   };
 
   const handleDeleteAddress = async (addressId) => {
@@ -69,13 +95,13 @@ function ProfileContainer() {
   }
 
   return (
-    <div className="h-[80vh] flex">
+    <div className="md:h-[80vh] md:flex">
       {/* Sidebar */}
-      <div className="w-64 bg-gray-800 text-white">
+      <div className="hidden md:block md:w-64 bg-white text-black">
         <UserData user={user} />
         <SideBar pageShow={pageShow} setPageShow={setPageShow} />
       </div>
-
+      <TopBar pageShow={pageShow} setPageShow={setPageShow} user={user} />
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto p-6 bg-gray-100">
         {pageShow === "Dashboard" && (
@@ -145,7 +171,7 @@ function ProfileContainer() {
               setUser((prevUser) => ({
                 ...prevUser,
                 addresses: {
-                  edges: [...prevUser.addresses.edges,{
+                  edges: [...prevUser.addresses.edges, {
                     node: newAddress
                   }]
                 }

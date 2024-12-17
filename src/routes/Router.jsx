@@ -14,6 +14,11 @@ import { ContactPage } from "../pages/ContactPage";
 import MenPage from "../pages/MenPage";
 import WoMenPage from "../pages/WoMenPage";
 import EyeGlasses from "../pages/EyeGlasses";
+import ContactLenses from "../pages/ContactLenses";
+import CategoryPage from "../pages/CategoryPage";
+import Offers from "../pages/Offers";
+import SearchPage from "../pages/SearchPage";
+import Orderpage from "../components/Order/Orderpage";
 
 export const router = createBrowserRouter([
   {
@@ -56,6 +61,10 @@ export const router = createBrowserRouter([
         element:<SunGlasses/>
       },
       {
+        path: "/contactLenses",
+        element:<ContactLenses/>
+      },
+      {
         path: "/eyeglasses",
         element:<EyeGlasses/>
       },
@@ -66,9 +75,17 @@ export const router = createBrowserRouter([
       {
         path: "/Women",
         element:<WoMenPage/>
+      },{
+        path: "/offer",
+        element:<Offers/>
       },
       {
-
+        path: "/category",
+        element:<CategoryPage/>
+      },
+      {
+        path: "/query",
+        element:<SearchPage/>
       },
       // User routes
       {
@@ -78,9 +95,14 @@ export const router = createBrowserRouter([
             path: "/cart",
             element: <CartPage />,
           },
+          
           {
             path: "/profile",
             element: <ProfilePage />,
+          },
+          {
+            path: "/order",
+            element: <Orderpage />,
           },
         ],
       },]
