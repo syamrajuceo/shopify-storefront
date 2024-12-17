@@ -17,6 +17,7 @@ import Promo2 from '../../assets/promo3.png'
 export const Home = () => {
   return (
     <>
+    
       <Carousel/>
       <ShapeSelector/>
       <div className='flex flex-col gap-6'>
