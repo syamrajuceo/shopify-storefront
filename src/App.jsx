@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
 import { RouterProvider } from "react-router-dom";
-import { fetchAllCollections, fetchAllProducts, fetchCollectionsWithProducts } from "./store/products";
+import {
+  fetchAllCollections,
+  fetchAllProducts,
+  fetchCollectionsWithProducts,
+} from "./store/products";
 import { router } from "./routes/Router";
 import { fetchCart } from "./store/cart";
 import { fetchReviews } from "./store/review";
 import { Loading } from "./components/loading/Loading";
+import useShopifyStore from "./store/useShopifyStore";
 
 const App = () => {
-  const [loading, setLoading] = useState(false);
+  const setLoading = useShopifyStore((state) => state.setLoading);
+  const loading = useShopifyStore((state) => state.loading);
+
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -19,7 +26,6 @@ const App = () => {
         setLoading(false);
         const fetchedCart = await fetchCart();
         const fetchedCollections = await fetchCollectionsWithProducts();
-        console.log("fetchAllCollections : ", fetchedCollections)
       } catch (error) {
         console.error("Error during initial fetch:", error.message);
       }
@@ -27,7 +33,11 @@ const App = () => {
     loadData();
   }, []);
 
-  return <>{loading ? <Loading /> : <RouterProvider router={router} />}</>;
+  return (
+    <>
+      <RouterProvider router={router} />
+    </>
+  );
 };
 
 export default App;

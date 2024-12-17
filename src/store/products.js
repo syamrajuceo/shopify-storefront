@@ -266,7 +266,7 @@ export const fetchCollectionsWithProducts = async () => {
             title
             description
             handle
-            products(first: 1000) {
+            products(first: 250) {
               edges {
                 node {
                   id
@@ -289,7 +289,7 @@ export const fetchCollectionsWithProducts = async () => {
 
   try {
     const response = await shopifyClient.post("", { query });
-    console.log("response : ",response)
+    console.log("response: ", response);
     if (
       !response.data ||
       !response.data.data ||

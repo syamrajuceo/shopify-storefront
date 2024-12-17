@@ -29,7 +29,7 @@ export const Review = ({
           handleReview={handleReview}
         />
       )}
-      <section className="">
+      <section className="px-[20px]">
         <div className="w-full max-w-7xl lg-6 mx-auto">
           <div className="w-full">
             <h1 className="text-[22px] text-gray-800 font-[500]">Reviews</h1>
