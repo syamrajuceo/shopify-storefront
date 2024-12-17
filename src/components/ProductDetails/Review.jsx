@@ -29,7 +29,7 @@ export const Review = ({
           handleReview={handleReview}
         />
       )}
-      <section className="px-[20px]">
+      <section className="px-[20px] w-[100%]">
         <div className="w-full max-w-7xl lg-6 mx-auto">
           <div className="w-full">
             <h1 className="text-[22px] text-gray-800 font-[500]">Reviews</h1>
@@ -47,7 +47,7 @@ export const Review = ({
             </div>
 
             {/* Rating breakdown section */}
-            <div className="flex gap-1 pb-11 border-b border-gray-100 max-xl:max-w-2xl max-xl:mx-auto mt-3">
+            <div className="flex gap-1 pb-11 border-b border-gray-100 min-w-[100%] max-xl:max-w-2xl max-xl:mx-auto mt-3">
               <div className="box flex flex-col gap-y-1">
                 {Object.entries(ratingDistribution).map(([star, count]) => (
                   <div key={star} className="flex items-center w-full">

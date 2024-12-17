@@ -19,6 +19,8 @@ import { addToCart } from "../../store/cart";
 import toast from "react-hot-toast";
 import { addReview, fetchReviews } from "../../store/review";
 import { ProductCarousel2 } from "../home/ProductCarousel2";
+
+const accessToken = localStorage.getItem("accessToken");
 export const ProductDetails = () => {
   const { reviews } = useShopifyStore.getState();
   const [reviewsData, setReviewData] = useState(reviews);
@@ -72,6 +74,9 @@ export const ProductDetails = () => {
       if (!variantId) {
         console.error("Variant ID not found.");
         return;
+      }
+      if(accessToken === null || accessToken === undefined){
+        return navigate("/login")
       }
       const cart = await addToCart(variantId, quantity);
       console.log("Cart updated:", cart);
@@ -200,7 +205,7 @@ export const ProductDetails = () => {
         </Breadcrumbs>
         <h2 className="text-sm font-normal text-gray-400">Urban Utility</h2>
 
-        <p className="text-xl font-normal text-gray-700 font-bold">{title}</p>
+        <p className="text-xl text-gray-700 font-bold">{title}</p>
         <div className="flex space-x-2 mt-4">
           <Rating
             name="half-rating-read"
@@ -213,7 +218,7 @@ export const ProductDetails = () => {
       </div>
       <div className="flex flex-col md:flex-row gap-10 mt-4">
         {/* Main image and sub-images section */}
-        <div className="flex flex-col items-center  p-3 max-h-auto w-full md:w-[40%] h-auto  md:h-[550px]">
+        <div className="flex flex-col items-center  p-3 max-h-auto w-full md:w-[50%] h-auto  md:h-[550px]">
           {/* Main Image */}
           <img
             src={mainImg}
@@ -233,8 +238,8 @@ export const ProductDetails = () => {
             ))}
           </div>
           {/* Quantity and Add to Cart Section */}
-          <div className="mt-2 h-[50px] w-full hidden sm:flex justify-center items-center gap-2">
-            <div className="flex w-[30%] justify-around items-center gap-4 bg-gray-200 py-2 px-4 rounded-md cursor-pointer">
+          <div className="mt-2 h-[50px] w-full hidden md:flex justify-center items-center gap-2">
+            <div className="flex w-[40%] justify-around items-center gap-4 bg-gray-200 py-2 px-4 rounded-md cursor-pointer">
               <p
                 onClick={() =>
                   handleQty(quantity > 1 ? quantity - 1 : quantity)
@@ -262,7 +267,7 @@ export const ProductDetails = () => {
         </div>
 
         {/* Product Details Section */}
-        <div className="ml-2 h-[450px] w-full md:w-[60%] overflow-y-auto">
+        <div className="ml-2 h-[450px] w-full md:w-[50%] overflow-y-auto">
           <div className="hidden md:block">
             <Breadcrumbs aria-label="breadcrumb">
               <Typography
@@ -288,7 +293,7 @@ export const ProductDetails = () => {
 
             <h2 className="text-sm font-normal text-gray-400">Urban Utility</h2>
 
-            <p className="text-xl font-normal text-gray-700 font-extrabold">{title}</p>
+            <span className="text-xl text-gray-700 font-bold">{title}</span>
             <div className="flex space-x-2 mt-4">
               <Rating
                 name="half-rating-read"
@@ -435,7 +440,7 @@ export const ProductDetails = () => {
       </div>
 
       {/* Mobile fixed bottom Add to Cart */}
-      <div className="fixed bottom-[65px] left-0 w-full sm:hidden bg-white border-t p-4 flex justify-between items-center gap-2 shadow-md">
+      <div className="fixed bottom-[65px] left-0 w-full md:hidden bg-white border-t p-4 flex justify-between items-center gap-2 shadow-md">
         <div className="flex w-[45%] justify-around items-center gap-4 bg-gray-200 py-2 px-4 rounded-md">
           <p
             onClick={() => handleQty(quantity > 1 ? quantity - 1 : quantity)}

@@ -137,16 +137,20 @@ import {
 import expressLogo from "../../assets/Frame 390 1.png";
 import deliveryLogo from "../../assets/Group.png";
 import { addToCart } from "../../store/cart";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import CircularProgress from "@mui/material/CircularProgress";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 
+const accessToken = localStorage.getItem("accessToken");
 export const ProductCard = ({ product = {} }) => {
+
   console.log("product... : ", product);
   const userObject = localStorage.getItem("user");
   const user = userObject ? JSON.parse(userObject) : { email: "" };
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const {
     title = "",
@@ -184,6 +188,9 @@ export const ProductCard = ({ product = {} }) => {
       if (!variantId) {
         console.error("Variant ID not found.");
         return;
+      }
+      if(accessToken === null || accessToken === undefined){
+        return navigate("/login")
       }
       setLoading(true);
       const quantity = 1;

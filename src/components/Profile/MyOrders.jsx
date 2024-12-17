@@ -1,11 +1,14 @@
-function MyOrders({ userId }) {
+import OrdersPage from "../../pages/OrdersPage";
+
+function MyOrders({ }) {
     
-    const orders = []; 
+    // const orders = []; 
   
     return (
       <div>
         <h1 className="text-2xl font-bold">My Orders</h1>
-        {orders.length === 0 ? (
+        <OrdersPage/>
+        {/* {orders.length === 0 ? (
           <p>No orders found.</p>
         ) : (
           <ul>
@@ -17,7 +20,7 @@ function MyOrders({ userId }) {
               </li>
             ))}
           </ul>
-        )}
+        )} */}
       </div>
     );
   }
