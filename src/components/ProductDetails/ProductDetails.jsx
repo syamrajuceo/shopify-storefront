@@ -52,6 +52,7 @@ export const ProductDetails = () => {
     description = "",
     images = null,
     variants = null,
+    productType,
     id = "",
     metafields = [],
   } = product || {};
@@ -208,16 +209,16 @@ export const ProductDetails = () => {
           >
             Shop
           </Typography>
-          <Typography
+          {/* <Typography
             fontSize={"11px"}
             underline="hover"
             color="inherit"
             href="/material-ui/getting-started/installation/"
           >
             Eyewear
-          </Typography>
+          </Typography> */}
           <Typography sx={{ color: "text.primary" }} fontSize={"11px"}>
-            Sunglasses
+            {productType}
           </Typography>
         </Breadcrumbs>
         <h2 className="text-sm font-normal text-gray-400">Urban Utility</h2>
@@ -318,16 +319,16 @@ export const ProductDetails = () => {
               >
                 Shop
               </Typography>
-              <Typography
+              {/* <Typography
                 fontSize={"11px"}
                 underline="hover"
                 color="inherit"
                 href="/material-ui/getting-started/installation/"
               >
                 Eyewear
-              </Typography>
+              </Typography> */}
               <Typography sx={{ color: "text.primary" }} fontSize={"11px"}>
-                Sunglasses
+                {productType}
               </Typography>
             </Breadcrumbs>
 
