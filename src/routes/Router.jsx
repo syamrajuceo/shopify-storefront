@@ -19,12 +19,17 @@ import CategoryPage from "../pages/CategoryPage";
 import Offers from "../pages/Offers";
 import SearchPage from "../pages/SearchPage";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Orderpage from "../components/Order/Orderpage.jsx";
+=======
+>>>>>>> 754fcbd133cae73e27303d1a916f349e9e19724b
 
 
 =======
 import OrdersPage from "../pages/OrdersPage";
 >>>>>>> 969c52a48986cafcc7e77f1ded12a0a38de5914e
+
+import OrdersPage from "../pages/OrdersPage";
 
 export const router = createBrowserRouter([
   {
