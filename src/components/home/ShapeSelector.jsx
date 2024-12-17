@@ -4,6 +4,7 @@ import Rectangle from "../../assets/rectangleglass.png";
 import CatEye from "../../assets/catEyeglass.png";
 import aviator from "../../assets/aviator.png";
 import Geometric from "../../assets/geomatricglass.png";
+import { Link } from "react-router-dom";
 const shapes = [
   {
     id: "round",
@@ -44,102 +45,102 @@ export default function ShapeSelector() {
 
         <div className="flex flex-col md:flex-row md:w-[70%] mx-auto flex-wrap  justify-center items-center gap-3">
 
-           
-        <div className="grid grid-cols-3 gap-3">
-          <div className="relative group flex flex-col items-center  ">
-            <div
-              className={`
+
+          <div className="grid grid-cols-3 gap-3">
+            <Link className="relative group flex flex-col items-center "    to={{ pathname: "/shape", search: "?shape=round" }}>
+              <div
+                className={`
                  md:h-36 md:w-36 h-24 w-24 border-2  rounded-full overflow-hidden 
                   transition-all duration-300 ease-in-out
                   cursor-pointer transform hover:scale-105
                 `}
-            >
-              <img
-                src={Rounded}
-                alt={"rounded"}
-                className="max-w-full max-h-full object-contain m-auto block "
-              />
-            </div>
-            <div className="mt-4 text-center">
-              <h3 className="text-lg font-medium text-gray-900">Rounded</h3>
-            </div>
-          </div>
-          <div className="relative group flex flex-col items-center  ">
-            <div
-              className={`
+              >
+                <img
+                  src={Rounded}
+                  alt={"rounded"}
+                  className="max-w-full max-h-full object-contain m-auto block "
+                />
+              </div>
+              <div className="mt-4 text-center">
+                <h3 className="text-lg font-medium text-gray-900">Rounded</h3>
+              </div>
+            </Link>
+            <Link className="relative group flex flex-col items-center  "to={{ pathname: "/shape", search: "?shape=rectangle" }} >
+              <div
+                className={`
                  md:h-36 md:w-36 h-24 w-24 border-2  rounded-full overflow-hidden 
                   transition-all duration-300 ease-in-out
                   cursor-pointer transform hover:scale-105
                 `}
-            >
-              <img
-                src={Rectangle}
-                alt={"Rectangle"}
-                className="max-w-full max-h-full object-contain m-auto block "
-              />
-            </div>
-            <div className="mt-4 text-center">
-              <h3 className="text-lg font-medium text-gray-900">Rectangle</h3>
-            </div>
+              >
+                <img
+                  src={Rectangle}
+                  alt={"Rectangle"}
+                  className="max-w-full max-h-full object-contain m-auto block "
+                />
+              </div>
+              <div className="mt-4 text-center">
+                <h3 className="text-lg font-medium text-gray-900">Rectangle</h3>
+              </div>
+            </Link>
+
+            <Link className="relative group flex flex-col items-center  " to={{ pathname: "/shape", search: "?shape=cat-eye" }}>
+              <div
+                className={`
+                 md:h-36 md:w-36 h-24 w-24 border-2  rounded-full overflow-hidden 
+                  transition-all duration-300 ease-in-out
+                  cursor-pointer transform hover:scale-105
+                `}
+              >
+                <img
+                  src={CatEye}
+                  alt={"cateye"}
+                  className="max-w-full max-h-full object-contain m-auto block "
+                />
+              </div>
+              <div className="mt-4 text-center">
+                <h3 className="text-lg font-medium text-gray-900">Cat Eye</h3>
+              </div>
+            </Link>
           </div>
 
-          <div className="relative group flex flex-col items-center  ">
-            <div
-              className={`
+          <div className="grid grid-cols-2  gap-3">
+            <Link className="relative group flex flex-col items-center  " to={{ pathname: "/shape", search: "?shape=aviator" }}>
+              <div
+                className={`
                  md:h-36 md:w-36 h-24 w-24 border-2  rounded-full overflow-hidden 
                   transition-all duration-300 ease-in-out
                   cursor-pointer transform hover:scale-105
                 `}
-            >
-              <img
-                src={CatEye}
-                alt={"cateye"}
-                className="max-w-full max-h-full object-contain m-auto block "
-              />
-            </div>
-            <div className="mt-4 text-center">
-              <h3 className="text-lg font-medium text-gray-900">Cat Eye</h3>
-            </div>
-          </div>
-          </div>
-
-         <div className="grid grid-cols-2  gap-3">
-          <div className="relative group flex flex-col items-center  ">
-            <div
-              className={`
+              >
+                <img
+                  src={aviator}
+                  alt={"aviator"}
+                  className="max-w-full max-h-full object-contain m-auto block "
+                />
+              </div>
+              <div className="mt-4 text-center">
+                <h3 className="text-lg font-medium text-gray-900">{"Aviator"}</h3>
+              </div>
+            </Link>
+            <Link className="relative group flex flex-col items-center  " to={{ pathname: "/shape", search: "?shape=geometric" }}>
+              <div
+                className={`
                  md:h-36 md:w-36 h-24 w-24 border-2  rounded-full overflow-hidden 
                   transition-all duration-300 ease-in-out
                   cursor-pointer transform hover:scale-105
                 `}
-            >
-              <img
-                src={aviator}
-                alt={"aviator"}
-                className="max-w-full max-h-full object-contain m-auto block "
-              />
-            </div>
-            <div className="mt-4 text-center">
-              <h3 className="text-lg font-medium text-gray-900">{"Aviator"}</h3>
-            </div>
-          </div>
-          <div className="relative group flex flex-col items-center  ">
-            <div
-              className={`
-                 md:h-36 md:w-36 h-24 w-24 border-2  rounded-full overflow-hidden 
-                  transition-all duration-300 ease-in-out
-                  cursor-pointer transform hover:scale-105
-                `}
-            >
-              <img
-                src={Geometric}
-                alt={"Geometric"}
-                className="max-w-full max-h-full object-contain m-auto block "
-              />
-            </div>
-            <div className="mt-4 text-center">
-              <h3 className="text-lg font-medium text-gray-900">Geometric</h3>
-            </div>
-          </div>
+              >
+                <img
+                  src={Geometric}
+                  alt={"Geometric"}
+                  className="max-w-full max-h-full object-contain m-auto block "
+                />
+              </div>
+              <div className="mt-4 text-center" >
+                <h3 className="text-lg font-medium text-gray-900">Geometric</h3>
+              </div>
+            </Link>
           </div>
 
         </div>

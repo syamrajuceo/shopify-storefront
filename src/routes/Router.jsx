@@ -22,6 +22,7 @@ import { HomePageSkeleton } from "../components/skeleton/Home";
 import { CartPageSkeleton } from "../components/skeleton/Cart";
 import OrdersPage from "../pages/OrdersPage";
 import OrderSummary from "../components/Order/OrderSummary";
+import ShapePage from "../pages/ShapePage";
 
 
 export const router = createBrowserRouter([
@@ -90,6 +91,10 @@ export const router = createBrowserRouter([
       {
         path: "/query",
         element:<SearchPage/>
+      },
+      {
+        path: "/shape",
+        element:<ShapePage/>
       },
       // User routes
       {
