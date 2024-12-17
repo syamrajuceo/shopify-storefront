@@ -72,7 +72,7 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
             <IoIosSearch />
           </Link>
 
-          <ProductSearchList searchQuery={searchQuery} searchResult={searchResult} querytype={querytype} selectedIndex={selectedIndex}/>
+          <ProductSearchList searchQuery={searchQuery} searchResult={searchResult} setSearchQuery={setSearchQuery} querytype={querytype} selectedIndex={selectedIndex}/>
         </div>
         <div className="flex items-center gap-2">
           <Link className="hidden md:block" to={"/contact"}>Contact</Link>
