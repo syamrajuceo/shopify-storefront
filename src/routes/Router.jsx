@@ -19,6 +19,7 @@ import CategoryPage from "../pages/CategoryPage";
 import Offers from "../pages/Offers";
 import SearchPage from "../pages/SearchPage";
 import OrdersPage from "../pages/OrdersPage";
+import OrderSummary from "../components/Order/OrderSummary";
 
 export const router = createBrowserRouter([
   {
@@ -103,6 +104,10 @@ export const router = createBrowserRouter([
           {
             path: "/order",
             element: <OrdersPage />,
+          },
+          {
+            path: "/ordersummary",
+            element: <OrderSummary/>,
           },
         ],
       },]
