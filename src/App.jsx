@@ -5,6 +5,7 @@ import { router } from "./routes/Router";
 import { fetchCart } from "./store/cart";
 import { fetchReviews } from "./store/review";
 import { Loading } from "./components/loading/Loading";
+import { fetchOrders } from "./store/orders";
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -15,8 +16,8 @@ const App = () => {
         const products = await fetchAllProducts();
         const cart = await fetchCart();
         const reviews = await fetchReviews();
-        console.log(reviews);
         setLoading(false);
+        const orders =await fetchOrders()
         const fetchedCart = await fetchCart();
       } catch (error) {
         console.error("Error during initial fetch:", error.message);
