@@ -126,7 +126,9 @@ export function ProductCarousel({ Promoimage }) {
 
         <div
           ref={scrollContainerRef}
+
           className="flex overflow-x-auto gap-6 scroll-smooth snap-x snap-mandatory scrollbar-hide bg-custom-gray justify-between p-4 rounded-xl"
+
           style={{
             scrollbarWidth: "none", // For Firefox
             msOverflowStyle: "none", // For IE/Edge
