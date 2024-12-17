@@ -433,7 +433,7 @@ export const ProductDetails = () => {
           <span className="text-gray-400">|</span>
           <p className="text-lg font-bold">{quantity}</p>
           <span className="text-gray-400">|</span>
-          <p onClick={() => handleQty(quantity - 1)}>+</p>
+          <p onClick={() => handleQty(quantity + 1)}>+</p>
         </div>
         <button
           type="button"

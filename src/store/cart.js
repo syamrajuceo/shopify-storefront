@@ -112,7 +112,7 @@ const getCartFromLocalStorage = () => {
 export const createCart = async (accessToken = null) => {
   // Retrieve user details from localStorage
   const user = JSON.parse(localStorage.getItem("user"));
-
+  
   // Set default buyer identity if no user details are available
   const buyerIdentity = user
     ? {
@@ -179,12 +179,14 @@ export const createCart = async (accessToken = null) => {
     console.log("Cart created successfully:", cart);
 
     // Step 2: Send cart details to your backend
-    await sendCartDetailsToBackend({
-      user_email: buyerIdentity.email || "", // Use default email if not available
+    const backendRes = await sendCartDetailsToBackend({
+      user_email: user.email || "",
       cartId: cart.id,
       checkoutUrl: cart.checkoutUrl,
-      phone: user?.phone || "", // Use user phone if available
+      phone: user?.phone || "",
     });
+
+    console.log("backendRes : ",backendRes)
 
     return cart;
   } catch (error) {
