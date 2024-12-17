@@ -18,7 +18,9 @@ import ContactLenses from "../pages/ContactLenses";
 import CategoryPage from "../pages/CategoryPage";
 import Offers from "../pages/Offers";
 import SearchPage from "../pages/SearchPage";
-import Orderpage from "../components/Order/Orderpage";
+import Orderpage from "../components/Order/Orderpage.jsx";
+
+
 
 export const router = createBrowserRouter([
   {
