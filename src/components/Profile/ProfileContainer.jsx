@@ -9,7 +9,7 @@ import { fetchUserData, deleteUserAddress } from "./ProfileController";
 import AddSettings from "./AddSettings";
 import AddressList from "./AddressList";
 import TopBar from "./TopBar";
-
+import OrderSummary from "../Order/OrderSummary";
 
 function ProfileContainer({ activeTab = "" }) {
   const [user, setUser] = useState(null);
@@ -35,6 +35,9 @@ function ProfileContainer({ activeTab = "" }) {
       case "add-address":
         setPageShow("Add Address");
         break;
+        case "ordersummary":
+          setPageShow("ordersummary");
+          break;
       default:
         setPageShow("Dashboard");
         break;
@@ -163,7 +166,7 @@ function ProfileContainer({ activeTab = "" }) {
         )}
 
         {pageShow === "My Orders" && <MyOrders userId={user.id} />}
-
+        {pageShow === "ordersummary" && <OrderSummary />}
         {pageShow === "Add Address" && (
           <AddSettings
             user={user}

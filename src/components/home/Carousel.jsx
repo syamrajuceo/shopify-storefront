@@ -50,7 +50,7 @@ export default function Carousel() {
 
   return (
    <div className='p-4 md:p-8'>
-    <div className="relative h-[450px] w-full overflow-hidden rounded-lg">
+    <div className="relative h-[450px] w-full overflow-hidden rounded-[18px]">
       {slides.map((slide, index) => (
         <div
           key={index}
