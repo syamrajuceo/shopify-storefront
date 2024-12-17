@@ -14,12 +14,12 @@ import { Link } from "react-router-dom";
 import { CartCard } from "./CartCard";
 import useShopifyStore from "../../store/useShopifyStore";
 import { Discount } from "@mui/icons-material";
+import { CartPageSkeleton } from "../skeleton/Cart";
 // import SimilarProductsCarousel from "../carousel/Carousel";
 
 export const Cart = () => {
   const { cart } = useShopifyStore.getState();
   const [cartData, setCartData] = useState(cart);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   // const [discountCode, setDiscountCode] = useState("");
   const [subTotal, setSubTotal] = useState(0);
@@ -28,13 +28,15 @@ export const Cart = () => {
   const [currency, setCurrency] = useState("AED");
   const [totalItems, setTotalItems] = useState(0);
   // const cartId = localStorage.getItem("cartId");
-
+  const setLoading = useShopifyStore((state) => state.setLoading);
+  const loading = useShopifyStore((state) => state.loading);
   const userObject = localStorage.getItem("user");
   const user = JSON.parse(userObject);
 
   const Products = useShopifyStore((state) => state.products);
 
   const loadData = async () => {
+    setLoading(true);
     try {
       const fetchedCart = await fetchCart();
       if (fetchedCart) {
@@ -177,7 +179,7 @@ export const Cart = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <CartPageSkeleton />;
   }
 
   if (error) {

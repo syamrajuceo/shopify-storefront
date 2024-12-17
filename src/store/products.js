@@ -75,8 +75,9 @@ export const fetchAllProducts = async () => {
       const product = edge.node;
 
       // Safely map metafields if they exist and are not null
-      const metafields = product.metafields? product.metafields
-            .filter((mf) => mf !== null) 
+      const metafields = product.metafields
+        ? product.metafields
+            .filter((mf) => mf !== null)
             .map((mf) => ({
               key: mf.key,
               value: mf.value,
@@ -90,22 +91,17 @@ export const fetchAllProducts = async () => {
         metafields,
       };
     });
-   
+
     const newProduct = await Metacontroller(products);
 
     // Store products in Zustand
     useShopifyStore.getState().setProducts(newProduct);
-
     return newProduct;
   } catch (error) {
     console.error("Error fetching products:", error.message);
     throw error;
   }
 };
-
-
-
-
 
 // export const fetchProductById = async (variantId) => {
 //   const query = `
@@ -191,6 +187,160 @@ export const fetchVariantsByProductId = async (productId) => {
     return variants.map((variant) => variant.node);
   } catch (error) {
     console.error("Error fetching variants:", error.message);
+    throw error;
+  }
+};
+
+export const fetchAllCollections = async () => {
+  const query = `
+    query {
+      collections(first: 100) {
+        edges {
+          node {
+            id
+            title
+            description
+            handle
+            updatedAt
+          }
+        }
+      }
+    }
+  `;
+
+  try {
+    const response = await shopifyClient.post("", { query });
+    const collections = response.data.data.collections.edges.map(
+      (edge) => edge.node
+    );
+    return collections;
+  } catch (error) {
+    console.error("Error fetching collections:", error.message);
+    throw error;
+  }
+};
+
+export const fetchCollectionByHandle = async (collectionHandle) => {
+  const query = `
+    query FetchCollection($handle: String!) {
+      collection(handle: $handle) {
+        id
+        title
+        description
+        handle
+        updatedAt
+        image {
+          src
+          altText
+        }
+      }
+    }
+  `;
+
+  try {
+    const response = await shopifyClient.post("", {
+      query,
+      variables: { handle: collectionHandle },
+    });
+
+    const collection = response.data.data.collection;
+    if (!collection) {
+      throw new Error(
+        `Collection with handle "${collectionHandle}" not found.`
+      );
+    }
+    return collection;
+  } catch (error) {
+    console.error("Error fetching collection:", error.message);
+    throw error;
+  }
+};
+
+export const fetchCollectionsWithProducts = async () => {
+  const query = `
+    query {
+      collections(first: 100) {
+        edges {
+          node {
+            id
+            title
+            description
+            handle
+            products(first: 250) {
+              edges {
+                node {
+                  id
+                  title
+                  description
+                  priceRange {
+                    minVariantPrice {
+                      amount
+                      currencyCode
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  try {
+    const response = await shopifyClient.post("", { query });
+    console.log("response: ", response);
+    if (
+      !response.data ||
+      !response.data.data ||
+      !response.data.data.collections
+    ) {
+      throw new Error("Collections data is not available.");
+    }
+    const collections = response.data.data.collections.edges.map((edge) => ({
+      ...edge.node,
+      products: edge.node.products.edges.map((productEdge) => productEdge.node),
+    }));
+    return collections;
+  } catch (error) {
+    console.error("Error fetching collections with products:", error.message);
+    throw error;
+  }
+};
+
+export const fetchCollectionsWithMetafields = async () => {
+  const query = `
+    query {
+      collections(first: 100) {
+        edges {
+          node {
+            id
+            title
+            handle
+            metafields(identifiers: [
+              { namespace: "custom", key: "collection_type" },
+              { namespace: "custom", key: "theme" }
+            ]) {
+              namespace
+              key
+              value
+              type
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  try {
+    const response = await shopifyClient.post("", { query });
+    const collections = response.data.data.collections.edges.map((edge) => ({
+      ...edge.node,
+      metafields: edge.node.metafields || [],
+    }));
+    return collections;
+  } catch (error) {
+    console.error("Error fetching collections with metafields:", error.message);
     throw error;
   }
 };

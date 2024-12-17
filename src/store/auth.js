@@ -239,6 +239,8 @@ export const signUp = async (firstName, lastName, email, password) => {
       throw new Error(customerAccessTokenCreate.userErrors[0].message);
     }
 
+    localStorage.setItem("user", JSON.stringify(customerCreate.customer));
+
     const accessToken =
       customerAccessTokenCreate.customerAccessToken.accessToken;
     console.log("Access token obtained:", accessToken);

@@ -234,8 +234,16 @@ export const ProductDetails = () => {
           </div>
           {/* Quantity and Add to Cart Section */}
           <div className="mt-2 h-[50px] w-full hidden sm:flex justify-center items-center gap-2">
-            <div className="flex w-[30%] justify-around items-center gap-4 bg-gray-200 py-2 px-4 rounded-md">
-              <p onClick={() => handleQty(quantity - 1)}>-</p>
+            <div className="flex w-[30%] justify-around items-center gap-4 bg-gray-200 py-2 px-4 rounded-md cursor-pointer">
+              <p
+                onClick={() =>
+                  handleQty(quantity > 1 ? quantity - 1 : quantity)
+                }
+                disabled={quantity === 1}
+              >
+                -
+              </p>
+
               {/* <span className="text-gray-400">|</span> */}
               <p className="text-lg font-bold">{quantity}</p>
               {/* <span className="text-gray-400">|</span> */}
@@ -429,11 +437,16 @@ export const ProductDetails = () => {
       {/* Mobile fixed bottom Add to Cart */}
       <div className="fixed bottom-[65px] left-0 w-full sm:hidden bg-white border-t p-4 flex justify-between items-center gap-2 shadow-md">
         <div className="flex w-[45%] justify-around items-center gap-4 bg-gray-200 py-2 px-4 rounded-md">
-          <p onClick={() => handleQty(quantity - 1)}>-</p>
+          <p
+            onClick={() => handleQty(quantity > 1 ? quantity - 1 : quantity)}
+            disabled={quantity === 1}
+          >
+            -
+          </p>
           <span className="text-gray-400">|</span>
           <p className="text-lg font-bold">{quantity}</p>
           <span className="text-gray-400">|</span>
-          <p onClick={() => handleQty(quantity - 1)}>+</p>
+          <p onClick={() => handleQty(quantity + 1)}>+</p>
         </div>
         <button
           type="button"
