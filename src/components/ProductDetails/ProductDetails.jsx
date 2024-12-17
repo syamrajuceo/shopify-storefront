@@ -19,6 +19,8 @@ import { addToCart } from "../../store/cart";
 import toast from "react-hot-toast";
 import { addReview, fetchReviews } from "../../store/review";
 import { ProductCarousel2 } from "../home/ProductCarousel2";
+import CircularProgress from "@mui/material/CircularProgress";
+import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 
 const accessToken = localStorage.getItem("accessToken");
 export const ProductDetails = () => {
@@ -40,6 +42,7 @@ export const ProductDetails = () => {
     4: 0,
     5: 0,
   });
+  const [loading, setLoading] = useState(false);
 
   // let product_handle = handle;
 
@@ -68,6 +71,18 @@ export const ProductDetails = () => {
 
   const numericId = id.split("/").pop();
 
+  const qtyAvailable = variants?.edges?.[0]?.node?.quantityAvailable;
+
+  const expressDelivery = metafields.some(
+    (field) => field.key === "express_delivery" && field.value === "true"
+  );
+  const freeDelivery = metafields.some(
+    (field) => field.key === "free_delivery" && field.value === "true"
+  );
+
+  console.log("free .........", freeDelivery, expressDelivery);
+  console.log("qtyAvailable .........", qtyAvailable);
+
   // Handle Add to Cart
   const handleAddToCart = async () => {
     try {
@@ -75,10 +90,12 @@ export const ProductDetails = () => {
         console.error("Variant ID not found.");
         return;
       }
-      if(accessToken === null || accessToken === undefined){
-        return navigate("/login")
+      if (accessToken === null || accessToken === undefined) {
+        return navigate("/login");
       }
+      setLoading(true);
       const cart = await addToCart(variantId, quantity);
+      setLoading(false);
       console.log("Cart updated:", cart);
       toast.success("Product added to cart!");
     } catch (error) {
@@ -241,26 +258,49 @@ export const ProductDetails = () => {
           <div className="mt-2 h-[50px] w-full hidden md:flex justify-center items-center gap-2">
             <div className="flex w-[40%] justify-around items-center gap-4 bg-gray-200 py-2 px-4 rounded-md cursor-pointer">
               <p
-                onClick={() =>
-                  handleQty(quantity > 1 ? quantity - 1 : quantity)
-                }
-                disabled={quantity === 1}
+                onClick={() => {
+                  if (quantity > 1) handleQty(quantity - 1); // Only decrease if quantity > 1
+                }}
+                className={`${
+                  quantity === 1
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
               >
                 -
               </p>
 
-              {/* <span className="text-gray-400">|</span> */}
               <p className="text-lg font-bold">{quantity}</p>
-              {/* <span className="text-gray-400">|</span> */}
-              <p onClick={() => handleQty(quantity + 1)}>+</p>
+
+              <p
+                onClick={() => {
+                  if (quantity < qtyAvailable) handleQty(quantity + 1); // Only increase if available stock allows
+                }}
+                className={`${
+                  quantity >= qtyAvailable
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
+              >
+                +
+              </p>
             </div>
+
             <div className="w-full">
               <button
                 type="button"
-                className="w-full bg-slate-950 py-2.5 px-4 hover:bg-slate-800 text-white text-sm font-semibold rounded-md disabled:opacity-60"
+                className="w-full bg-slate-950 py-2.5 px-4 hover:bg-slate-800 text-white text-sm font-semibold rounded-md disabled:opacity-60 flex justify-center items-center"
                 onClick={() => handleAddToCart()}
+                disabled={qtyAvailable <= 0}
               >
-                Add to cart
+                {loading ? (
+                  <CircularProgress size="20px" />
+                ) : (
+                  <div className="flex items-center gap-[5px]">
+                    <ShoppingBagOutlinedIcon />
+                    Add To Cart
+                  </div>
+                )}
               </button>
             </div>
           </div>
@@ -387,14 +427,39 @@ export const ProductDetails = () => {
             </div>
           </form>
           <div className="flex justify-start items-center w-auto max-w-[350px] text-gray-600 gap-2">
-            <div className="flex justify-between items-center bg-[#EBF1FC] px-2 py-1 rounded-md gap-2 ">
-              <img src={deliveryIcon} alt="" />
-              <p className="text-[12px]">Free Delivery</p>
-            </div>
-            <div className="flex justify-between items-center bg-[#EBF1FC] px-2 py-1.5 rounded-md gap-2">
-              <img src={stockIcon} alt="" />
-              <p className="text-[12px]">Only one left in stock</p>
-            </div>
+            {qtyAvailable > 0 && freeDelivery && (
+              <div className="flex justify-between items-center bg-[#EBF1FC] px-2 py-1 rounded-md gap-2">
+                <div className="flex items-center gap-2">
+                  <img src={deliveryIcon} alt="Delivery Icon" />
+                  <p className="text-[12px]">Free Delivery</p>
+                </div>
+              </div>
+            )}
+
+            {qtyAvailable === 1 && (
+              <div className="flex justify-between items-center bg-[#EBF1FC] px-2 py-1.5 rounded-md gap-2">
+                <div className="flex items-center gap-2">
+                  <img src={stockIcon} alt="Stock Icon" />
+                  <p className="text-[12px]">Only one left in stock</p>
+                </div>
+              </div>
+            )}
+            {qtyAvailable === 2 && (
+              <div className="flex justify-between items-center bg-[#EBF1FC] px-2 py-1.5 rounded-md gap-2">
+                <div className="flex items-center gap-2">
+                  <img src={stockIcon} alt="Stock Icon" />
+                  <p className="text-[12px]">Only two left in stock</p>
+                </div>
+              </div>
+            )}
+            {qtyAvailable <= 0 && (
+              <div className="flex justify-between items-center bg-[#EBF1FC] px-2 py-1.5 rounded-md gap-2">
+                <div className="flex items-center gap-2">
+                  <img src={stockIcon} alt="Stock Icon" />
+                  <p className="text-[12px]">Out of stock</p>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="mt-6">
@@ -441,24 +506,52 @@ export const ProductDetails = () => {
 
       {/* Mobile fixed bottom Add to Cart */}
       <div className="fixed bottom-[65px] left-0 w-full md:hidden bg-white border-t p-4 flex justify-between items-center gap-2 shadow-md">
+        {/* Quantity Control Section */}
         <div className="flex w-[45%] justify-around items-center gap-4 bg-gray-200 py-2 px-4 rounded-md">
           <p
-            onClick={() => handleQty(quantity > 1 ? quantity - 1 : quantity)}
-            disabled={quantity === 1}
+            onClick={() => {
+              if (quantity > 1) handleQty(quantity - 1); // Decrease quantity only if it's greater than 1
+            }}
+            className={`${
+              quantity === 1
+                ? "text-gray-400 cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
           >
             -
           </p>
           <span className="text-gray-400">|</span>
           <p className="text-lg font-bold">{quantity}</p>
           <span className="text-gray-400">|</span>
-          <p onClick={() => handleQty(quantity + 1)}>+</p>
+          <p
+            onClick={() => {
+              if (quantity < qtyAvailable) handleQty(quantity + 1); // Increase quantity only if it's less than available stock
+            }}
+            className={`${
+              quantity >= qtyAvailable
+                ? "text-gray-400 cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
+          >
+            +
+          </p>
         </div>
+
+        {/* Add to Cart Button */}
         <button
           type="button"
-          className="w-full bg-orange-500 py-2.5 px-4 hover:bg-orange-600 text-white text-sm font-semibold rounded-md disabled:opacity-60"
+          className="w-full bg-orange-500 py-2.5 px-4 hover:bg-orange-600 text-white text-sm font-semibold rounded-md disabled:opacity-60 flex justify-center items-center"
           onClick={() => handleAddToCart()}
+          disabled={qtyAvailable <= 0}
         >
-          Add to cart
+          {loading ? (
+            <CircularProgress size="20px" />
+          ) : (
+            <div className="flex items-center gap-[5px]">
+              <ShoppingBagOutlinedIcon />
+              Add To Cart
+            </div>
+          )}
         </button>
       </div>
     </div>
