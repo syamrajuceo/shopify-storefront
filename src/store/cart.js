@@ -228,6 +228,35 @@ const sendCartDetailsToBackend = async (cartDetails) => {
   }
 };
 
+
+export const deleteCart = async () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const email = user.email
+
+
+  try {
+    const response = await axios.delete(
+      `http://localhost:5558/api/customer/cart/delete/${email}`
+    );
+    console.log("Cart deleted successfully in backend:", response.data);
+  } catch (error) {
+    if (error.response && error.response.data) {
+      // Handle error response from server
+      console.error(
+        "Error deleting cart in backend:",
+        error.response.data.message
+      );
+      throw new Error(
+        error.response.data.message || "Failed to delete cart in backend."
+      );
+    } else {
+      // Handle network or other errors
+      console.error("Error deleting cart in backend:", error.message);
+      throw new Error(error.message || "An unknown error occurred.");
+    }
+  }
+};
+
 export const addToCart = async (variantId, quantity, userEmail) => {
   let { cartId } = useShopifyStore.getState();
 
@@ -287,6 +316,8 @@ export const addToCart = async (variantId, quantity, userEmail) => {
 
   try {
     const response = await shopifyClient.post("", { query, variables });
+
+    
 
     const errors = response?.data?.data?.cartLinesAdd?.userErrors || [];
     if (errors.length > 0) {
@@ -408,169 +439,6 @@ export const updateCart = async (lineItemId, quantity, userEmail) => {
     throw error;
   }
 };
-
-// export const addToCart = async (variantId, quantity) => {
-//   let { cartId } = useShopifyStore.getState();
-
-//   if (!cartId) {
-//     // Try to fetch from localStorage if cart ID is not in the state
-//     cartId = localStorage.getItem("cartId");
-
-//     // If no cart ID, create a new one
-//     if (!cartId) {
-//       console.warn("No cart ID available, creating a new cart...");
-//       try {
-//         const cart = await createCart(accessToken);
-//         cartId = cart?.id;
-//         if (!cartId) {
-//           throw new Error("Cart creation failed.");
-//         }
-//       } catch (error) {
-//         console.error("Error creating cart:", error.message);
-//         throw error;
-//       }
-//     }
-//   }
-
-//   const query = `
-//     mutation addLineItem($cartId: ID!, $lines: [CartLineInput!]!) {
-//       cartLinesAdd(cartId: $cartId, lines: $lines) {
-//         cart {
-//           id
-//           checkoutUrl
-//           lines(first: 10) {
-//             edges {
-//               node {
-//                 id
-//                 quantity
-//                 merchandise {
-//                   ... on ProductVariant {
-//                     id
-//                     title
-//                   }
-//                 }
-//               }
-//             }
-//           }
-//         }
-//         userErrors {
-//           field
-//           message
-//         }
-//       }
-//     }
-//   `;
-
-//   const variables = {
-//     cartId,
-//     lines: [{ quantity, merchandiseId: variantId }],
-//   };
-
-//   try {
-//     const response = await shopifyClient.post("", { query, variables });
-
-//     const errors = response?.data?.data?.cartLinesAdd?.userErrors || [];
-//     if (errors.length > 0) {
-//       console.error("API User Errors:", errors);
-//       throw new Error(errors.map((err) => err.message).join(", "));
-//     }
-
-//     const cart = response?.data?.data?.cartLinesAdd?.cart;
-//     if (!cart) {
-//       console.error("Failed to update cart: No cart returned.");
-//       throw new Error("Failed to update cart.");
-//     }
-
-//     // If accessToken is provided, update the cart buyer identity
-//     if (accessToken) {
-//       const updatedCart = await updateCartBuyerIdentity(cart.id, accessToken);
-//       if (updatedCart) {
-//         cart.checkoutUrl = updatedCart.checkoutUrl;
-//       }
-//     }
-
-//     // Update Zustand and localStorage with new cart data
-//     useShopifyStore.getState().setCart(cart.id, cart.checkoutUrl);
-//     localStorage.setItem("cartId", cart.id);
-//     localStorage.setItem("checkoutUrl", cart.checkoutUrl);
-
-//     return cart;
-//   } catch (error) {
-//     console.error("Error adding product to cart:", error.message);
-//     throw error;
-//   }
-// };
-
-// export const updateCart = async (lineItemId, quantity) => {
-//   const query = `
-//     mutation updateCartLineItem($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
-//       cartLinesUpdate(cartId: $cartId, lines: $lines) {
-//         cart {
-//           id
-//           checkoutUrl
-//           lines(first: 10) {
-//             edges {
-//               node {
-//                 id
-//                 quantity
-//                 merchandise {
-//                   ... on ProductVariant {
-//                     id
-//                     title
-//                   }
-//                 }
-//               }
-//             }
-//           }
-//         }
-//         userErrors {
-//           field
-//           message
-//         }
-//       }
-//     }
-//   `;
-
-//   const { cartId } = getCartFromLocalStorage() || {};
-//   if (!cartId) {
-//     console.error("No cart ID available.");
-//     return null;
-//   }
-
-//   const variables = {
-//     cartId,
-//     lines: [{ id: lineItemId, quantity }],
-//   };
-
-//   try {
-//     const response = await shopifyClient.post("", { query, variables });
-
-//     const errors = response?.data?.data?.cartLinesUpdate?.userErrors || [];
-//     if (errors.length > 0) {
-//       console.error("API User Errors:", errors);
-//       throw new Error(errors.map((err) => err.message).join(", "));
-//     }
-
-//     const cart = response?.data?.data?.cartLinesUpdate?.cart;
-
-//     // Update cart buyer identity if accessToken is provided
-//     if (accessToken) {
-//       const updatedCart = await updateCartBuyerIdentity(cart.id, accessToken);
-//       if (updatedCart) {
-//         cart.checkoutUrl = updatedCart.checkoutUrl;
-//       }
-//     }
-
-//     // Store cart in localStorage and update Zustand
-//     storeCartInLocalStorage(cart.id, cart.checkoutUrl);
-//     useShopifyStore.getState().setCart(cart.id, cart.checkoutUrl);
-
-//     return cart;
-//   } catch (error) {
-//     console.error("Error updating cart:", error.message);
-//     throw error;
-//   }
-// };
 
 export const fetchInitialCart = async (email) => {
   console.log("fetchInitialCart ....", email);
@@ -810,72 +678,72 @@ export const fetchCart = async () => {
   }
 };
 
-export const createPreAuthenticatedCheckoutUrl = async () => {
-  const cartId = localStorage.getItem("cartId");
-  const accessToken = localStorage.getItem("accessToken");
-  if (!cartId) {
-    throw new Error("No cart ID found.");
-  }
+// export const createPreAuthenticatedCheckoutUrl = async () => {
+//   const cartId = localStorage.getItem("cartId");
+//   const accessToken = localStorage.getItem("accessToken");
+//   if (!cartId) {
+//     throw new Error("No cart ID found.");
+//   }
 
-  if (accessToken) {
-    try {
-      const cart = await updateCartBuyerIdentity(cartId, accessToken);
-      console.log("buyer identity updated.");
-      console.log("New cart: ", cart);
-    } catch (error) {
-      console.error("Error updating cart buyer identity:", error.message);
-      throw error;
-    }
-  }
+//   if (accessToken) {
+//     try {
+//       const cart = await updateCartBuyerIdentity(cartId, accessToken);
+//       console.log("buyer identity updated.");
+//       console.log("New cart: ", cart);
+//     } catch (error) {
+//       console.error("Error updating cart buyer identity:", error.message);
+//       throw error;
+//     }
+//   }
 
-  const query = `
-    mutation checkoutCreate($cartId: ID!, $buyerIdentity: BuyerIdentityInput) {
-      checkoutCreate(input: {cartId: $cartId, buyerIdentity: $buyerIdentity}) {
-        checkout {
-          id
-          webUrl
-        }
-        userErrors {
-          field
-          message
-        }
-      }
-    }
-  `;
+//   const query = `
+//     mutation checkoutCreate($cartId: ID!, $buyerIdentity: BuyerIdentityInput) {
+//       checkoutCreate(input: {cartId: $cartId, buyerIdentity: $buyerIdentity}) {
+//         checkout {
+//           id
+//           webUrl
+//         }
+//         userErrors {
+//           field
+//           message
+//         }
+//       }
+//     }
+//   `;
 
-  const variables = {
-    cartId: `${cartId}`,
-    buyerIdentity: {
-      email: "salihkm000@gmail.com",
-      accessToken: accessToken,
-    },
-  };
+//   const variables = {
+//     cartId: `${cartId}`,
+//     buyerIdentity: {
+//       email: "salihkm000@gmail.com",
+//       accessToken: accessToken,
+//     },
+//   };
 
-  try {
-    const response = await shopifyClient.post("", { query, variables });
-    console.log("Response: " + JSON.stringify(response));
+//   try {
+//     const response = await shopifyClient.post("", { query, variables });
+//     console.log("Response: " + JSON.stringify(response));
 
-    const errors = response?.data?.data?.checkoutCreate?.userErrors || [];
-    if (errors.length > 0) {
-      console.error("API User Errors:", errors);
-      throw new Error(errors.map((err) => err.message).join(", "));
-    }
+//     const errors = response?.data?.data?.checkoutCreate?.userErrors || [];
+//     if (errors.length > 0) {
+//       console.error("API User Errors:", errors);
+//       throw new Error(errors.map((err) => err.message).join(", "));
+//     }
 
-    const checkout = response?.data?.data?.checkoutCreate?.checkout;
+//     const checkout = response?.data?.data?.checkoutCreate?.checkout;
 
-    if (!checkout) {
-      throw new Error("Failed to create checkout.");
-    }
+//     if (!checkout) {
+//       throw new Error("Failed to create checkout.");
+//     }
 
-    return checkout.webUrl;
-  } catch (error) {
-    console.error(
-      "Error creating pre-authenticated checkout URL:",
-      error.message
-    );
-    throw error;
-  }
-};
+//     return checkout.webUrl;
+//   } catch (error) {
+//     console.error(
+//       "Error creating pre-authenticated checkout URL:",
+//       error.message
+//     );
+//     throw error;
+//   }
+// };
 
 export const updateCartBuyerIdentity = async (cartId, accessToken) => {
   const query = `
