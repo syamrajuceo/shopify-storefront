@@ -3,9 +3,11 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../../store/auth";
 import { toast } from "react-hot-toast";
+import ScrollToTop from "../../utils/ScrollToTop";
 
 export const Login = () => {
   const navigate = useNavigate();
+  ScrollToTop()
   const {
     register,
     handleSubmit,
