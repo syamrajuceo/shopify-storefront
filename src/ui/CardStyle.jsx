@@ -276,7 +276,7 @@ export const ExpressLogo = styled.img`
 
 // Card Button
 export const CardButton = styled.button`
-  background: #000000;
+  // background: #000000;
   color: #fff;
   padding: 0.5rem 1.25rem;
   border: none;
