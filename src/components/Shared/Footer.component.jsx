@@ -68,11 +68,11 @@ const ContactInfo = () => (
           <p className="font-semibold text-gray-900">0 800 300-353</p>
         </div>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-wrap">
         <Mail className="h-5 w-5 text-gray-600" />
         <div>
           <p className="text-sm text-gray-600">Need help with your order?</p>
-          <p className="font-semibold text-gray-900">info@example.com</p>
+          <p className="font-semibold text-gray-900 whitespace-nowrap">info@example.com</p>
         </div>
       </div>
     </div>
@@ -98,7 +98,7 @@ const NavigationLinks = ({section}) => (
 );
 
 const SocialLinks = () => (
-  <div className="flex gap-4 items-center">
+  <div className="flex gap-4 items-center flex-wrap">
     <Link href="https://facebook.com" className="text-blue-600 hover:text-blue-700">
       {socialIcons.facebook}
     </Link>
@@ -115,7 +115,7 @@ const SocialLinks = () => (
 );
 
 const PaymentMethods = () => (
-  <div className="flex items-center gap-2">
+  <div className="flex items-center gap-2 flex-wrap">
     <img 
       src={visa} 
       alt="Visa" 

@@ -5,6 +5,7 @@ export const MainCardContainer = styled.div`
   overflow-x: auto;
   align-items: center;
   padding: 0.625rem;
+
 `;
 
 export const AdCard = styled.div`
@@ -38,7 +39,6 @@ export const CardContainer = styled.div`
   gap: 2.5rem;
   align-items: center;
   overflow-x: auto;
-
   ::-webkit-scrollbar {
     display: none;
   }
@@ -69,11 +69,13 @@ export const AdCardMobileImage = styled.img`
 
 // Individual Card
 export const Card = styled.div`
-  flex: 0 0 auto;
+  flex: 0 0 0;
   border-radius: 0.625rem;
   width:260px;
   scroll-snap-align: center;
   position: relative;
+  // background-color:red;
+   height:100%
   @media screen and (max-width: 71.8125rem) {
     max-width: 15.625rem;
   }
@@ -115,7 +117,7 @@ export const CardOffText = styled.p`
 // Card Image Container
 export const CardImageContainer = styled.div`
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: center;
   overflow: hidden;
   /* padding : 10px; */
@@ -127,7 +129,7 @@ export const CardImage = styled.img`
   height: 17rem;
   border-radius: 0.625rem;
   background-position: center;
- object-fit: contain;
+  object-fit: contain;
   /* transform: scale(0.9);  */
   @media screen and (max-width: 40.9375rem) {
     height: 14rem;

@@ -200,7 +200,7 @@ export const ProductDetails = () => {
   }, []);
 
   return (
-    <div className="px-4 mb-[160px] md:mb-[30px]">
+    <div className="px-4   md:mb-[30px]">
       <div className="block md:hidden">
         <Breadcrumbs aria-label="breadcrumb">
           <Typography

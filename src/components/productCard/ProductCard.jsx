@@ -23,7 +23,7 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import CircularProgress from "@mui/material/CircularProgress";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
-
+import Model from '../../assets/model.png'
 const accessToken = localStorage.getItem("accessToken");
 export const ProductCard = ({ product = {}, home = false }) => {
 
