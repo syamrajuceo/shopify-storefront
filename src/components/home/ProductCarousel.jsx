@@ -127,7 +127,7 @@ export function ProductCarousel({ Promoimage }) {
         <div
           ref={scrollContainerRef}
 
-          className="flex overflow-x-auto gap-6 scroll-smooth snap-x snap-mandatory scrollbar-hide bg-custom-gray justify-between p-4 rounded-xl"
+          className="flex overflow-x-auto gap-6 scroll-smooth snap-x snap-mandatory scrollbar-hide  justify-between p-4 rounded-xl"
 
           style={{
             scrollbarWidth: "none", // For Firefox
@@ -142,7 +142,7 @@ export function ProductCarousel({ Promoimage }) {
             buttonText="View all"
             imageUrl={Promoimage}
             className="snap-start w-[200px] md:w-[370px] rounded-xl flex-shrink-0"
-          />):(  <div className="snap-start   md:w-[370px] rounded-xl flex-shrink-0 w-[200px] h-[345px] md:h-[440px]">
+          />):(  <div className="snap-start   md:w-[370px] rounded-xl flex-shrink-0 w-[200px]  md:h-[430px] lg:h-[440px] xl:[450px]">
             <img
               src={evervaImg}
               alt="everva"
