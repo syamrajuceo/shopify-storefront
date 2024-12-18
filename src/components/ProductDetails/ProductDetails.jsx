@@ -151,6 +151,7 @@ export const ProductDetails = () => {
         toast.success("Review submitted successfully!");
         HandleFetchReview();
       }
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }

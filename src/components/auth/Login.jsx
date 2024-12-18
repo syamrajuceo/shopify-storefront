@@ -25,6 +25,7 @@ export const Login = () => {
       if (customer !== undefined) {
         toast.success("Logged in successfully!");
         navigate("/");
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error during login:", error);

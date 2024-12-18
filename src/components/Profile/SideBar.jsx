@@ -24,7 +24,8 @@ function SideBar({ pageShow, setPageShow }) {
     // Navigate if it's not logout, otherwise just redirect
     if (page === "Logout") {
       localStorage.clear();  // Clear local storage before redirecting
-      navigate("/");  // Redirect to the homepage ("/")
+      navigate("/");  
+      window.location.reload();// Redirect to the homepage ("/")
     } else {
       navigate(`/profile?activetab=${activeTab}`);
     }

@@ -36,6 +36,7 @@ export const Register = () => {
 
       console.log("Account created successfully:", customer);
       navigate("/");
+      window.location.reload();
     } catch (error) {
       console.error("Error during registration:", error.message);
     }
