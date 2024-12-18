@@ -25,7 +25,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 
 const accessToken = localStorage.getItem("accessToken");
-export const ProductCard = ({ product = {} }) => {
+export const ProductCard = ({ product = {}, home = false }) => {
 
   console.log("product... : ", product);
   const userObject = localStorage.getItem("user");
@@ -56,6 +56,8 @@ export const ProductCard = ({ product = {} }) => {
       : 0;
   const variantId = variants?.edges[0]?.node?.id || "";
 
+  const is_available = variants?.edges?.[0]?.node?.availableForSale || false
+  const is_available_stock = variants?.edges?.[0]?.node?.quantityAvailable || 0
   // Check metafields for express and free delivery
   const expressDelivery = metafields.some(
     (field) => field.key === "express_delivery" && field.value === "true"
@@ -71,9 +73,13 @@ export const ProductCard = ({ product = {} }) => {
         console.error("Variant ID not found.");
         return;
       }
-      if(accessToken === null || accessToken === undefined){
+      if (home) {
+        return navigate(`/product/${handle}`)
+      }
+      if (accessToken === null || accessToken === undefined) {
         return navigate("/login")
       }
+
       setLoading(true);
       const quantity = 1;
       const cart = await addToCart(variantId, quantity, user.email);
@@ -131,15 +137,17 @@ export const ProductCard = ({ product = {} }) => {
         </Link>
         <div>
           <CardButton
-            onClick={handleAddToCart}
-            className="flex items-center justify-center"
+            onClick={home || is_available ? handleAddToCart : undefined}
+            className={`flex items-center justify-center ${is_available||home ? " bg-slate-900": "bg-slate-800 opacity-60"} `}
           >
             {loading ? (
               <CircularProgress size="20px" />
             ) : (
               <div className="flex items-center gap-[5px]">
                 <ShoppingBagOutlinedIcon />
-                Add To Cart
+                {
+                  home ? "View Product" : is_available ? "Add To Cart" : "Out Of Stock"
+                }
               </div>
             )}
           </CardButton>

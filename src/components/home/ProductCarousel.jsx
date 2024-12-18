@@ -5,6 +5,7 @@ import evervaImg from "../../assets/everva.webp";
 import { ArrowRight } from "lucide-react";
 import { cn } from "../../lib/utils";
 import useShopifyStore from "../../store/useShopifyStore";
+import { Link } from "react-router-dom";
 export function ProductCarousel({ Promoimage }) {
   const Products =useShopifyStore((state) => state.products);
   const scrollContainerRef = useRef(null);
@@ -37,11 +38,11 @@ export function ProductCarousel({ Promoimage }) {
               {subtitle}
             </p>
             \
-            <button className="md:inline-flex items-center gap-2 bg-white text-black px-16 py-3 rounded-md hidden">
+            <Link className="md:inline-flex items-center gap-2 bg-white text-black px-16 py-3 rounded-md hidden" to="/query?query=">
               {/* Visible only on medium screens and above */}
               {buttonText}
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -156,7 +157,7 @@ export function ProductCarousel({ Promoimage }) {
           {Products.slice(0, 4).map((product) => (
 
             <div key={product.id} className="snap-start">
-              <ProductCard product={product} />
+              <ProductCard product={product}  home={true} />
             </div>
           ))}
         </div>
