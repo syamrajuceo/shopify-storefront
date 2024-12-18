@@ -34,7 +34,7 @@ export default function ProductList({ title }) {
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-[95vw] py-7">
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+        <h2 className="text-1xl font-bold tracking-tight text-gray-900">
           {title}
         </h2>
         <div className="relative mx-auto   py-5">
