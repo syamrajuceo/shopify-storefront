@@ -51,6 +51,7 @@ export function ProductCarousel2() {
               <ProductCard
                 className="min-w-[300px] transform transition-all duration-300 hover:scale-105"
                 product={product}
+                home={true}
               />
             </div>
           ))}

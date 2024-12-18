@@ -313,7 +313,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
             </button>
           )}
 
-          <div className="text-center p-14">
+          {/* <div className="text-center p-14">
             النظارات الواقية الصناعية ضرورية لحماية العمال في البيئات التي تشكل”
             فيها الغبار والحطام والمواد الكيميائية والمخاطر العالية التأثير
             تهديدًا. تلبي مجموعتنا من النظارات الواقية المعتمدة أعلى المعايير
@@ -341,7 +341,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
                 )}
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
       {/* mobile */}
