@@ -153,6 +153,7 @@ export const ProductDetails = () => {
         setReviewData((prevData) => [...prevData, reviews]);
   
       }
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }

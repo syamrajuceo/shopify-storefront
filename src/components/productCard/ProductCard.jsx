@@ -42,6 +42,7 @@ export const ProductCard = ({ product = {}, home = false }) => {
     id = "",
     handle = "",
     metafields = [],
+    
   } = product || {};
 
   const productImage = images?.edges?.[0]?.node?.url || "";

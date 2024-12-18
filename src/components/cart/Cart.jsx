@@ -9,13 +9,15 @@ import tamaraIcon from "../../assets/image 1.png";
 import tabbyIcon from "../../assets/image 2.png";
 import cartIcon from "../../assets/Vector (1).png";
 import { shopifyClient } from "../../config/shopifyClient";
-import { fetchCart, updateCart } from "../../store/cart";
+import { deleteCart, fetchCart, updateCart } from "../../store/cart";
 import { Link } from "react-router-dom";
 import { CartCard } from "./CartCard";
 import useShopifyStore from "../../store/useShopifyStore";
 import { Discount } from "@mui/icons-material";
 import { CartPageSkeleton } from "../skeleton/Cart";
 // import SimilarProductsCarousel from "../carousel/Carousel";
+
+const accessToken = localStorage.getItem("accessToken");
 
 export const Cart = () => {
   const { cart } = useShopifyStore.getState();
@@ -168,7 +170,20 @@ export const Cart = () => {
   const handleCheckoutButtonClick = async () => {
     try {
       const checkoutUrl = localStorage.getItem("checkoutUrl");
+
+      if (!checkoutUrl) {
+        console.error("Checkout URL is missing.");
+        return;
+      }
       window.location.href = checkoutUrl;
+
+      await deleteCart();
+      // Redirect to a thank-you page
+      // window.location.href = `/order`;
+
+      // Cleanup local storage
+      localStorage.removeItem("cartId");
+      localStorage.removeItem("checkoutUrl");
     } catch (error) {
       console.error("Error during checkout:", error.message);
     }
@@ -186,7 +201,7 @@ export const Cart = () => {
     return <div>Error: {error}</div>;
   }
 
-  if (!cartData) {
+  if (!accessToken) {
     return (
       <div className="h-[30rem] flex justify-center items-center">
         <div className="flex flex-col gap-2 justify-center items-center ">
