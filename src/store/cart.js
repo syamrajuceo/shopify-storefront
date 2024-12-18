@@ -107,8 +107,6 @@ const getCartFromLocalStorage = () => {
 //   }
 // };
 
-
-
 export const createCart = async (accessToken = null) => {
   // Retrieve user details from localStorage
   const user = JSON.parse(localStorage.getItem("user"));
@@ -143,7 +141,6 @@ export const createCart = async (accessToken = null) => {
       buyerIdentity: buyerIdentity,
       attributes: [
         {
-
           key: "cart_attribute",
           value: "This is a cart attribute",
         },
@@ -186,7 +183,7 @@ export const createCart = async (accessToken = null) => {
       phone: user?.phone || "",
     });
 
-    console.log("backendRes : ",backendRes)
+    console.log("backendRes : ", backendRes);
 
     return cart;
   } catch (error) {
@@ -228,15 +225,13 @@ const sendCartDetailsToBackend = async (cartDetails) => {
   }
 };
 
-
 export const deleteCart = async () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  const email = user.email
-
+  const email = user.email;
 
   try {
     const response = await axios.delete(
-      `http://localhost:5558/api/customer/cart/delete/${email}`
+      `https://shopify-backend-1-f8t9.onrender.com/api/customer/cart/delete/${email}`
     );
     console.log("Cart deleted successfully in backend:", response.data);
   } catch (error) {
@@ -316,8 +311,6 @@ export const addToCart = async (variantId, quantity, userEmail) => {
 
   try {
     const response = await shopifyClient.post("", { query, variables });
-
-    
 
     const errors = response?.data?.data?.cartLinesAdd?.userErrors || [];
     if (errors.length > 0) {
@@ -663,14 +656,14 @@ export const fetchCart = async () => {
 
     // Store cart in localStorage and update Zustand
     storeCartInLocalStorage(cart.id, cart.checkoutUrl);
-    useShopifyStore.getState().setCart(cart,cart.id, cart.checkoutUrl);
-    cart.quantity = cart.lines.edges.length; 
+    useShopifyStore.getState().setCart(cart, cart.id, cart.checkoutUrl);
+    cart.quantity = cart.lines.edges.length;
 
     cart.itemquantity = cart.lines.edges.reduce((total, edge) => {
       return total + edge.node.quantity;
     }, 0);
 
-    console.log("getcart:", JSON.stringify(cart))
+    console.log("getcart:", JSON.stringify(cart));
     return cart;
   } catch (error) {
     console.error("Error fetching cart:", error.message);
