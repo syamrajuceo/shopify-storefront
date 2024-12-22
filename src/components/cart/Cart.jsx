@@ -16,6 +16,7 @@ import useShopifyStore from "../../store/useShopifyStore";
 import { Discount } from "@mui/icons-material";
 import { CartPageSkeleton } from "../skeleton/Cart";
 // import SimilarProductsCarousel from "../carousel/Carousel";
+import { ProductCarousel2 } from "../home/ProductCarousel2";
 
 const accessToken = localStorage.getItem("accessToken");
 
@@ -460,19 +461,8 @@ export const Cart = () => {
           </div>
         )}
         {/* ------------------Similar Products------------------ */}
-        <h3 className="mt-10 text-[20px] lg:text-[25px] font-normal">
-          Similar Products
-        </h3>
-        <div className="mt-2 flex gap-3 overflow-x-auto no-scrollbar">
-          {Products ? (
-            Products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))
-          ) : (
-            <p>Similar Product not Available</p>
-          )}
-        </div>
-        {/* <SimilarProductsCarousel/> */}
+          < ProductCarousel2 tittle={'Similar Products'} /> 
+       
       </div>
       {/* ------------------Checkout Button for mobile------------------ */}
       {cartData?.lines?.edges?.length > 0 && (
@@ -490,7 +480,7 @@ export const Cart = () => {
           </div>
           <button
             onClick={handleCheckoutButtonClick}
-            className="w-[40%] h-[50px] bg-[#353535] text-[16px] text-[#fff] text-white font-semibold rounded"
+            className="w-[40%] h-[50px] bg-[#353535] text-[16px] text-[#fff]  font-semibold rounded"
           >
             CHECK OUT
           </button>
