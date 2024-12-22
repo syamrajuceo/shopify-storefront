@@ -38,7 +38,7 @@ export const Home = () => {
             <Banner image={BannerImage3} mobile={bannerMobile3} />
           </div>
           <Brand />
-          <ProductCarousel2 />
+          <ProductCarousel2  tittle={'Top Selling Products'}/>
         </>
       )}
     </div>
