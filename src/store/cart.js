@@ -3,6 +3,7 @@ import { shopifyClient } from "../config/shopifyClient";
 import useShopifyStore from "./useShopifyStore";
 
 const accessToken = localStorage.getItem("accessToken");
+const cartId = localStorage.getItem("cartId");
 
 // Store cart ID and checkout URL in localStorage
 const storeCartInLocalStorage = (cartId, checkoutUrl) => {
@@ -109,20 +110,20 @@ const getCartFromLocalStorage = () => {
 
 export const createCart = async (accessToken = null) => {
   // Retrieve user details from localStorage
-  const user = JSON.parse(localStorage.getItem("user"));
+  // const user = JSON.parse(localStorage.getItem("user"));
 
   // Set default buyer identity if no user details are available
-  const buyerIdentity = user
-    ? {
-        email: user.email,
-        countryCode: user.countryCode || "IN",
-        preferences: {
-          delivery: {
-            deliveryMethod: user.deliveryMethod || "SHIPPING",
-          },
-        },
-      }
-    : {};
+  // const buyerIdentity = user
+  //   ? {
+  //       email: user.email,
+  //       countryCode: user.countryCode || "IN",
+  //       preferences: {
+  //         delivery: {
+  //           deliveryMethod: user.deliveryMethod || "SHIPPING",
+  //         },
+  //       },
+  //     }
+  //   : {};
 
   const query = `
     mutation cartCreate($input: CartInput!) {
@@ -138,7 +139,7 @@ export const createCart = async (accessToken = null) => {
   const variables = {
     input: {
       lines: [],
-      buyerIdentity: buyerIdentity,
+      // buyerIdentity: buyerIdentity,
       attributes: [
         {
           key: "cart_attribute",
@@ -162,12 +163,12 @@ export const createCart = async (accessToken = null) => {
     }
 
     // If accessToken is provided, update the cart buyer identity
-    if (accessToken) {
-      const updatedCart = await updateCartBuyerIdentity(cart.id, accessToken);
-      if (updatedCart) {
-        cart.checkoutUrl = updatedCart.checkoutUrl;
-      }
-    }
+    // if (accessToken) {
+    //   const updatedCart = await updateCartBuyerIdentity(cart.id, accessToken);
+    //   if (updatedCart) {
+    //     cart.checkoutUrl = updatedCart.checkoutUrl;
+    //   }
+    // }
 
     // Store cart in localStorage and Zustand
     storeCartInLocalStorage(cart.id, cart.checkoutUrl);
@@ -176,15 +177,15 @@ export const createCart = async (accessToken = null) => {
     console.log("Cart created successfully:", cart);
 
     // Step 2: Send cart details to your backend
-    const backendRes = await sendCartDetailsToBackend({
-      user_email: user.email || "",
-      cartId: cart.id,
-      checkoutUrl: cart.checkoutUrl,
-      phone: user?.phone || "",
-    });
-
-    console.log("backendRes : ", backendRes);
-
+    // if(user) {
+    //   const backendRes = await sendCartDetailsToBackend({
+    //     user_email: user.email || "",
+    //     cartId: cart.id,
+    //     checkoutUrl: cart.checkoutUrl,
+    //     phone: user?.phone || "",
+    //   });
+    //   console.log("backendRes : ", backendRes);
+    // }
     return cart;
   } catch (error) {
     console.error("Cart Creation Error:", error.message || error);
@@ -252,13 +253,13 @@ export const deleteCart = async () => {
   }
 };
 
-export const addToCart = async (variantId, quantity, userEmail) => {
+export const addToCart = async (variantId, quantity, userEmail = null) => {
   let { cartId } = useShopifyStore.getState();
-
+  console.log("state cartid : ", cartId);
   if (!cartId) {
     // Try to fetch from localStorage if cart ID is not in the state
     cartId = localStorage.getItem("cartId");
-
+    console.log("local cartid : ", cartId);
     // If no cart ID, create a new one
     if (!cartId) {
       console.warn("No cart ID available, creating a new cart...");
@@ -311,7 +312,7 @@ export const addToCart = async (variantId, quantity, userEmail) => {
 
   try {
     const response = await shopifyClient.post("", { query, variables });
-
+    console.log("cart res : ", response);
     const errors = response?.data?.data?.cartLinesAdd?.userErrors || [];
     if (errors.length > 0) {
       console.error("API User Errors:", errors);
@@ -323,30 +324,27 @@ export const addToCart = async (variantId, quantity, userEmail) => {
       console.error("Failed to update cart: No cart returned.");
       throw new Error("Failed to update cart.");
     }
-
-    if (accessToken) {
-      const updatedCart = await updateCartBuyerIdentity(cart.id, accessToken);
-      if (updatedCart) {
-        cart.checkoutUrl = updatedCart.checkoutUrl;
-      }
-    }
-
+    // if (accessToken) {
+    //   const updatedCart = await updateCartBuyerIdentity(cart.id, accessToken);
+    //   if (updatedCart) {
+    //     cart.checkoutUrl = updatedCart.checkoutUrl;
+    //   }
+    // }
     // Update Zustand and localStorage with new cart data
     useShopifyStore.getState().setCart(cart.id, cart.checkoutUrl);
     localStorage.setItem("cartId", cart.id);
     localStorage.setItem("checkoutUrl", cart.checkoutUrl);
-
     // Update backend with new cart ID and checkout URL
-    const res = await axios.put(
-      `https://shopify-backend-1-f8t9.onrender.com/api/customer/cart/update/${userEmail}`,
-      {
-        cartId: cart.id,
-        checkoutUrl: cart.checkoutUrl,
-      }
-    );
-
-    console.log("Bac res : ", res);
-
+    // if (userEmail) {
+    //   const res = await axios.put(
+    //     `https://shopify-backend-1-f8t9.onrender.com/api/customer/cart/update/${userEmail}`,
+    //     {
+    //       cartId: cart.id,
+    //       checkoutUrl: cart.checkoutUrl,
+    //     }
+    //   );
+    //   console.log("Bac res : ", res);
+    // }
     return cart;
   } catch (error) {
     console.error("Error adding product to cart:", error.message);
@@ -354,7 +352,8 @@ export const addToCart = async (variantId, quantity, userEmail) => {
   }
 };
 
-export const updateCart = async (lineItemId, quantity, userEmail) => {
+export const updateCart = async (lineItemId, quantity, userEmail = null) => {
+  console.log("cart id ... : ", cartId);
   const query = `
     mutation updateCartLineItem($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
       cartLinesUpdate(cartId: $cartId, lines: $lines) {
@@ -384,7 +383,6 @@ export const updateCart = async (lineItemId, quantity, userEmail) => {
     }
   `;
 
-  const { cartId } = getCartFromLocalStorage() || {};
   if (!cartId) {
     console.error("No cart ID available.");
     return null;
@@ -397,7 +395,7 @@ export const updateCart = async (lineItemId, quantity, userEmail) => {
 
   try {
     const response = await shopifyClient.post("", { query, variables });
-
+    console.log("cart update res : ", response);
     const errors = response?.data?.data?.cartLinesUpdate?.userErrors || [];
     if (errors.length > 0) {
       console.error("API User Errors:", errors);
@@ -406,26 +404,27 @@ export const updateCart = async (lineItemId, quantity, userEmail) => {
 
     const cart = response?.data?.data?.cartLinesUpdate?.cart;
 
-    if (accessToken) {
-      const updatedCart = await updateCartBuyerIdentity(cart.id, accessToken);
-      if (updatedCart) {
-        cart.checkoutUrl = updatedCart.checkoutUrl;
-      }
-    }
+    // if (accessToken) {
+    //   const updatedCart = await updateCartBuyerIdentity(cart.id, accessToken);
+    //   if (updatedCart) {
+    //     cart.checkoutUrl = updatedCart.checkoutUrl;
+    //   }
+    // }
 
     // Store cart in localStorage and update Zustand
     storeCartInLocalStorage(cart.id, cart.checkoutUrl);
     useShopifyStore.getState().setCart(cart.id, cart.checkoutUrl);
 
     // Update backend with updated cart ID and checkout URL
-    await axios.put(
-      `https://shopify-backend-1-f8t9.onrender.com/api/customer/cart/update/${userEmail}`,
-      {
-        cartId: cart.id,
-        checkoutUrl: cart.checkoutUrl,
-      }
-    );
-
+    // if (userEmail) {
+    //   await axios.put(
+    //     `https://shopify-backend-1-f8t9.onrender.com/api/customer/cart/update/${userEmail}`,
+    //     {
+    //       cartId: cart.id,
+    //       checkoutUrl: cart.checkoutUrl,
+    //     }
+    //   );
+    // }
     return cart;
   } catch (error) {
     console.error("Error updating cart:", error.message);
@@ -444,18 +443,18 @@ export const fetchInitialCart = async (email) => {
 
     cartId = localStorage.getItem("cartId");
 
-    if (!cartId) {
-      cartResponse = await axios.get(
-        `https://shopify-backend-1-f8t9.onrender.com/api/customer/cart/${email}`
-      );
-      console.log("Cart response: " + cartResponse);
-      if (cartResponse.data.success) {
-        console.log("res : :", cartResponse.data.cartId);
-        cartId = cartResponse.data.cartId;
-      } else {
-        cartId = null;
-      }
-    }
+    // if (!cartId) {
+    //   cartResponse = await axios.get(
+    //     `https://shopify-backend-1-f8t9.onrender.com/api/customer/cart/${email}`
+    //   );
+    //   console.log("Cart response: " + cartResponse);
+    //   if (cartResponse.data.success) {
+    //     console.log("res : :", cartResponse.data.cartId);
+    //     cartId = cartResponse.data.cartId;
+    //   } else {
+    //     cartId = null;
+    //   }
+    // }
 
     if (cartId === "" || cartId === null || cartId === undefined) {
       console.log("No cart ID available.");
@@ -525,13 +524,13 @@ export const fetchInitialCart = async (email) => {
       throw new Error("Cart not found.");
     }
 
-    if (accessToken) {
-      const updatedCart = await updateCartBuyerIdentity(cart.id, accessToken);
-      if (updatedCart) {
-        cart.checkoutUrl = updatedCart.checkoutUrl;
-        cart.buyerIdentity = updatedCart.buyerIdentity || cart.buyerIdentity;
-      }
-    }
+    // if (accessToken) {
+    //   const updatedCart = await updateCartBuyerIdentity(cart.id, accessToken);
+    //   if (updatedCart) {
+    //     cart.checkoutUrl = updatedCart.checkoutUrl;
+    //     cart.buyerIdentity = updatedCart.buyerIdentity || cart.buyerIdentity;
+    //   }
+    // }
 
     // Store cart in Zustand state and localStorage
     localStorage.setItem("cartId", cart.id);
@@ -549,7 +548,9 @@ export const fetchInitialCart = async (email) => {
 
 export const fetchCart = async () => {
   const accessToken = localStorage.getItem("accessToken");
-  const { cartId } = getCartFromLocalStorage() || {};
+  const cartId = localStorage.getItem("cartId");
+
+  console.log("Cart Id ...", cartId);
   if (!cartId) {
     console.log("No cart ID available.");
     return null;
@@ -644,15 +645,15 @@ export const fetchCart = async () => {
 
     console.log("Buyer Identity:", cart.buyerIdentity);
 
-    if (accessToken) {
-      // Optionally update cart buyer identity if accessToken is provided
-      const updatedCart = await updateCartBuyerIdentity(cart.id, accessToken);
-      if (updatedCart) {
-        cart.checkoutUrl = updatedCart.checkoutUrl;
-        // Ensure buyer identity is updated
-        cart.buyerIdentity = updatedCart.buyerIdentity || cart.buyerIdentity;
-      }
-    }
+    // if (accessToken) {
+    //   // Optionally update cart buyer identity if accessToken is provided
+    //   const updatedCart = await updateCartBuyerIdentity(cart.id, accessToken);
+    //   if (updatedCart) {
+    //     cart.checkoutUrl = updatedCart.checkoutUrl;
+    //     // Ensure buyer identity is updated
+    //     cart.buyerIdentity = updatedCart.buyerIdentity || cart.buyerIdentity;
+    //   }
+    // }
 
     // Store cart in localStorage and update Zustand
     storeCartInLocalStorage(cart.id, cart.checkoutUrl);
