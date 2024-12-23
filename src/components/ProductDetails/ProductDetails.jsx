@@ -91,9 +91,9 @@ export const ProductDetails = () => {
         console.error("Variant ID not found.");
         return;
       }
-      if (accessToken === null || accessToken === undefined) {
-        return navigate("/login");
-      }
+      // if (accessToken === null || accessToken === undefined) {
+      //   return navigate("/login");
+      // }
       setLoading(true);
       const cart = await addToCart(variantId, quantity);
       setLoading(false);
@@ -244,7 +244,7 @@ export const ProductDetails = () => {
           <img
             src={mainImg}
             alt="Product"
-            className="h-[300px] w-[250px] rounded-md "
+            className="h-[300px] w-[250px] rounded-md object-contain"
           />
           {/* Sub-images Container (displayed in a row below the main image) */}
           <div className="flex flex-row gap-2 mt-4 overflow-x-auto overflow-y-hidden no-scrollbar px-4 p-y2">
@@ -253,7 +253,7 @@ export const ProductDetails = () => {
                 key={index}
                 src={img}
                 alt={`Sub Image ${index + 1}`}
-                className="w-20 h-24 cursor-pointer rounded-md border"
+                className="w-20 h-24 cursor-pointer rounded-md border object-contain"
                 onMouseOver={() => setMainImg(img)}
               />
             ))}
