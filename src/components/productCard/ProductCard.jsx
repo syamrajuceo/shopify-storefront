@@ -42,7 +42,7 @@ export const ProductCard = ({ product = {}, home = false }) => {
     id = "",
     handle = "",
     metafields = [],
-    
+
   } = product || {};
 
   const productImage = images?.edges?.[0]?.node?.url || "";
@@ -138,8 +138,8 @@ export const ProductCard = ({ product = {}, home = false }) => {
         </Link>
         <div>
           <CardButton
-            onClick={home || is_available ? handleAddToCart : undefined}
-            className={`flex items-center justify-center ${is_available||home ? " bg-slate-900": "bg-slate-800 opacity-60"} `}
+            onClick={home || is_available && is_available_stock > 0 ? handleAddToCart : undefined}
+            className={`flex items-center justify-center ${is_available || home ? " bg-slate-900" : "bg-slate-800 opacity-60"} `}
           >
             {loading ? (
               <CircularProgress size="20px" />
@@ -147,7 +147,7 @@ export const ProductCard = ({ product = {}, home = false }) => {
               <div className="flex items-center gap-[5px]">
                 <ShoppingBagOutlinedIcon />
                 {
-                  home ? "View Product" : is_available ? "Add To Cart" : "Out Of Stock"
+                  home ? "View Product" : is_available && is_available_stock > 0 ? "Add To Cart" : "Out Of Stock"
                 }
               </div>
             )}
