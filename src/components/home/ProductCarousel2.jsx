@@ -4,7 +4,7 @@ import { ProductCard } from "../productCard/ProductCard";
 import { FaArrowRight } from "react-icons/fa";
 import useShopifyStore from "../../store/useShopifyStore";
 
-export function ProductCarousel2() {
+export function ProductCarousel2({title}) {
   const scrollContainerRef = useRef(null);
   const Products = useShopifyStore((state) => state.products);
   const scroll = (direction) => {
@@ -27,7 +27,7 @@ export function ProductCarousel2() {
       {/* Header */}
       <div className="mb-12 flex justify-between items-center align">
         <h2 className="mb-4 text-1xl  md:text-1xl font-bold tracking-tight text-gray-900">
-          Top Selling Products
+         {title?title:"Top Selling Products"} 
         </h2>
         <span className=" items-center justify-center gap-3 hidden md:flex">
           <p className="text-lg text-gray-600 ">View all</p>
@@ -51,7 +51,7 @@ export function ProductCarousel2() {
               <ProductCard
                 className="min-w-[300px] transform transition-all duration-300 hover:scale-105"
                 product={product}
-                home={true}
+                home={title==="Similar Products"?false:true}
               />
             </div>
           ))}

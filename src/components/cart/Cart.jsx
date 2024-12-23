@@ -15,6 +15,7 @@ import { CartCard } from "./CartCard";
 import useShopifyStore from "../../store/useShopifyStore";
 import { Discount } from "@mui/icons-material";
 import { CartPageSkeleton } from "../skeleton/Cart";
+import { ProductCarousel2 } from "../home/ProductCarousel2";
 // import SimilarProductsCarousel from "../carousel/Carousel";
 
 const accessToken = localStorage.getItem("accessToken");
@@ -463,10 +464,10 @@ export const Cart = () => {
           </div>
         )}
         {/* ------------------Similar Products------------------ */}
-        <h3 className="mt-10 text-[20px] lg:text-[25px] font-normal">
+        {/* <h3 className="mt-10 text-[20px] lg:text-[25px] font-normal">
           Similar Products
-        </h3>
-        <div className="mt-2 flex gap-3 overflow-x-auto no-scrollbar">
+        </h3> */}
+        {/* <div className="mt-2 flex gap-3 overflow-x-auto no-scrollbar">
           {Products ? (
             Products.map((product) => (
               <ProductCard key={product.id} product={product} />
@@ -474,7 +475,8 @@ export const Cart = () => {
           ) : (
             <p>Similar Product not Available</p>
           )}
-        </div>
+        </div> */}
+         < ProductCarousel2 title={'Similar Products'} /> 
         {/* <SimilarProductsCarousel/> */}
       </div>
       {/* ------------------Checkout Button for mobile------------------ */}

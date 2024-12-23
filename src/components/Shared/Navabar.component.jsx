@@ -64,7 +64,7 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
         <img src={logo} alt="logo" className="hidden sm:block cursor-pointer" onClick={() => navigate('/')}
         />
         <div className="flex sm:hidden gap-5 items-center">
-          <img src={basari} alt="logo" className="cursor-pointer h-[33.52px] w-[78.64px]" onClick={() => navigate('/')} />
+          <img src={logo} alt="logo" className="cursor-pointer h-[33.52px] w-[78.64px]" onClick={() => navigate('/')} />
           <div className="flex gap-2 items-center">
             <h1 className="opacity-65">Country</h1>
             <img src={flag} alt="flag" className="h-[15px] w-[21px] " />
