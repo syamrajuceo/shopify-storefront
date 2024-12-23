@@ -3,6 +3,7 @@ import ReviewForm from "./ReviewForm";
 import { useState } from "react";
 import useShopifyStore from "../../store/useShopifyStore";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 export const Review = ({
   product_handle,
@@ -15,7 +16,8 @@ export const Review = ({
   // const { reviews } = useShopifyStore.getState();
   const [isShow, SetIsShow] = useState(false);
   const [loadmore, setLoadmore] = useState(3);
-
+  const accessToken = localStorage.getItem('accessToken');
+  const navigate = useNavigate();
   const handleLoadmore = (loadmore) => {
     setLoadmore(loadmore);
   };
@@ -104,7 +106,7 @@ export const Review = ({
                 <p
                   className="font-bold text-blue-500 cursor-pointer"
                   onClick={() => {
-                    SetIsShow(true);
+                   {accessToken?SetIsShow(true):navigate('/login')} 
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                 >
