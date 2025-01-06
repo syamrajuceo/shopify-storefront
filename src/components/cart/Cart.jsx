@@ -15,6 +15,7 @@ import { CartCard } from "./CartCard";
 import useShopifyStore from "../../store/useShopifyStore";
 import { Discount } from "@mui/icons-material";
 import { CartPageSkeleton } from "../skeleton/Cart";
+import { ProductCarousel2 } from "../home/ProductCarousel2";
 // import SimilarProductsCarousel from "../carousel/Carousel";
 import { ProductCarousel2 } from "../home/ProductCarousel2";
 
@@ -42,6 +43,7 @@ export const Cart = () => {
     setLoading(true);
     try {
       const fetchedCart = await fetchCart();
+      console.log("fetched cart :", fetchedCart)
       if (fetchedCart) {
         setCartData(fetchedCart);
         if (fetchedCart.lines.edges.length > 0) {
@@ -152,7 +154,8 @@ export const Cart = () => {
   const handleQuantityChange = async (newQuantity, id) => {
     if (newQuantity < 1) return;
     try {
-      await updateCart(id, newQuantity, user.email);
+      const updatedCart = await updateCart(id, newQuantity);
+      console.log("Updated Cart:", updatedCart);
       await loadData();
     } catch (error) {
       console.error("Failed to update cart quantity:", error.message);
@@ -161,7 +164,8 @@ export const Cart = () => {
 
   const handleRemove = async (id) => {
     try {
-      await updateCart(id, 0, user.email);
+      const removedCart = await updateCart(id, 0);
+      console.log("removedCart :" ,removedCart)
       await loadData();
     } catch (error) {
       console.error("Failed to remove item from cart:", error.message);
@@ -178,7 +182,7 @@ export const Cart = () => {
       }
       window.location.href = checkoutUrl;
 
-      await deleteCart();
+      // await deleteCart();
       // Redirect to a thank-you page
       // window.location.href = `/order`;
 
@@ -202,32 +206,32 @@ export const Cart = () => {
     return <div>Error: {error}</div>;
   }
 
-  if (!accessToken) {
-    return (
-      <div className="h-[30rem] flex justify-center items-center">
-        <div className="flex flex-col gap-2 justify-center items-center ">
-          <div className="px-4 py-5 rounded-[50%] bg-[#F6F6F6] flex justify-center items-center">
-            <div className="w-[110px] h-[100px] px-4 py-5 flex justify-center items-center rounded-[50%] bg-[#EFF0F3]">
-              <img src={cartIcon} alt="" className="h-full w-full" />
-            </div>
-          </div>
-          <p className="text-[24px] font-medium text-[#535353]">
-            Your Cart is Not Available
-          </p>
-          <p className="text-[16px] font-normal text-[#787878]">
-            Please
-            <Link to="/login" className="text-[18px] font-bold underline">
-              Login
-            </Link>
-            or
-            <Link to="/register" className="text-[18px] font-bold underline">
-              Create New Account
-            </Link>
-          </p>
-        </div>
-      </div>
-    );
-  }
+  // if (!accessToken) {
+  //   return (
+  //     <div className="h-[30rem] flex justify-center items-center">
+  //       <div className="flex flex-col gap-2 justify-center items-center ">
+  //         <div className="px-4 py-5 rounded-[50%] bg-[#F6F6F6] flex justify-center items-center">
+  //           <div className="w-[110px] h-[100px] px-4 py-5 flex justify-center items-center rounded-[50%] bg-[#EFF0F3]">
+  //             <img src={cartIcon} alt="" className="h-full w-full" />
+  //           </div>
+  //         </div>
+  //         <p className="text-[24px] font-medium text-[#535353]">
+  //           Your Cart is Not Available
+  //         </p>
+  //         <p className="text-[16px] font-normal text-[#787878]">
+  //           Please
+  //           <Link to="/login" className="text-[18px] font-bold underline">
+  //             Login
+  //           </Link>
+  //           or
+  //           <Link to="/register" className="text-[18px] font-bold underline">
+  //             Create New Account
+  //           </Link>
+  //         </p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
   return (
     <div>
       <div className="py-8 px-4 md:py-16 md:px-20 bg-white mb-18">
@@ -461,8 +465,22 @@ export const Cart = () => {
           </div>
         )}
         {/* ------------------Similar Products------------------ */}
-          < ProductCarousel2 tittle={'Similar Products'} /> 
-       
+
+        {/* <h3 className="mt-10 text-[20px] lg:text-[25px] font-normal">
+          Similar Products
+        </h3> */}
+        {/* <div className="mt-2 flex gap-3 overflow-x-auto no-scrollbar">
+          {Products ? (
+            Products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))
+          ) : (
+            <p>Similar Product not Available</p>
+          )}
+        </div> */}
+         < ProductCarousel2 title={'Similar Products'} /> 
+        {/* <SimilarProductsCarousel/> */}
+
       </div>
       {/* ------------------Checkout Button for mobile------------------ */}
       {cartData?.lines?.edges?.length > 0 && (

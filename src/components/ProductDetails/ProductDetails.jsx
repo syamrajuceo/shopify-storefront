@@ -91,9 +91,9 @@ export const ProductDetails = () => {
         console.error("Variant ID not found.");
         return;
       }
-      if (accessToken === null || accessToken === undefined) {
-        return navigate("/login");
-      }
+      // if (accessToken === null || accessToken === undefined) {
+      //   return navigate("/login");
+      // }
       setLoading(true);
       const cart = await addToCart(variantId, quantity);
       setLoading(false);

@@ -27,7 +27,7 @@ import Model from '../../assets/model.png'
 const accessToken = localStorage.getItem("accessToken");
 export const ProductCard = ({ product = {}, home = false }) => {
 
-  console.log("product... : ", product);
+  // console.log("product... : ", product);
   const userObject = localStorage.getItem("user");
   const user = userObject ? JSON.parse(userObject) : { email: "" };
   const [loading, setLoading] = useState(false);
@@ -77,9 +77,9 @@ export const ProductCard = ({ product = {}, home = false }) => {
       if (home) {
         return navigate(`/product/${handle}`)
       }
-      if (accessToken === null || accessToken === undefined) {
-        return navigate("/login")
-      }
+      // if (accessToken === null || accessToken === undefined) {
+      //   return navigate("/login")
+      // }
 
       setLoading(true);
       const quantity = 1;
