@@ -17,6 +17,7 @@ import { Discount } from "@mui/icons-material";
 import { CartPageSkeleton } from "../skeleton/Cart";
 import { ProductCarousel2 } from "../home/ProductCarousel2";
 // import SimilarProductsCarousel from "../carousel/Carousel";
+import { ProductCarousel2 } from "../home/ProductCarousel2";
 
 const accessToken = localStorage.getItem("accessToken");
 
@@ -464,6 +465,7 @@ export const Cart = () => {
           </div>
         )}
         {/* ------------------Similar Products------------------ */}
+
         {/* <h3 className="mt-10 text-[20px] lg:text-[25px] font-normal">
           Similar Products
         </h3> */}
@@ -478,6 +480,7 @@ export const Cart = () => {
         </div> */}
          < ProductCarousel2 title={'Similar Products'} /> 
         {/* <SimilarProductsCarousel/> */}
+
       </div>
       {/* ------------------Checkout Button for mobile------------------ */}
       {cartData?.lines?.edges?.length > 0 && (
@@ -495,7 +498,7 @@ export const Cart = () => {
           </div>
           <button
             onClick={handleCheckoutButtonClick}
-            className="w-[40%] h-[50px] bg-[#353535] text-[16px] text-[#fff] text-white font-semibold rounded"
+            className="w-[40%] h-[50px] bg-[#353535] text-[16px] text-[#fff]  font-semibold rounded"
           >
             CHECK OUT
           </button>
