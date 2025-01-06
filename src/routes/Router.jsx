@@ -23,6 +23,7 @@ import { CartPageSkeleton } from "../components/skeleton/Cart";
 import OrdersPage from "../pages/OrdersPage";
 import OrderSummary from "../components/Order/OrderSummary";
 import ShapePage from "../pages/ShapePage";
+import { ProductVariants } from "../components/ProductDetails/ProductByVarient";
 
 
 export const router = createBrowserRouter([
@@ -55,6 +56,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/product/:handle",
+        // element: <ProductVariants />,
         element: <ProductDetailsPage />,
       },
       {

@@ -21,13 +21,14 @@ import { addReview, fetchReviews } from "../../store/review";
 import { ProductCarousel2 } from "../home/ProductCarousel2";
 import CircularProgress from "@mui/material/CircularProgress";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
+import { fetchProductByHandle } from "../../store/products";
 
 const accessToken = localStorage.getItem("accessToken");
 export const ProductDetails = () => {
   const { reviews } = useShopifyStore.getState();
   const [reviewsData, setReviewData] = useState(reviews);
   const [product, setProduct] = useState(null);
-  const products = useShopifyStore((state) => state.products);
+  // const products = useShopifyStore((state) => state.products);
   const { handle } = useParams();
   const [mainImg, setMainImg] = useState(null);
   const [subImgs, setSubImgs] = useState([]);
@@ -43,6 +44,8 @@ export const ProductDetails = () => {
     5: 0,
   });
   const [loading, setLoading] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState({});
+  const [selectedVariant, setSelectedVariant] = useState(null);
 
   // let product_handle = handle;
 
@@ -57,22 +60,20 @@ export const ProductDetails = () => {
     metafields = [],
   } = product || {};
   // const productImage = images?.edges?.[0]?.node?.url || "";
-  const discountPrice = variants?.edges?.[0]?.node?.priceV2?.amount || "0.00";
-  const originalPrice =
-    variants?.edges?.[0]?.node?.compareAtPriceV2?.amount || "0.00";
-  const productCurrency =
-    variants?.edges?.[0]?.node?.priceV2?.currencyCode || "$";
+  const discountPrice = selectedVariant?.priceV2?.amount || "0.00";
+  const originalPrice = selectedVariant?.compareAtPriceV2?.amount || "0.00";
+  const productCurrency = selectedVariant?.priceV2?.currencyCode || "$";
   const savedAmount = originalPrice - discountPrice;
   const offerPercentage =
     originalPrice && discountPrice
       ? ((originalPrice - discountPrice) / originalPrice) * 100
       : 0;
-  const variantId = variants?.edges[0]?.node?.id || "";
+  const variantId = selectedVariant?.id || "";
   // const productImages = images?.edges?.map((edge) => edge.node.url) || [];
 
   const numericId = id.split("/").pop();
 
-  const qtyAvailable = variants?.edges?.[0]?.node?.quantityAvailable;
+  const qtyAvailable = selectedVariant?.quantityAvailable;
 
   const expressDelivery = metafields.some(
     (field) => field.key === "express_delivery" && field.value === "true"
@@ -149,9 +150,8 @@ export const ProductDetails = () => {
       console.log("Got response :", res);
       if (res.status === 201) {
         toast.success("Review submitted successfully!");
-        fetchData()
+        fetchData();
         setReviewData((prevData) => [...prevData, reviews]);
-  
       }
       window.location.reload();
     } catch (error) {
@@ -166,17 +166,21 @@ export const ProductDetails = () => {
 
   const fetchData = async () => {
     try {
-      const foundProduct = products.find((p) => p.handle === handle);
-      if (!foundProduct) {
-        console.error("Product not found!");
-        return;
-      }
-      setProduct(foundProduct);
+      // const foundProduct = products.find((p) => p.handle === handle);
+      // if (!foundProduct) {
+      //   console.error("Product not found!");
+      //   return;
+      // }
+      // setProduct(foundProduct);
 
-      if (foundProduct?.images?.edges) {
-        const allImages = foundProduct.images.edges.map(
-          (edge) => edge.node.url
-        );
+      const { productData, initialOptions } = await fetchProductByHandle(
+        handle
+      );
+      setProduct(productData);
+      setSelectedOptions(initialOptions);
+
+      if (productData?.images?.edges) {
+        const allImages = productData.images.edges.map((edge) => edge.node.url);
         setMainImg(allImages[0] || null);
         setSubImgs(allImages);
       }
@@ -194,11 +198,33 @@ export const ProductDetails = () => {
 
   useEffect(() => {
     fetchData();
-  }, [handle, products, numericId]);
+  }, [handle, numericId]);
 
   useEffect(() => {
     HandleFetchReview();
   }, []);
+
+  useEffect(() => {
+    // Find the matching variant based on selected options
+    if (product) {
+      const matchingVariant = product.variants.edges.find(({ node }) =>
+        node.selectedOptions.every(
+          (option) => selectedOptions[option.name] === option.value
+        )
+      );
+      setSelectedVariant(matchingVariant ? matchingVariant.node : null);
+    }
+  }, [selectedOptions, product]);
+
+  const handleOptionChange = (optionName, value) => {
+    setSelectedOptions((prev) => ({
+      ...prev,
+      [optionName]: value,
+    }));
+  };
+
+  console.log("product : ", product);
+  console.log("selectedVariant : ", selectedVariant);
 
   return (
     <div className="px-4   md:mb-[30px]">
@@ -372,64 +398,68 @@ export const ProductDetails = () => {
             </p>
           </div>
 
-          <form action="">
-            <div className="mt-3">
-              <h3 className="text-md font-normal text-gray-600">
-                Available Shades
-              </h3>
-              <div className="text mt-3">
-                <div className="flex items-center justify-start gap-3 md:gap-6 relative mb-6 ">
-                  <button
-                    data-ui="checked active"
-                    className="p-1.5 border border-gray-200 rounded-full transition-all duration-300 hover:border-emerald-500 :border-emerald-500"
-                  >
-                    <svg
-                      width="15"
-                      height="15"
-                      viewBox="0 0 40 40"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle cx="20" cy="20" r="20" fill="#10B981" />
-                    </svg>
-                  </button>
-                  <button className="p-1.5 border border-gray-200 rounded-full transition-all duration-300 hover:border-amber-400 focus-within:border-amber-400">
-                    <svg
-                      width="15"
-                      height="15"
-                      viewBox="0 0 40 40"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle cx="20" cy="20" r="20" fill="#FBBF24" />
-                    </svg>
-                  </button>
-                  <button className="p-1.5 border border-gray-200 rounded-full transition-all duration-300 hover:border-red-500 focus-within:border-red-500">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="15"
-                      height="15"
-                      viewBox="0 0 40 40"
-                      fill="none"
-                    >
-                      <circle cx="20" cy="20" r="20" fill="#F43F5E" />
-                    </svg>
-                  </button>
-                  <button className="p-1.5 border border-gray-200 rounded-full  transition-all duration-300 hover:border-blue-400 focus-within:border-blue-400">
-                    <svg
-                      width="15"
-                      height="15"
-                      viewBox="0 0 40 40"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle cx="20" cy="20" r="20" fill="#2563EB" />
-                    </svg>
-                  </button>
+          {/* Render options (e.g., colors, sizes) */}
+          <div className="my-3 ml-1">
+            {product?.options?.map((option) => (
+              <div key={option.name}>
+                <h3 className="my-2">{option.name}</h3>
+                <div style={{ display: "flex", gap: "10px" }}>
+                  {option.values.map((value) => {
+                    const isColorOption = option.name
+                      .toLowerCase()
+                      .includes("color");
+                    const isSelected = selectedOptions[option.name] === value;
+
+                    return (
+                      <label
+                        key={value}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          width: isColorOption ? "30px" : "auto",
+                          height: isColorOption ? "30px" : "auto",
+                          borderRadius: isColorOption ? "50%" : "4px", // Rounded for color, square for text
+                          backgroundColor: isColorOption
+                            ? value
+                            : "transparent",
+                          border: isSelected
+                            ? "3px solid #ffffff" // Black border for selected option
+                            : "3px solid transparent", // Transparent border for unselected
+                          outline: isSelected
+                            ? "1px solid #2f2f2f" // Black border for selected option
+                            : "1px solid transparent", // Transparent border for unselected
+                          cursor: "pointer",
+                          // padding: isColorOption ? "0" : "5px 10px",
+                          textAlign: "center",
+                          // boxShadow: isSelected
+                          //   ? "0 0 5px rgba(0, 0, 0, 0.5)" // Optional shadow for selected
+                          //   : "none",
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          name={option.name}
+                          value={value}
+                          checked={isSelected}
+                          onChange={() =>
+                            handleOptionChange(option.name, value)
+                          }
+                          style={{ display: "none" }}
+
+                        />
+                        {!isColorOption && (
+                          <span className="bg-[#E0E0E04D] py-[2px] px-[5px] text-[#3F4646] text-14px] font-semibold">
+                            {value}
+                          </span>
+                        )}
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
-            </div>
-          </form>
+            ))}
+          </div>
           <div className="flex justify-start items-center w-auto max-w-[350px] text-gray-600 gap-2">
             {qtyAvailable > 0 && freeDelivery && (
               <div className="flex justify-between items-center bg-[#EBF1FC] px-2 py-1 rounded-md gap-2">
