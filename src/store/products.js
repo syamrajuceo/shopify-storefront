@@ -34,6 +34,10 @@ export const fetchAllProducts = async () => {
                     availableForSale
                     sku
                     quantityAvailable
+                    selectedOptions {
+                      name
+                      value
+                    }
                   }
                 }
               }
@@ -53,7 +57,7 @@ export const fetchAllProducts = async () => {
               {namespace: "shopify", key: "target-gender"},
               {namespace: "shopify", key: "fabric"},
               {namespace: "shopify", key: "lens_polarization"},
-              {namespace: "custom", key: "express_delivery"}
+              {namespace: "custom", key: "express_delivery"},
               {namespace: "custom", key: "free_delivery"}
             ]) {
               namespace
@@ -102,6 +106,148 @@ export const fetchAllProducts = async () => {
     throw error;
   }
 };
+
+export const fetchProductByHandle = async (handle) => {
+  try {
+    const response = await fetch(
+      "https://4bz4tg-qg.myshopify.com/api/2024-10/graphql.json",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Shopify-Storefront-Access-Token":
+            "aae77a75514b280e61a74cc7ee993635",
+        },
+        body: JSON.stringify({
+          query: `
+            query getProductVariants($handle: String!) {
+              productByHandle(handle: $handle) {
+                id
+                title
+                descriptionHtml
+                description
+                vendor
+                handle
+                productType
+                options {
+                  name
+                  values
+                }
+                variants(first: 200) {
+                  edges {
+                    node {
+                      id
+                      title
+                      priceV2 {
+                        amount
+                        currencyCode
+                      }
+                      compareAtPriceV2 {
+                        amount
+                        currencyCode
+                      }
+                      availableForSale
+                      sku
+                      quantityAvailable
+                      selectedOptions {
+                        name
+                        value
+                      }
+                      image {
+                        id
+                        url
+                        altText
+                      }
+                    }
+                  }
+                }
+                images(first: 100) {
+                  edges {
+                    node {
+                      id
+                      url
+                      altText
+                    }
+                  }
+                }
+                metafields(identifiers: [
+                  {namespace: "shopify", key: "color-pattern"},
+                  {namespace: "shopify", key: "age-group"},
+                  {namespace: "shopify", key: "eyewear-frame-design"},
+                  {namespace: "shopify", key: "target-gender"},
+                  {namespace: "shopify", key: "fabric"},
+                  {namespace: "shopify", key: "lens_polarization"},
+                  {namespace: "custom", key: "express_delivery"},
+                  {namespace: "custom", key: "free_delivery"}
+                ]) {
+                  namespace
+                  key
+                  value
+                  type
+                  description
+                }
+              }
+            }
+          `,
+          variables: { handle },
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("API Response:", data);
+
+    const productData = data.data?.productByHandle;
+    if (!productData) {
+      throw new Error("Product not found or invalid response structure.");
+    }
+
+    // Safely map metafields if they exist and are not null
+    const metafields = productData.metafields
+      ? productData.metafields
+          .filter((mf) => mf !== null)
+          .map((mf) => ({
+            key: mf.key,
+            value: mf.value,
+            namespace: mf.namespace,
+            type: mf.type,
+            description: mf.description,
+          }))
+      : [];
+
+    // Add metafields to the product data
+    const productWithMetafields = {
+      ...productData,
+      metafields,
+    };
+
+    // Initialize selected options with the first available value for each option
+    const initialOptions = {};
+    productData.options.forEach((option) => {
+      initialOptions[option.name] = option.values[0];
+    });
+
+    // Return product data and initial options
+    return { productData: productWithMetafields, initialOptions };
+  } catch (error) {
+    console.error("Error fetching product variants:", error);
+    throw error; // Re-throw error to allow handling at the call site
+  }
+};
+
+
+
+
+
+
+
+
+
+
 
 // export const fetchProductById = async (variantId) => {
 //   const query = `
