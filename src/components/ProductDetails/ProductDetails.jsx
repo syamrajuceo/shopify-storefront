@@ -497,11 +497,12 @@ export const ProductDetails = () => {
                 <div
                   style={{
                     display: "flex",
+                    flexWrap : "wrap",
                     gap: "10px",
                     alignItems: "center",
                     paddingLeft: "5px",
-                    overflowX: "auto",
-                    maxWidth: "400px",
+                    // overflowX: "auto",
+                    maxWidth: "450px",
                     // height: "40px",
                     padding: "2px",
                     // border: "1px solid #000",
