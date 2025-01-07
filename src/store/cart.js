@@ -254,25 +254,20 @@ export const deleteCart = async () => {
 };
 
 export const addToCart = async (variantId, quantity, userEmail = null) => {
-  let { cartId } = useShopifyStore.getState();
-  console.log("state cartid : ", cartId);
+  const cartId = localStorage.getItem("cartId");
+  console.log("local cartid : ", cartId);
+  // If no cart ID, create a new one
   if (!cartId) {
-    // Try to fetch from localStorage if cart ID is not in the state
-    cartId = localStorage.getItem("cartId");
-    console.log("local cartid : ", cartId);
-    // If no cart ID, create a new one
-    if (!cartId) {
-      console.warn("No cart ID available, creating a new cart...");
-      try {
-        const cart = await createCart(accessToken);
-        cartId = cart?.id;
-        if (!cartId) {
-          throw new Error("Cart creation failed.");
-        }
-      } catch (error) {
-        console.error("Error creating cart:", error.message);
-        throw error;
+    console.warn("No cart ID available, creating a new cart...");
+    try {
+      const cart = await createCart(accessToken);
+      cartId = cart?.id;
+      if (!cartId) {
+        throw new Error("Cart creation failed.");
       }
+    } catch (error) {
+      console.error("Error creating cart:", error.message);
+      throw error;
     }
   }
 

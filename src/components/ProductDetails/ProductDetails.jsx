@@ -3,7 +3,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-
+import { FaPlay, FaPause, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { Breadcrumbs, Rating, Typography } from "@mui/material";
 import deliveryIcon from "../../assets/images/hugeicons_truck-delivery.png";
 import stockIcon from "../../assets/images/Vector.png";
@@ -14,7 +14,7 @@ import { Review } from "./Review";
 import ProductDescription from "./ProductDescription";
 import { useParams } from "react-router-dom";
 import useShopifyStore from "../../store/useShopifyStore";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { addToCart } from "../../store/cart";
 import toast from "react-hot-toast";
 import { addReview, fetchReviews } from "../../store/review";
@@ -30,7 +30,10 @@ export const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   // const products = useShopifyStore((state) => state.products);
   const { handle } = useParams();
-  const [mainImg, setMainImg] = useState(null);
+  const [mainContent, setMainContent] = useState({
+    type: "image",
+    content: null,
+  });
   const [subImgs, setSubImgs] = useState([]);
   const [ratingCount, setRatingCount] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -46,8 +49,10 @@ export const ProductDetails = () => {
   const [loading, setLoading] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [selectedVariant, setSelectedVariant] = useState(null);
-
-  // let product_handle = handle;
+  const [videos, setVideos] = useState([]);
+  const videoRef = useRef(null); // Ref for video element
+  const [isPlaying, setIsPlaying] = useState(false); // State for play/pause
+  const [isMuted, setIsMuted] = useState(false); // State for mute/unmute
 
   const {
     title = "",
@@ -181,9 +186,12 @@ export const ProductDetails = () => {
 
       if (productData?.images?.edges) {
         const allImages = productData.images.edges.map((edge) => edge.node.url);
-        setMainImg(allImages[0] || null);
+        // setMainContent({ type: "image", content: allImages[0] || null });
         setSubImgs(allImages);
       }
+      const videoItems =
+        productData.media?.filter((media) => media.type === "video") || [];
+      setVideos(videoItems);
       HandleFetchReview();
       const filteredReviews = await filterReviewsByProductId(
         reviewsData,
@@ -213,6 +221,10 @@ export const ProductDetails = () => {
         )
       );
       setSelectedVariant(matchingVariant ? matchingVariant.node : null);
+      setMainContent({
+        type: "image",
+        content: matchingVariant?.node?.image?.url || null,
+      });
     }
   }, [selectedOptions, product]);
 
@@ -221,6 +233,26 @@ export const ProductDetails = () => {
       ...prev,
       [optionName]: value,
     }));
+  };
+
+  // Play/Pause Handler
+  const togglePlayPause = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  // Mute/Unmute Handler
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
   };
 
   console.log("product : ", product);
@@ -265,23 +297,86 @@ export const ProductDetails = () => {
       </div>
       <div className="flex flex-col md:flex-row gap-10 mt-4">
         {/* Main image and sub-images section */}
-        <div className="flex flex-col items-center  p-3 max-h-auto w-full md:w-[50%] h-auto  md:h-[550px]">
-          {/* Main Image */}
-          <img
-            src={mainImg}
-            alt="Product"
-            className="h-[300px] w-[250px] rounded-md object-contain"
-          />
+        <div className="relative flex flex-col items-center  p-3 max-h-auto w-full md:w-[50%] h-auto  md:h-[550px]">
+          {/* Main Display Section */}
+          {mainContent.type === "image" ? (
+            <img
+              src={mainContent.content}
+              alt="Product"
+              className="h-[300px] w-[250px] rounded-md object-contain"
+            />
+          ) : (
+            <div className="relative">
+              <video ref={videoRef} className="h-[300px] w-auto">
+                {mainContent.content?.sources?.map((source, index) => (
+                  <source
+                    key={index}
+                    src={source.url}
+                    type={`video/${source.format}`}
+                  />
+                ))}
+                Your browser does not support the video tag.
+              </video>
+              <div className="absolute bottom-2 right-2 flex gap-2">
+                {/* Play/Pause Button */}
+                <button
+                  onClick={togglePlayPause}
+                  className="bg-black/50 p-2 rounded-full text-white hover:bg-black/70"
+                >
+                  {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
+                </button>
+
+                {/* Mute/Unmute Button */}
+                <button
+                  onClick={toggleMute}
+                  className="bg-black/50 p-2 rounded-full text-white hover:bg-black/70"
+                >
+                  {isMuted ? (
+                    <FaVolumeMute size={20} />
+                  ) : (
+                    <FaVolumeUp size={20} />
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
           {/* Sub-images Container (displayed in a row below the main image) */}
           <div className="flex flex-row gap-2 mt-4 overflow-x-auto overflow-y-hidden no-scrollbar px-4 p-y2">
+            {/* Sub-images */}
             {subImgs.map((img, index) => (
               <img
                 key={index}
                 src={img}
                 alt={`Sub Image ${index + 1}`}
                 className="w-20 h-24 cursor-pointer rounded-md border object-contain"
-                onMouseOver={() => setMainImg(img)}
+                onMouseOver={() =>
+                  setMainContent({ type: "image", content: img })
+                }
               />
+            ))}
+            {/* Videos */}
+            {/* Videos */}
+            {videos.map((video) => (
+              <div
+                key={video.id}
+                className="w-20 h-24 cursor-pointer rounded-md border object-contain overflow-hidden"
+              >
+                <video
+                  className="w-full h-full object-contain rounded-md"
+                  onMouseOver={() =>
+                    setMainContent({ type: "video", content: video })
+                  }
+                >
+                  {video.sources.map((source, index) => (
+                    <source
+                      key={index}
+                      src={source.url}
+                      type={`video/${source.format}`}
+                    />
+                  ))}
+                  Your browser does not support the video tag.
+                </video>
+              </div>
             ))}
           </div>
           {/* Quantity and Add to Cart Section */}
@@ -289,7 +384,7 @@ export const ProductDetails = () => {
             <div className="flex w-[40%] justify-around items-center gap-4 bg-gray-200 py-2 px-4 rounded-md cursor-pointer">
               <p
                 onClick={() => {
-                  if (quantity > 1) handleQty(quantity - 1); // Only decrease if quantity > 1
+                  if (quantity > 1) handleQty(quantity - 1);
                 }}
                 className={`${
                   quantity === 1
@@ -399,11 +494,23 @@ export const ProductDetails = () => {
           </div>
 
           {/* Render options (e.g., colors, sizes) */}
-          <div className="my-3 ml-1">
+          <div className="my-2 h-auto">
             {product?.options?.map((option) => (
               <div key={option.name}>
                 <h3 className="my-2">{option.name}</h3>
-                <div style={{ display: "flex", gap: "10px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    alignItems: "center",
+                    paddingLeft: "5px",
+                    overflowX: "auto",
+                    maxWidth: "400px",
+                    // height: "40px",
+                    padding : "2px",
+                    // border: "1px solid #000",
+                  }}
+                >
                   {option.values.map((value) => {
                     const isColorOption = option.name
                       .toLowerCase()
@@ -417,8 +524,8 @@ export const ProductDetails = () => {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          width: isColorOption ? "30px" : "auto",
-                          height: isColorOption ? "30px" : "auto",
+                          width: isColorOption ? "27px" : "auto",
+                          height: isColorOption ? "27px" : "auto",
                           borderRadius: isColorOption ? "50%" : "4px", // Rounded for color, square for text
                           backgroundColor: isColorOption
                             ? value
@@ -446,7 +553,6 @@ export const ProductDetails = () => {
                             handleOptionChange(option.name, value)
                           }
                           style={{ display: "none" }}
-
                         />
                         {!isColorOption && (
                           <span className="bg-[#E0E0E04D] py-[2px] px-[5px] text-[#3F4646] text-14px] font-semibold">
@@ -526,6 +632,7 @@ export const ProductDetails = () => {
         <div className=" w-full">
           <ProductDescription
             description={description}
+            descriptionHtml = {descriptionHtml}
             metafields={metafields}
           />
         </div>

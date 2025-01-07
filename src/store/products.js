@@ -170,6 +170,38 @@ export const fetchProductByHandle = async (handle) => {
                     }
                   }
                 }
+                media(first: 10) {
+                  edges {
+                    node {
+                      ... on Video {
+                        id
+                        sources {
+                          url
+                          format
+                        }
+                      }
+                      ... on MediaImage {
+                        id
+                        image {
+                          url
+                          altText
+                        }
+                      }
+                      ... on ExternalVideo {
+                        id
+                        embedUrl
+                        host
+                      }
+                      ... on Model3d {
+                        id
+                        alt
+                        sources {
+                          url
+                        }
+                      }
+                    }
+                  }
+                }
                 metafields(identifiers: [
                   {namespace: "shopify", key: "color-pattern"},
                   {namespace: "shopify", key: "age-group"},
@@ -206,6 +238,43 @@ export const fetchProductByHandle = async (handle) => {
       throw new Error("Product not found or invalid response structure.");
     }
 
+    // Extract media data (including videos)
+    const media = productData.media?.edges.map(({ node }) => {
+      if (node.sources) {
+        return {
+          type: "video",
+          id: node.id,
+          sources: node.sources.map((source) => ({
+            url: source.url,
+            format: source.format,
+          })),
+        };
+      } else if (node.image) {
+        return {
+          type: "image",
+          id: node.id,
+          url: node.image.url,
+          altText: node.image.altText,
+        };
+      } else if (node.embedUrl) {
+        return {
+          type: "externalVideo",
+          id: node.id,
+          embedUrl: node.embedUrl,
+          host: node.host,
+        };
+      } else if (node.alt && node.sources) {
+        return {
+          type: "3dModel",
+          id: node.id,
+          sources: node.sources.map((source) => ({
+            url: source.url,
+          })),
+        };
+      }
+      return null;
+    });
+
     // Safely map metafields if they exist and are not null
     const metafields = productData.metafields
       ? productData.metafields
@@ -219,9 +288,10 @@ export const fetchProductByHandle = async (handle) => {
           }))
       : [];
 
-    // Add metafields to the product data
-    const productWithMetafields = {
+    // Add media and metafields to the product data
+    const productWithMediaAndMetafields = {
       ...productData,
+      media,
       metafields,
     };
 
@@ -231,13 +301,15 @@ export const fetchProductByHandle = async (handle) => {
       initialOptions[option.name] = option.values[0];
     });
 
-    // Return product data and initial options
-    return { productData: productWithMetafields, initialOptions };
+    // Return product data, media, and initial options
+    return { productData: productWithMediaAndMetafields, initialOptions };
   } catch (error) {
     console.error("Error fetching product variants:", error);
     throw error; // Re-throw error to allow handling at the call site
   }
 };
+
+
 
 
 

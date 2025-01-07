@@ -78,7 +78,10 @@ export const CartCard = ({ product, handleQuantityChange, handleRemove }) => {
       <ContentWrapper>
         <Link to={`/product/${product.merchandise.product.handle}`}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div>
             <Title>{product.merchandise?.product?.title}</Title>
+            <span className="text-gray-500 font-medium">{product.merchandise?.title}</span>
+            </div>
             <PriceWrapper>
               <p className="original">
                 {product.merchandise?.priceV2?.currencyCode}
