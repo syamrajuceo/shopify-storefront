@@ -1,4 +1,4 @@
-const ProductDescription = ({ description, metafields = [] }) => {
+const ProductDescription = ({ description,descriptionHtml, metafields = [] }) => {
 
   console.log(metafields)
   const color = metafields.find((metobj) => metobj.key === "color-pattern")?.metavalue?.reduce((acc, val) => {
@@ -17,9 +17,11 @@ const ProductDescription = ({ description, metafields = [] }) => {
     <div className="max-w-4xl mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Product Description</h2>
 
-      <p className="text-gray-700 mb-8">
-        {description}
-      </p>
+      {/* Render HTML safely */}
+      <p
+        className="text-gray-700 mb-8"
+        dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+      ></p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 capitalize">
         <div className="p-4 border border-gray-300">

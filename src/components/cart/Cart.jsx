@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { ProductCard } from "../productCard/ProductCard";
-import productImg1 from "../../assets/Rectangle 25.png";
-import productImg2 from "../../assets/Rectangle 26 (1).png";
-import productImg3 from "../../assets/Rectangle 26 (2).png";
-import productImg4 from "../../assets/Rectangle 26.png";
-import couponIcon from "../../assets/Vector.png";
 import tamaraIcon from "../../assets/image 1.png";
 import tabbyIcon from "../../assets/image 2.png";
 import cartIcon from "../../assets/Vector (1).png";
-import { shopifyClient } from "../../config/shopifyClient";
+// import { shopifyClient } from "../../config/shopifyClient";
 import { deleteCart, fetchCart, updateCart } from "../../store/cart";
 import { Link } from "react-router-dom";
 import { CartCard } from "./CartCard";
 import useShopifyStore from "../../store/useShopifyStore";
-import { Discount } from "@mui/icons-material";
+// import { Discount } from "@mui/icons-material";
 import { CartPageSkeleton } from "../skeleton/Cart";
-import { ProductCarousel2 } from "../home/ProductCarousel2";
 // import SimilarProductsCarousel from "../carousel/Carousel";
 import { ProductCarousel2 } from "../home/ProductCarousel2";
 
@@ -50,7 +43,7 @@ export const Cart = () => {
           const subTotal = fetchedCart.lines.edges
             .map((node) =>
               parseFloat(
-                node.node.merchandise.compareAtPriceV2.amount *
+                node?.node?.merchandise?.compareAtPriceV2?.amount *
                   node.node.quantity
               )
             )
@@ -194,10 +187,6 @@ export const Cart = () => {
     }
   };
 
-  const handleCartUpdate = (updatedCart) => {
-    setCart(updatedCart);
-  };
-
   if (loading) {
     return <CartPageSkeleton />;
   }
@@ -243,7 +232,6 @@ export const Cart = () => {
                 <CartCard
                   key={node.id}
                   product={node}
-                  onCartUpdate={handleCartUpdate}
                   handleQuantityChange={handleQuantityChange}
                   handleRemove={handleRemove}
                 />
