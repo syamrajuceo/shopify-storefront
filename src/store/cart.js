@@ -571,6 +571,7 @@ export const fetchCart = async () => {
                ... on ProductVariant {
                  id
                  title
+                 
                  priceV2 {
                    amount
                    currencyCode
