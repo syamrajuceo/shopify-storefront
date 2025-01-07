@@ -53,12 +53,13 @@ export const ContentWrapper = styled.div`
 export const Title = styled.h3`
   font-size: 16px;
   font-weight: 600;
-  max-width: 60%;
+  /* max-width: 60%; */
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 5px;
   @media (max-width: 1102px) {
     max-width: 100%;
   }
