@@ -307,7 +307,7 @@ export const ProductDetails = () => {
             />
           ) : (
             <div className="relative">
-              <video ref={videoRef} className="h-[300px] w-auto">
+              <video ref={videoRef} className="h-[300px] w-auto" controls>
                 {mainContent.content?.sources?.map((source, index) => (
                   <source
                     key={index}
@@ -317,16 +317,13 @@ export const ProductDetails = () => {
                 ))}
                 Your browser does not support the video tag.
               </video>
-              <div className="absolute bottom-2 right-2 flex gap-2">
-                {/* Play/Pause Button */}
+              {/* <div className="absolute bottom-2 right-2 flex gap-2">
                 <button
                   onClick={togglePlayPause}
                   className="bg-black/50 p-2 rounded-full text-white hover:bg-black/70"
                 >
                   {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
                 </button>
-
-                {/* Mute/Unmute Button */}
                 <button
                   onClick={toggleMute}
                   className="bg-black/50 p-2 rounded-full text-white hover:bg-black/70"
@@ -337,7 +334,7 @@ export const ProductDetails = () => {
                     <FaVolumeUp size={20} />
                   )}
                 </button>
-              </div>
+              </div> */}
             </div>
           )}
           {/* Sub-images Container (displayed in a row below the main image) */}
