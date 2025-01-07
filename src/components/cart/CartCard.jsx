@@ -105,7 +105,7 @@ export const CartCard = ({ product, handleQuantityChange, handleRemove }) => {
             {product.merchandise?.priceV2?.currencyCode}
             {product.merchandise?.compareAtPriceV2?.amount}
           </p>
-          <p className="discount">45% off</p>
+          <p className="discount">{offerPercentage.toFixed(2)}% off</p>
         </PriceWrapperMobile>
         <CostMobile>
           Cost : {product.merchandise?.priceV2?.currencyCode}

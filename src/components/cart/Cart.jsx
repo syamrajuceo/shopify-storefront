@@ -36,7 +36,7 @@ export const Cart = () => {
     setLoading(true);
     try {
       const fetchedCart = await fetchCart();
-      console.log("fetched cart :", fetchedCart)
+      console.log("fetched cart :", fetchedCart);
       if (fetchedCart) {
         setCartData(fetchedCart);
         if (fetchedCart.lines.edges.length > 0) {
@@ -158,7 +158,7 @@ export const Cart = () => {
   const handleRemove = async (id) => {
     try {
       const removedCart = await updateCart(id, 0);
-      console.log("removedCart :" ,removedCart)
+      console.log("removedCart :", removedCart);
       await loadData();
     } catch (error) {
       console.error("Failed to remove item from cart:", error.message);
@@ -466,9 +466,8 @@ export const Cart = () => {
             <p>Similar Product not Available</p>
           )}
         </div> */}
-         < ProductCarousel2 title={'Similar Products'} /> 
+        <ProductCarousel2 title={"Similar Products"} />
         {/* <SimilarProductsCarousel/> */}
-
       </div>
       {/* ------------------Checkout Button for mobile------------------ */}
       {cartData?.lines?.edges?.length > 0 && (

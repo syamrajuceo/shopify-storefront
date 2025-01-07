@@ -5,7 +5,6 @@ export const MainCardContainer = styled.div`
   overflow-x: auto;
   align-items: center;
   padding: 0.625rem;
-
 `;
 
 export const AdCard = styled.div`
@@ -71,11 +70,11 @@ export const AdCardMobileImage = styled.img`
 export const Card = styled.div`
   flex: 0 0 0;
   border-radius: 0.625rem;
-  width:260px;
+  width: 260px;
   scroll-snap-align: center;
   position: relative;
   // background-color:red;
-   height:100%
+  height: 100%;
   @media screen and (max-width: 71.8125rem) {
     max-width: 15.625rem;
   }
