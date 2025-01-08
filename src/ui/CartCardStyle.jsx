@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
 export const CartCardWrapper = styled.div`
-  height: 153px;
+  height: 160px;
   width: 100%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e2e2;
+  border: 1px solid #adadad;
   border-radius: 12px;
   padding: 16px;
   display: flex;
@@ -59,7 +59,7 @@ export const Title = styled.h3`
   -webkit-line-clamp: 1;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
   @media (max-width: 1102px) {
     max-width: 100%;
   }
@@ -148,7 +148,7 @@ export const CostMobile = styled.div`
 
 export const FooterWrapper = styled.div`
   position: absolute;
-  bottom: 8px;
+  bottom: 0px;
   display: flex;
   justify-content: space-between;
   align-items: center;

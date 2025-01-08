@@ -254,7 +254,7 @@ export const deleteCart = async () => {
 };
 
 export const addToCart = async (variantId, quantity, userEmail = null) => {
-  const cartId = localStorage.getItem("cartId");
+  let cartId = localStorage.getItem("cartId");
   console.log("local cartid : ", cartId);
   // If no cart ID, create a new one
   if (!cartId) {
@@ -348,7 +348,11 @@ export const addToCart = async (variantId, quantity, userEmail = null) => {
 };
 
 export const updateCart = async (lineItemId, quantity, userEmail = null) => {
-  console.log("cart id ... : ", cartId);
+  let cartId = localStorage.getItem("cartId");
+  console.log("local cartid : ", cartId);
+  if (!cartId) {
+    console.warn("No cart ID available, creating a new cart...");
+  }
   const query = `
     mutation updateCartLineItem($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
       cartLinesUpdate(cartId: $cartId, lines: $lines) {
@@ -567,6 +571,7 @@ export const fetchCart = async () => {
                ... on ProductVariant {
                  id
                  title
+                 
                  priceV2 {
                    amount
                    currencyCode
