@@ -297,27 +297,27 @@ export const ProductDetails = () => {
       </div>
       <div className="flex flex-col md:flex-row gap-10 mt-4 h-auto w-full">
         {/* Main image and sub-images section */}
-          <div className="relative md:sticky md:top-4 flex flex-col items-center p-3 h-full w-full md:w-[50%]">
-            {/* Main Display Section */}
-            {mainContent.type === "image" ? (
-              <img
-                src={mainContent.content}
-                alt="Product"
-                className="h-[300px] w-[250px] rounded-md object-contain"
-              />
-            ) : (
-              <div className="relative">
-                <video ref={videoRef} className="h-[300px] w-auto" controls>
-                  {mainContent.content?.sources?.map((source, index) => (
-                    <source
-                      key={index}
-                      src={source.url}
-                      type={`video/${source.format}`}
-                    />
-                  ))}
-                  Your browser does not support the video tag.
-                </video>
-                {/* <div className="absolute bottom-2 right-2 flex gap-2">
+        <div className="relative md:sticky md:top-10 flex flex-col items-center p-3 h-full w-full md:w-[50%]">
+          {/* Main Display Section */}
+          {mainContent.type === "image" ? (
+            <img
+              src={mainContent.content}
+              alt="Product"
+              className="h-[400px] w-auto rounded-md object-contain"
+            />
+          ) : (
+            <div className="relative">
+              <video ref={videoRef} className="h-[300px] w-auto" controls>
+                {mainContent.content?.sources?.map((source, index) => (
+                  <source
+                    key={index}
+                    src={source.url}
+                    type={`video/${source.format}`}
+                  />
+                ))}
+                Your browser does not support the video tag.
+              </video>
+              {/* <div className="absolute bottom-2 right-2 flex gap-2">
                 <button
                   onClick={togglePlayPause}
                   className="bg-black/50 p-2 rounded-full text-white hover:bg-black/70"
@@ -335,98 +335,98 @@ export const ProductDetails = () => {
                   )}
                 </button>
               </div> */}
-              </div>
-            )}
-            {/* Sub-images Container (displayed in a row below the main image) */}
-            <div className="flex flex-row gap-2 mt-4 overflow-x-auto overflow-y-hidden no-scrollbar px-4 p-y2">
-              {/* Sub-images */}
-              {subImgs.map((img, index) => (
-                <img
-                  key={index}
-                  src={img}
-                  alt={`Sub Image ${index + 1}`}
-                  className="w-20 h-24 cursor-pointer rounded-md border object-contain"
-                  onMouseOver={() =>
-                    setMainContent({ type: "image", content: img })
-                  }
-                />
-              ))}
-              {/* Videos */}
-              {videos.map((video) => (
-                <div
-                  key={video.id}
-                  className="w-20 h-24 cursor-pointer rounded-md border object-contain overflow-hidden"
-                >
-                  <video
-                    className="w-full h-full object-contain rounded-md"
-                    onMouseOver={() =>
-                      setMainContent({ type: "video", content: video })
-                    }
-                  >
-                    {video.sources.map((source, index) => (
-                      <source
-                        key={index}
-                        src={source.url}
-                        type={`video/${source.format}`}
-                      />
-                    ))}
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              ))}
             </div>
-            {/* Quantity and Add to Cart Section */}
-            <div className="mt-2 h-[50px] w-full hidden md:flex justify-center items-center gap-2">
-              <div className="flex w-[40%] justify-around items-center gap-4 bg-gray-200 py-2 px-4 rounded-md cursor-pointer">
-                <p
-                  onClick={() => {
-                    if (quantity > 1) handleQty(quantity - 1);
-                  }}
-                  className={`${
-                    quantity === 1
-                      ? "text-gray-400 cursor-not-allowed"
-                      : "cursor-pointer"
-                  }`}
+          )}
+          {/* Sub-images Container (displayed in a row below the main image) */}
+          <div className="flex flex-row gap-2 mt-4 overflow-x-auto overflow-y-hidden no-scrollbar px-4 p-y2">
+            {/* Sub-images */}
+            {subImgs.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`Sub Image ${index + 1}`}
+                className="w-20 h-24 cursor-pointer rounded-md border object-contain"
+                onMouseOver={() =>
+                  setMainContent({ type: "image", content: img })
+                }
+              />
+            ))}
+            {/* Videos */}
+            {videos.map((video) => (
+              <div
+                key={video.id}
+                className="w-20 h-24 cursor-pointer rounded-md border object-contain overflow-hidden"
+              >
+                <video
+                  className="w-full h-full object-contain rounded-md"
+                  onMouseOver={() =>
+                    setMainContent({ type: "video", content: video })
+                  }
                 >
-                  -
-                </p>
-
-                <p className="text-lg font-bold">{quantity}</p>
-
-                <p
-                  onClick={() => {
-                    if (quantity < qtyAvailable) handleQty(quantity + 1); // Only increase if available stock allows
-                  }}
-                  className={`${
-                    quantity >= qtyAvailable
-                      ? "text-gray-400 cursor-not-allowed"
-                      : "cursor-pointer"
-                  }`}
-                >
-                  +
-                </p>
+                  {video.sources.map((source, index) => (
+                    <source
+                      key={index}
+                      src={source.url}
+                      type={`video/${source.format}`}
+                    />
+                  ))}
+                  Your browser does not support the video tag.
+                </video>
               </div>
+            ))}
+          </div>
+          {/* Quantity and Add to Cart Section */}
+          <div className="mt-2 h-[50px] w-full hidden md:flex justify-center items-center gap-2">
+            <div className="flex w-[40%] justify-around items-center gap-4 bg-gray-200 py-2 px-4 rounded-md cursor-pointer">
+              <p
+                onClick={() => {
+                  if (quantity > 1) handleQty(quantity - 1);
+                }}
+                className={`${
+                  quantity === 1
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
+              >
+                -
+              </p>
 
-              <div className="w-full">
-                <button
-                  type="button"
-                  className="w-full bg-slate-950 py-2.5 px-4 hover:bg-slate-800 text-white text-sm font-semibold rounded-md disabled:opacity-60 flex justify-center items-center"
-                  onClick={() => handleAddToCart()}
-                  disabled={qtyAvailable <= 0}
-                >
-                  {loading ? (
-                    <CircularProgress size="20px" />
-                  ) : (
-                    <div className="flex items-center gap-[5px]">
-                      <ShoppingBagOutlinedIcon />
-                      Add To Cart
-                    </div>
-                  )}
-                </button>
-              </div>
+              <p className="text-lg font-bold">{quantity}</p>
+
+              <p
+                onClick={() => {
+                  if (quantity < qtyAvailable) handleQty(quantity + 1); // Only increase if available stock allows
+                }}
+                className={`${
+                  quantity >= qtyAvailable
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
+              >
+                +
+              </p>
+            </div>
+
+            <div className="w-full">
+              <button
+                type="button"
+                className="w-full bg-slate-950 py-2.5 px-4 hover:bg-slate-800 text-white text-sm font-semibold rounded-md disabled:opacity-60 flex justify-center items-center"
+                onClick={() => handleAddToCart()}
+                disabled={qtyAvailable <= 0}
+              >
+                {loading ? (
+                  <CircularProgress size="20px" />
+                ) : (
+                  <div className="flex items-center gap-[5px]">
+                    <ShoppingBagOutlinedIcon />
+                    Add To Cart
+                  </div>
+                )}
+              </button>
             </div>
           </div>
-        
+        </div>
+
         {/* Product Details Section */}
         <div className="ml-2 w-full md:w-[50%] h-auto">
           <div className="hidden md:block">
@@ -497,7 +497,7 @@ export const ProductDetails = () => {
                 <div
                   style={{
                     display: "flex",
-                    flexWrap : "wrap",
+                    flexWrap: "wrap",
                     gap: "10px",
                     alignItems: "center",
                     paddingLeft: "5px",
@@ -614,10 +614,17 @@ export const ProductDetails = () => {
               </p>
             </div>
           </div>
+          <div className="w-full">
+            <ProductDescription
+              description={description}
+              descriptionHtml={descriptionHtml}
+              metafields={metafields}
+            />
+          </div>
         </div>
       </div>
 
-      <div className="mt-10 w-full flex gap-2 flex-col-reverse md:flex-row h-auto">
+      <div className="mt-10 w-full h-auto">
         <Review
           product_handle={numericId}
           filteredReviews={filteredReviews}
@@ -626,13 +633,6 @@ export const ProductDetails = () => {
           averageRating={averageRating}
           ratingCount={ratingCount}
         />
-        <div className=" w-full">
-          <ProductDescription
-            description={description}
-            descriptionHtml={descriptionHtml}
-            metafields={metafields}
-          />
-        </div>
       </div>
 
       <div className="">
