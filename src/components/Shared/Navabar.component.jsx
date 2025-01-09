@@ -98,7 +98,8 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
           />
         </div>
 
-        <div className="flex items-center gap-4 justify-center">
+        <div className="flex items-center md:gap-2 lg:gap-4 justify-center">
+          <Link className="hidden md:block text-[15px] text-[#030712] font-[600]" to={"https://eyetest-booking-two.vercel.app"}>Eye test</Link>
           <Link className="hidden md:block text-[15px] text-[#030712] font-[600]" to={"/contact"}>Contact</Link>
           <Link to={"/login"}>
             <img src={user} alt="user" />
@@ -190,6 +191,7 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
               {iconMapping[linkobj.icon]}
               <span>{linkobj.name}</span>
             </NavLink>
+            
           ))}
         </div>
 

@@ -7,16 +7,25 @@ import {
 } from "./store/products";
 import { router } from "./routes/Router";
 import { fetchCart } from "./store/cart";
-import { fetchReviews } from "./store/review";
+// import { fetchReviews } from "./store/review";
 import { Loading } from "./components/loading/Loading";
 
 import useShopifyStore from "./store/useShopifyStore";
 import { fetchOrders } from "./store/orders";
 import PopupModal from "./components/testPopup/EyeTest";
+import { useDispatch } from 'react-redux';
+import { fetchReviews } from "./redux/slices/reviewsSlice";
+
 const App = () => {
   const setLoading = useShopifyStore((state) => state.setLoading);
   const loading = useShopifyStore((state) => state.loading);
   const [showPopup, setShowPopup] = useState(false);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchReviews());
+  }, [dispatch]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -25,7 +34,7 @@ const App = () => {
         const products = await fetchAllProducts();
         setLoading(false);
         const cart = await fetchCart();
-        const reviews = await fetchReviews();
+        // const reviews = await fetchReviews();
         const orders = await fetchOrders();
         const fetchedCart = await fetchCart();
         const fetchedCollections = await fetchCollectionsWithProducts();

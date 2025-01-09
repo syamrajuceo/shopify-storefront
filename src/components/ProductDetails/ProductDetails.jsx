@@ -17,16 +17,22 @@ import useShopifyStore from "../../store/useShopifyStore";
 import { useEffect, useRef, useState } from "react";
 import { addToCart } from "../../store/cart";
 import toast from "react-hot-toast";
-import { addReview, fetchReviews } from "../../store/review";
+// import { addReview, fetchReviews } from "../../store/review";
 import { ProductCarousel2 } from "../home/ProductCarousel2";
 import CircularProgress from "@mui/material/CircularProgress";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import { fetchProductByHandle } from "../../store/products";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addReview,
+  deleteReview,
+  fetchReviews,
+  updateReview,
+} from "../../redux/slices/reviewsSlice";
 
 const accessToken = localStorage.getItem("accessToken");
 export const ProductDetails = () => {
-  const { reviews } = useShopifyStore.getState();
-  const [reviewsData, setReviewData] = useState(reviews);
+  // const { reviews } = useShopifyStore.getState();
   const [product, setProduct] = useState(null);
   // const products = useShopifyStore((state) => state.products);
   const { handle } = useParams();
@@ -35,17 +41,7 @@ export const ProductDetails = () => {
     content: null,
   });
   const [subImgs, setSubImgs] = useState([]);
-  const [ratingCount, setRatingCount] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [filteredReviews, setFilteredReviews] = useState(0);
-  const [averageRating, setAverageRating] = useState(0);
-  const [ratingDistribution, setRatingDistribution] = useState({
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-  });
   const [loading, setLoading] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [selectedVariant, setSelectedVariant] = useState(null);
@@ -53,7 +49,6 @@ export const ProductDetails = () => {
   const videoRef = useRef(null); // Ref for video element
   const [isPlaying, setIsPlaying] = useState(false); // State for play/pause
   const [isMuted, setIsMuted] = useState(false); // State for mute/unmute
-
   const {
     title = "",
     descriptionHtml = "",
@@ -110,64 +105,64 @@ export const ProductDetails = () => {
     }
   };
 
-  const filterReviewsByProductId = (reviews, productId) => {
-    if (!reviews || reviews.length === 0) {
-      console.error("Reviews array is empty or undefined!");
-      return [];
-    }
-    return reviews.filter(
-      (review) => String(review.product_external_id) === String(productId)
-    );
-  };
+  // const filterReviewsByProductId = (reviews, productId) => {
+  //   if (!reviews || reviews.length === 0) {
+  //     console.error("Reviews array is empty or undefined!");
+  //     return [];
+  //   }
+  //   return reviews.filter(
+  //     (review) => String(review.product_external_id) === String(productId)
+  //   );
+  // };
 
-  const calculateReviewStats = (filteredReviews) => {
-    setRatingCount(filteredReviews.length);
-    if (filteredReviews.length === 0) {
-      setAverageRating(0);
-      setRatingDistribution({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
-      return;
-    }
+  // const calculateReviewStats = (filteredReviews) => {
+  //   setRatingCount(filteredReviews.length);
+  //   if (filteredReviews.length === 0) {
+  //     setAverageRating(0);
+  //     setRatingDistribution({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
+  //     return;
+  //   }
 
-    // Calculate average rating
-    const totalRating = filteredReviews.reduce(
-      (sum, review) => sum + review.rating,
-      0
-    );
-    const average = totalRating / filteredReviews.length;
+  //   // Calculate average rating
+  //   const totalRating = filteredReviews.reduce(
+  //     (sum, review) => sum + review.rating,
+  //     0
+  //   );
+  //   const average = totalRating / filteredReviews.length;
 
-    // Calculate distribution of ratings
-    const distribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-    filteredReviews.forEach((review) => {
-      distribution[review.rating] = (distribution[review.rating] || 0) + 1;
-    });
+  //   // Calculate distribution of ratings
+  //   const distribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+  //   filteredReviews.forEach((review) => {
+  //     distribution[review.rating] = (distribution[review.rating] || 0) + 1;
+  //   });
 
-    setAverageRating(Number(average.toFixed(1)));
-    setRatingDistribution(distribution);
-  };
+  //   setAverageRating(Number(average.toFixed(1)));
+  //   setRatingDistribution(distribution);
+  // };
 
   const handleQty = (qty) => {
     setQuantity(qty);
   };
 
-  const handleAddReview = async (reviews) => {
-    try {
-      const res = await addReview(reviews);
-      console.log("Got response :", res);
-      if (res.status === 201) {
-        toast.success("Review submitted successfully!");
-        fetchData();
-        setReviewData((prevData) => [...prevData, reviews]);
-      }
-      window.location.reload();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleAddReview = async (reviews) => {
+  //   try {
+  //     const res = await addReview(reviews);
+  //     console.log("Got response :", res);
+  //     if (res.status === 201) {
+  //       toast.success("Review submitted successfully!");
+  //       fetchData();
+  //       setReviewData((prevData) => [...prevData, reviews]);
+  //     }
+  //     window.location.reload();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const HandleFetchReview = async () => {
-    const fetchedRev = await fetchReviews();
-    setReviewData(fetchedRev);
-  };
+  // const HandleFetchReview = async () => {
+  //   const fetchedRev = await fetchReviews();
+  //   setReviewData(fetchedRev);
+  // };
 
   const fetchData = async () => {
     try {
@@ -192,13 +187,13 @@ export const ProductDetails = () => {
       const videoItems =
         productData.media?.filter((media) => media.type === "video") || [];
       setVideos(videoItems);
-      HandleFetchReview();
-      const filteredReviews = await filterReviewsByProductId(
-        reviewsData,
-        numericId
-      );
-      calculateReviewStats(filteredReviews);
-      setFilteredReviews(filteredReviews);
+      // HandleFetchReview();
+      // const filteredReviews = await filterReviewsByProductId(
+      //   reviewsData,
+      //   numericId
+      // );
+      // calculateReviewStats(filteredReviews);
+      // setFilteredReviews(filteredReviews);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -208,9 +203,9 @@ export const ProductDetails = () => {
     fetchData();
   }, [handle, numericId]);
 
-  useEffect(() => {
-    HandleFetchReview();
-  }, []);
+  // useEffect(() => {
+  //   HandleFetchReview();
+  // }, []);
 
   useEffect(() => {
     // Find the matching variant based on selected options
@@ -235,28 +230,107 @@ export const ProductDetails = () => {
     }));
   };
 
-  // Play/Pause Handler
-  const togglePlayPause = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
+  // --------------------- review --------------------
+
+  const dispatch = useDispatch();
+  const { reviews, error } = useSelector((state) => state.reviews);
+
+  // Local state for derived data
+  const [filteredReviews, setFilteredReviews] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
+  const [ratingDistribution, setRatingDistribution] = useState({
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+  });
+  const [ratingCount, setRatingCount] = useState(0);
+
+  // Fetch reviews on component mount
+  useEffect(() => {
+    dispatch(fetchReviews());
+  }, [dispatch]);
+
+  // Filter reviews for the specific product whenever reviews or product ID changes
+  useEffect(() => {
+    if (reviews) {
+      const productReviews = filterReviewsByProductId(reviews, numericId);
+      setFilteredReviews(productReviews);
+      calculateReviewStats(productReviews);
+    }
+  }, [reviews, numericId]);
+
+  // Filter reviews for a specific product
+  const filterReviewsByProductId = (reviews, productId) => {
+    if (!reviews || reviews.length === 0) {
+      console.error("Reviews array is empty or undefined!");
+      return [];
+    }
+    return reviews.filter(
+      (review) => String(review.product_external_id) === String(productId)
+    );
+  };
+
+  const calculateReviewStats = (filteredReviews) => {
+  setRatingCount(filteredReviews.length);
+
+  if (filteredReviews.length === 0) {
+    setAverageRating(0);
+    setRatingDistribution({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
+    return;
+  }
+
+  // Initialize distribution
+  const distribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+  // Calculate total rating and populate distribution
+  const totalRating = filteredReviews.reduce((sum, review) => {
+    const { rating } = review;
+
+    // Ensure the rating is within valid range
+    if (rating >= 1 && rating <= 5) {
+      distribution[rating] = (distribution[rating] || 0) + 1;
+      return sum + rating;
+    } else {
+      console.warn(`Invalid rating value: ${rating}`);
+      return sum;
+    }
+  }, 0);
+
+  // Calculate the average rating
+  const average = totalRating / filteredReviews.length;
+
+  setAverageRating(Number(average.toFixed(1)));
+  setRatingDistribution(distribution);
+};
+
+  // Handle adding a review
+  const handleAddReview = async (reviewData) => {
+    try {
+      await dispatch(addReview(reviewData)).unwrap(); // Ensure the action completes successfully
+      dispatch(fetchReviews()); // Re-fetch reviews after successfully adding a new one
+    } catch (error) {
+      console.error("Error adding review:", error);
     }
   };
 
-  // Mute/Unmute Handler
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
+  // Handle deleting a review
+  const handleDeleteReview = (reviewId) => {
+    dispatch(deleteReview(reviewId)).then(() => {
+      dispatch(fetchReviews()); // Re-fetch reviews after successfully deleting a review
+    });
   };
 
-  console.log("product : ", product);
-  console.log("selectedVariant : ", selectedVariant);
+  // Handle updating a review
+  const handleUpdateReview = (reviewId, updatedData) => {
+    dispatch(updateReview({ reviewId, updatedData })).then(() => {
+      dispatch(fetchReviews()); // Re-fetch reviews after successfully updating a review
+    });
+  };
+
+  console.log("filteredReviews : ", filteredReviews);
+  // console.log("reviews : ", reviews);
 
   return (
     <div className="px-4   md:mb-[30px]">
@@ -297,27 +371,27 @@ export const ProductDetails = () => {
       </div>
       <div className="flex flex-col md:flex-row gap-10 mt-4 h-auto w-full">
         {/* Main image and sub-images section */}
-          <div className="relative md:sticky md:top-4 flex flex-col items-center p-3 h-full w-full md:w-[50%]">
-            {/* Main Display Section */}
-            {mainContent.type === "image" ? (
-              <img
-                src={mainContent.content}
-                alt="Product"
-                className="h-[300px] w-[250px] rounded-md object-contain"
-              />
-            ) : (
-              <div className="relative">
-                <video ref={videoRef} className="h-[300px] w-auto" controls>
-                  {mainContent.content?.sources?.map((source, index) => (
-                    <source
-                      key={index}
-                      src={source.url}
-                      type={`video/${source.format}`}
-                    />
-                  ))}
-                  Your browser does not support the video tag.
-                </video>
-                {/* <div className="absolute bottom-2 right-2 flex gap-2">
+        <div className="relative md:sticky md:top-10 flex flex-col items-center p-3 h-full w-full md:w-[50%]">
+          {/* Main Display Section */}
+          {mainContent.type === "image" ? (
+            <img
+              src={mainContent.content}
+              alt="Product"
+              className="h-[400px] w-auto rounded-md object-contain"
+            />
+          ) : (
+            <div className="relative">
+              <video ref={videoRef} className="h-[300px] w-auto" controls>
+                {mainContent.content?.sources?.map((source, index) => (
+                  <source
+                    key={index}
+                    src={source.url}
+                    type={`video/${source.format}`}
+                  />
+                ))}
+                Your browser does not support the video tag.
+              </video>
+              {/* <div className="absolute bottom-2 right-2 flex gap-2">
                 <button
                   onClick={togglePlayPause}
                   className="bg-black/50 p-2 rounded-full text-white hover:bg-black/70"
@@ -335,98 +409,98 @@ export const ProductDetails = () => {
                   )}
                 </button>
               </div> */}
-              </div>
-            )}
-            {/* Sub-images Container (displayed in a row below the main image) */}
-            <div className="flex flex-row gap-2 mt-4 overflow-x-auto overflow-y-hidden no-scrollbar px-4 p-y2">
-              {/* Sub-images */}
-              {subImgs.map((img, index) => (
-                <img
-                  key={index}
-                  src={img}
-                  alt={`Sub Image ${index + 1}`}
-                  className="w-20 h-24 cursor-pointer rounded-md border object-contain"
-                  onMouseOver={() =>
-                    setMainContent({ type: "image", content: img })
-                  }
-                />
-              ))}
-              {/* Videos */}
-              {videos.map((video) => (
-                <div
-                  key={video.id}
-                  className="w-20 h-24 cursor-pointer rounded-md border object-contain overflow-hidden"
-                >
-                  <video
-                    className="w-full h-full object-contain rounded-md"
-                    onMouseOver={() =>
-                      setMainContent({ type: "video", content: video })
-                    }
-                  >
-                    {video.sources.map((source, index) => (
-                      <source
-                        key={index}
-                        src={source.url}
-                        type={`video/${source.format}`}
-                      />
-                    ))}
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              ))}
             </div>
-            {/* Quantity and Add to Cart Section */}
-            <div className="mt-2 h-[50px] w-full hidden md:flex justify-center items-center gap-2">
-              <div className="flex w-[40%] justify-around items-center gap-4 bg-gray-200 py-2 px-4 rounded-md cursor-pointer">
-                <p
-                  onClick={() => {
-                    if (quantity > 1) handleQty(quantity - 1);
-                  }}
-                  className={`${
-                    quantity === 1
-                      ? "text-gray-400 cursor-not-allowed"
-                      : "cursor-pointer"
-                  }`}
+          )}
+          {/* Sub-images Container (displayed in a row below the main image) */}
+          <div className="flex flex-row gap-2 mt-4 overflow-x-auto overflow-y-hidden no-scrollbar px-4 p-y2">
+            {/* Sub-images */}
+            {subImgs.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`Sub Image ${index + 1}`}
+                className="w-20 h-24 cursor-pointer rounded-md border object-contain"
+                onMouseOver={() =>
+                  setMainContent({ type: "image", content: img })
+                }
+              />
+            ))}
+            {/* Videos */}
+            {videos.map((video) => (
+              <div
+                key={video.id}
+                className="w-20 h-24 cursor-pointer rounded-md border object-contain overflow-hidden"
+              >
+                <video
+                  className="w-full h-full object-contain rounded-md"
+                  onMouseOver={() =>
+                    setMainContent({ type: "video", content: video })
+                  }
                 >
-                  -
-                </p>
-
-                <p className="text-lg font-bold">{quantity}</p>
-
-                <p
-                  onClick={() => {
-                    if (quantity < qtyAvailable) handleQty(quantity + 1); // Only increase if available stock allows
-                  }}
-                  className={`${
-                    quantity >= qtyAvailable
-                      ? "text-gray-400 cursor-not-allowed"
-                      : "cursor-pointer"
-                  }`}
-                >
-                  +
-                </p>
+                  {video.sources.map((source, index) => (
+                    <source
+                      key={index}
+                      src={source.url}
+                      type={`video/${source.format}`}
+                    />
+                  ))}
+                  Your browser does not support the video tag.
+                </video>
               </div>
+            ))}
+          </div>
+          {/* Quantity and Add to Cart Section */}
+          <div className="mt-2 h-[50px] w-full hidden md:flex justify-center items-center gap-2">
+            <div className="flex w-[40%] justify-around items-center gap-4 bg-gray-200 py-2 px-4 rounded-md cursor-pointer">
+              <p
+                onClick={() => {
+                  if (quantity > 1) handleQty(quantity - 1);
+                }}
+                className={`${
+                  quantity === 1
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
+              >
+                -
+              </p>
 
-              <div className="w-full">
-                <button
-                  type="button"
-                  className="w-full bg-slate-950 py-2.5 px-4 hover:bg-slate-800 text-white text-sm font-semibold rounded-md disabled:opacity-60 flex justify-center items-center"
-                  onClick={() => handleAddToCart()}
-                  disabled={qtyAvailable <= 0}
-                >
-                  {loading ? (
-                    <CircularProgress size="20px" />
-                  ) : (
-                    <div className="flex items-center gap-[5px]">
-                      <ShoppingBagOutlinedIcon />
-                      Add To Cart
-                    </div>
-                  )}
-                </button>
-              </div>
+              <p className="text-lg font-bold">{quantity}</p>
+
+              <p
+                onClick={() => {
+                  if (quantity < qtyAvailable) handleQty(quantity + 1); // Only increase if available stock allows
+                }}
+                className={`${
+                  quantity >= qtyAvailable
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
+              >
+                +
+              </p>
+            </div>
+
+            <div className="w-full">
+              <button
+                type="button"
+                className="w-full bg-slate-950 py-2.5 px-4 hover:bg-slate-800 text-white text-sm font-semibold rounded-md disabled:opacity-60 flex justify-center items-center"
+                onClick={() => handleAddToCart()}
+                disabled={qtyAvailable <= 0}
+              >
+                {loading ? (
+                  <CircularProgress size="20px" />
+                ) : (
+                  <div className="flex items-center gap-[5px]">
+                    <ShoppingBagOutlinedIcon />
+                    Add To Cart
+                  </div>
+                )}
+              </button>
             </div>
           </div>
-        
+        </div>
+
         {/* Product Details Section */}
         <div className="ml-2 w-full md:w-[50%] h-auto">
           <div className="hidden md:block">
@@ -497,7 +571,7 @@ export const ProductDetails = () => {
                 <div
                   style={{
                     display: "flex",
-                    flexWrap : "wrap",
+                    flexWrap: "wrap",
                     gap: "10px",
                     alignItems: "center",
                     paddingLeft: "5px",
@@ -614,10 +688,17 @@ export const ProductDetails = () => {
               </p>
             </div>
           </div>
+          <div className="w-full">
+            <ProductDescription
+              description={description}
+              descriptionHtml={descriptionHtml}
+              metafields={metafields}
+            />
+          </div>
         </div>
       </div>
 
-      <div className="mt-10 w-full flex gap-2 flex-col-reverse md:flex-row h-auto">
+      <div className="mt-10 w-full h-auto">
         <Review
           product_handle={numericId}
           filteredReviews={filteredReviews}
@@ -626,13 +707,6 @@ export const ProductDetails = () => {
           averageRating={averageRating}
           ratingCount={ratingCount}
         />
-        <div className=" w-full">
-          <ProductDescription
-            description={description}
-            descriptionHtml={descriptionHtml}
-            metafields={metafields}
-          />
-        </div>
       </div>
 
       <div className="">
