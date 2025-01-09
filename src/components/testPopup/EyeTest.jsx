@@ -31,7 +31,7 @@ const PopupModal = ({ closeModal }) => {
         {/* Book Now Button */}
         <div className="mt-6 flex justify-center">
           <a
-            href="https://eyetest-booking-two.vercel.app/"
+            href="https://eyestorebooking.netlify.app/"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600"
