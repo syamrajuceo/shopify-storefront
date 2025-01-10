@@ -1,5 +1,5 @@
 import React from "react";
-import CloseIcon from '@mui/icons-material/Close'; // Import MUI Close Icon
+import CloseIcon from '@mui/icons-material/Close';
 
 const PopupModal = ({ closeModal }) => {
   return (

@@ -142,7 +142,10 @@ export const Review = ({
                             {moment(review.created_at).fromNow()}
                           </p>
                         </div>
-                        <p className="text-gray-700 text-sm font-[600] mt-2">
+                        <p className="text-gray-700 text-md font-[600] mt-2 capitalize">
+                          {review.title}
+                        </p>
+                        <p className="text-gray-500 text-sm font-[600] mt-2 capitalize">
                           {review.body}
                         </p>
                       </div>
