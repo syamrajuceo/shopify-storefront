@@ -77,10 +77,6 @@ export const ProductCard = ({ product = {}, home = false }) => {
       if (home) {
         return navigate(`/product/${handle}`)
       }
-      // if (accessToken === null || accessToken === undefined) {
-      //   return navigate("/login")
-      // }
-
       setLoading(true);
       const quantity = 1;
       const cart = await addToCart(variantId, quantity, user.email);

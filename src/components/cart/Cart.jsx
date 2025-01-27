@@ -4,17 +4,20 @@ import tabbyIcon from "../../assets/image 2.png";
 import cartIcon from "../../assets/Vector (1).png";
 // import { shopifyClient } from "../../config/shopifyClient";
 import { deleteCart, fetchCart, updateCart } from "../../store/cart";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CartCard } from "./CartCard";
 import useShopifyStore from "../../store/useShopifyStore";
 // import { Discount } from "@mui/icons-material";
 import { CartPageSkeleton } from "../skeleton/Cart";
 // import SimilarProductsCarousel from "../carousel/Carousel";
 import { ProductCarousel2 } from "../home/ProductCarousel2";
+import { Category } from "@mui/icons-material";
 
 const accessToken = localStorage.getItem("accessToken");
+const user = localStorage.getItem("user");
 
 export const Cart = () => {
+  const Navigate = useNavigate();
   const { cart } = useShopifyStore.getState();
   const [cartData, setCartData] = useState(cart);
   const [error, setError] = useState(null);
@@ -29,8 +32,7 @@ export const Cart = () => {
   const loading = useShopifyStore((state) => state.loading);
   const userObject = localStorage.getItem("user");
   const user = JSON.parse(userObject);
-
-  const Products = useShopifyStore((state) => state.products);
+  const [categories, setCategories] = useState([]);
 
   const loadData = async () => {
     setLoading(true);
@@ -93,57 +95,7 @@ export const Cart = () => {
   useEffect(() => {
     loadData();
   }, []);
-  // Apply discount code
-  // const handleApplyDiscountCode = async () => {
-  //   try {
-  //     const query = `
-  //       mutation checkoutDiscountCodeApplyV2($checkoutId: ID!, $discountCode: String!) {
-  //         checkoutDiscountCodeApplyV2(checkoutId: $checkoutId, discountCode: $discountCode) {
-  //           checkout {
-  //             discountApplications(first: 10) {
-  //               edges {
-  //                 node {
-  //                   allocationMethod
-  //                   targetSelection
-  //                   targetType
-  //                 }
-  //               }
-  //             }
-  //             checkoutUserErrors {
-  //               message
-  //               code
-  //               field
-  //             }
-  //           }
-  //         }
-  //       }
-  //     `;
 
-  //     const response = await shopifyClient.post("", {
-  //       query,
-  //       variables: {
-  //         checkoutId: cartId,
-  //         discountCode: discountCode,
-  //       },
-  //     });
-
-  //     console.log("GraphQL Response:", response.data);
-
-  //     if (
-  //       response.data?.checkoutDiscountCodeApplyV2?.checkoutUserErrors?.length >
-  //       0
-  //     ) {
-  //       console.error(
-  //         "Error applying discount:",
-  //         response.data.checkoutDiscountCodeApplyV2.checkoutUserErrors
-  //       );
-  //     } else {
-  //       console.log("Discount applied successfully:", response.data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error applying discount code:", error.message);
-  //   }
-  // };
   const handleQuantityChange = async (newQuantity, id) => {
     if (newQuantity < 1) return;
     try {
@@ -167,26 +119,37 @@ export const Cart = () => {
 
   const handleCheckoutButtonClick = async () => {
     try {
-      const checkoutUrl = localStorage.getItem("checkoutUrl");
+      // Check authentication
+      if (!accessToken || !user) {
+        // Save the current page URL to localStorage
+        localStorage.setItem("redirectAfterLogin", window.location.pathname);
+        Navigate("/login");
+        return;
+      }
 
+      // Get checkout URL
+      const checkoutUrl = localStorage.getItem("checkoutUrl");
       if (!checkoutUrl) {
         console.error("Checkout URL is missing.");
         return;
       }
+      // Redirect to checkout page
       window.location.href = checkoutUrl;
-
-      // await deleteCart();
-      // Redirect to a thank-you page
-      // window.location.href = `/order`;
-
-      // Cleanup local storage
-      localStorage.removeItem("cartId");
-      localStorage.removeItem("checkoutUrl");
+      // Cleanup local storage after successful redirection
+      // localStorage.removeItem("cartId");
+      // localStorage.removeItem("checkoutUrl");
     } catch (error) {
       console.error("Error during checkout:", error.message);
     }
   };
 
+
+  useEffect(() => {
+    const fetchedCategories = cartData?.lines?.edges?.map(({ node }) => node.merchandise.product.productType);
+    setCategories([...new Set(fetchedCategories)]);
+  }, [cartData]);
+
+  console.log("fetchedCategories : ", categories)
   if (loading) {
     return <CartPageSkeleton />;
   }
@@ -194,36 +157,9 @@ export const Cart = () => {
   if (error) {
     return <div>Error: {error}</div>;
   }
-
-  // if (!accessToken) {
-  //   return (
-  //     <div className="h-[30rem] flex justify-center items-center">
-  //       <div className="flex flex-col gap-2 justify-center items-center ">
-  //         <div className="px-4 py-5 rounded-[50%] bg-[#F6F6F6] flex justify-center items-center">
-  //           <div className="w-[110px] h-[100px] px-4 py-5 flex justify-center items-center rounded-[50%] bg-[#EFF0F3]">
-  //             <img src={cartIcon} alt="" className="h-full w-full" />
-  //           </div>
-  //         </div>
-  //         <p className="text-[24px] font-medium text-[#535353]">
-  //           Your Cart is Not Available
-  //         </p>
-  //         <p className="text-[16px] font-normal text-[#787878]">
-  //           Please
-  //           <Link to="/login" className="text-[18px] font-bold underline">
-  //             Login
-  //           </Link>
-  //           or
-  //           <Link to="/register" className="text-[18px] font-bold underline">
-  //             Create New Account
-  //           </Link>
-  //         </p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
   return (
     <div>
-      <div className="py-8 px-4 md:py-16 md:px-20 bg-white mb-18">
+      <div className="py-8 px-4 md:py-16 md:px-10 bg-white mb-18">
         {cartData?.lines?.edges?.length > 0 ? (
           <div className="h-auto lg:max-h-[33rem] flex flex-col lg:flex-row gap-4">
             {/* ------------------Cart Items------------------ */}
@@ -243,32 +179,6 @@ export const Cart = () => {
               <p className="text-[16px] text-[#535353] font-semiblod">
                 Order Summary
               </p>
-
-              {/* ------------------Coupon Code------------------ */}
-              {/* <div>
-                <div className="mt-3 flex items-center w-full h-[50px] border-2 border-[#dddddd] bg-white p-0 rounded-md overflow-hidden">
-                  <input
-                    type="text"
-                    placeholder="Coupon Code"
-                    className="w-full h-full py-1 px-2 outline-none border-none bg-transparent"
-                    value={discountCode}
-                    onChange={(e) => setDiscountCode(e.target.value)}
-                  />
-                  <button
-                    onClick={handleApplyDiscountCode}
-                    className="w-[103px] h-full bg-[#545454] text-[16px] font-semibold text-white"
-                  >
-                    Apply
-                  </button>
-                </div>
-                <div className="flex items-center gap-2 mt-2 bg-[#5BAF6729] border-2 border-[#00980053] py-1 px-3 rounded-md">
-                  <img src={couponIcon} alt="" />
-                  <p className="text-[#196F35] text-[14px] font-normal">
-                    Coupon Applied: AKG0101
-                  </p>
-                </div>
-              </div> */}
-
               {/* ------------------Summary------------------ */}
               <div className="mt-6 text-[#5A5A5A]">
                 <div className="flex justify-between items-center">
@@ -279,12 +189,6 @@ export const Cart = () => {
                     {currency} {Number(subTotal).toFixed(2)}
                   </p>
                 </div>
-                {/* <div className="flex justify-between items-center mt-1">
-                  <p className="text-[18px] font-normal">Coupon</p>
-                  <p className="text-[18px] font-semibold text-[#228944]">
-                    - {currency} 00.00
-                  </p>
-                </div> */}
                 <div className="flex justify-between items-center mt-1">
                   <p className="text-[18px] font-normal">Shipping Fee</p>
                   <p className="text-[18px] font-semibold text-[#228944]">
@@ -341,30 +245,6 @@ export const Cart = () => {
 
             {/* ------------------Cart Summary for mobile------------------ */}
             <div className="w-full block lg:hidden bg-white">
-              {/* ------------------Coupon Code------------------ */}
-              {/* <div>
-                <div className="mt-3 flex items-center w-full h-[50px] border-2 border-[#dddddd] bg-white p-0 rounded-md overflow-hidden">
-                  <input
-                    type="text"
-                    placeholder="Coupon Code"
-                    className="w-full h-full py-1 px-2 outline-none border-none bg-transparent"
-                    value={discountCode}
-                    onChange={(e) => setDiscountCode(e.target.value)}
-                  />
-                  <button
-                    onClick={handleApplyDiscountCode}
-                    className="w-[103px] h-full bg-[#545454] text-[16px] font-semibold text-white"
-                  >
-                    Apply
-                  </button>
-                </div>
-                <div className="flex items-center gap-2 mt-2 bg-[#5BAF6729] border-2 border-[#00980053] py-1 px-3 rounded-md">
-                  <img src={couponIcon} alt="" />
-                  <p className="text-[#196F35] text-[14px] font-normal">
-                    Coupon Applied: AKG0101
-                  </p>
-                </div>
-              </div> */}
               {/* ------------------Summary------------------ */}
 
               <div className="mt-6 text-[#5A5A5A] bg-[#F3F4F9] p-4 rounded-xl">
@@ -379,12 +259,7 @@ export const Cart = () => {
                     {currency} {Number(subTotal).toFixed(2)}
                   </p>
                 </div>
-                {/* <div className="flex justify-between items-center mt-1">
-                  <p className="text-[16px] font-normal">Coupon</p>
-                  <p className="text-[16px] font-semibold text-[#228944]">
-                    - {currency} 00.00
-                  </p>
-                </div> */}
+                
                 <div className="flex justify-between items-center mt-1">
                   <p className="text-[16px] font-normal">Shipping Fee</p>
                   <p className="text-[16px] font-semibold text-[#228944]">
@@ -453,21 +328,7 @@ export const Cart = () => {
           </div>
         )}
         {/* ------------------Similar Products------------------ */}
-
-        {/* <h3 className="mt-10 text-[20px] lg:text-[25px] font-normal">
-          Similar Products
-        </h3> */}
-        {/* <div className="mt-2 flex gap-3 overflow-x-auto no-scrollbar">
-          {Products ? (
-            Products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))
-          ) : (
-            <p>Similar Product not Available</p>
-          )}
-        </div> */}
-        <ProductCarousel2 title={"Similar Products"} />
-        {/* <SimilarProductsCarousel/> */}
+        <ProductCarousel2 title={"Similar Products"} category = {categories} />
       </div>
       {/* ------------------Checkout Button for mobile------------------ */}
       {cartData?.lines?.edges?.length > 0 && (
@@ -494,3 +355,106 @@ export const Cart = () => {
     </div>
   );
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // Apply discount code
+  // const handleApplyDiscountCode = async () => {
+  //   try {
+  //     const query = `
+  //       mutation checkoutDiscountCodeApplyV2($checkoutId: ID!, $discountCode: String!) {
+  //         checkoutDiscountCodeApplyV2(checkoutId: $checkoutId, discountCode: $discountCode) {
+  //           checkout {
+  //             discountApplications(first: 10) {
+  //               edges {
+  //                 node {
+  //                   allocationMethod
+  //                   targetSelection
+  //                   targetType
+  //                 }
+  //               }
+  //             }
+  //             checkoutUserErrors {
+  //               message
+  //               code
+  //               field
+  //             }
+  //           }
+  //         }
+  //       }
+  //     `;
+
+  //     const response = await shopifyClient.post("", {
+  //       query,
+  //       variables: {
+  //         checkoutId: cartId,
+  //         discountCode: discountCode,
+  //       },
+  //     });
+
+  //     console.log("GraphQL Response:", response.data);
+
+  //     if (
+  //       response.data?.checkoutDiscountCodeApplyV2?.checkoutUserErrors?.length >
+  //       0
+  //     ) {
+  //       console.error(
+  //         "Error applying discount:",
+  //         response.data.checkoutDiscountCodeApplyV2.checkoutUserErrors
+  //       );
+  //     } else {
+  //       console.log("Discount applied successfully:", response.data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error applying discount code:", error.message);
+  //   }
+  // };
+
+
+
+  {/* <div className="flex justify-between items-center mt-1">
+                  <p className="text-[16px] font-normal">Coupon</p>
+                  <p className="text-[16px] font-semibold text-[#228944]">
+                    - {currency} 00.00
+                  </p>
+                </div> */}
+
+
+
+
+                {/* ------------------Coupon Code------------------ */}
+              {/* <div>
+                <div className="mt-3 flex items-center w-full h-[50px] border-2 border-[#dddddd] bg-white p-0 rounded-md overflow-hidden">
+                  <input
+                    type="text"
+                    placeholder="Coupon Code"
+                    className="w-full h-full py-1 px-2 outline-none border-none bg-transparent"
+                    value={discountCode}
+                    onChange={(e) => setDiscountCode(e.target.value)}
+                  />
+                  <button
+                    onClick={handleApplyDiscountCode}
+                    className="w-[103px] h-full bg-[#545454] text-[16px] font-semibold text-white"
+                  >
+                    Apply
+                  </button>
+                </div>
+                <div className="flex items-center gap-2 mt-2 bg-[#5BAF6729] border-2 border-[#00980053] py-1 px-3 rounded-md">
+                  <img src={couponIcon} alt="" />
+                  <p className="text-[#196F35] text-[14px] font-normal">
+                    Coupon Applied: AKG0101
+                  </p>
+                </div>
+              </div> */}

@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { signIn } from "../../store/auth";
 import { toast } from "react-hot-toast";
 import ScrollToTop from "../../utils/ScrollToTop";
+import { updateCartBuyerIdentity } from "../../store/cart";
 
 export const Login = () => {
   const navigate = useNavigate();
-  ScrollToTop()
+  ScrollToTop();
   const {
     register,
     handleSubmit,
@@ -18,14 +19,40 @@ export const Login = () => {
     console.log("Data:", data);
     try {
       const { email, password } = data;
-      setLoading(true)
+      setLoading(true);
       const customer = await signIn(email, password);
-      setLoading(false)
-      console.log("Customer:", customer)
+      setLoading(false);
+      console.log("Customer:", customer);
 
       if (customer !== undefined) {
         toast.success("Logged in successfully!");
-        navigate("/");
+
+        // Get the redirect URL from localStorage
+        const redirectUrl = localStorage.getItem("redirectAfterLogin");
+
+        if (redirectUrl && redirectUrl === "/cart") {
+          const accessToken = localStorage.getItem("accessToken");
+          const cartId = localStorage.getItem("cartId");
+          const updatedCart = await updateCartBuyerIdentity(
+            cartId,
+            accessToken
+          );
+          if (updatedCart) {
+            localStorage.setItem("checkoutUrl", updatedCart.checkoutUrl);
+          }
+          console.log("Updated Cart:", updatedCart);
+
+          navigate(redirectUrl);
+          localStorage.removeItem("redirectAfterLogin");
+        } else if (redirectUrl) {
+          // Navigate to the stored URL
+          navigate(redirectUrl);
+          localStorage.removeItem("redirectAfterLogin"); // Cleanup
+        } else {
+          // Default navigation
+          navigate("/");
+        }
+
         window.location.reload();
       }
     } catch (error) {
@@ -37,9 +64,8 @@ export const Login = () => {
       ) {
         toast.error("Invalid email or password. Please try again.");
       } else {
-        // Generic login error message
         console.log("error : ", error.message);
-        toast.error(`Invalid email or password. Please try again.`);
+        toast.error("Something went wrong. Please try again.");
       }
     }
   };

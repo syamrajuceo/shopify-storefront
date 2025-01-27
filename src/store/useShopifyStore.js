@@ -5,6 +5,7 @@ const useShopifyStore = create((set) => ({
   checkoutUrl: null,
   userToken: null,
   products: [],
+  // topSellingProducts : [],
   user: null,
   loading: false,
   reviews: [],
@@ -15,6 +16,7 @@ const useShopifyStore = create((set) => ({
   setCart: (cart ,cartId, checkoutUrl) => set({cart, cartId, checkoutUrl }),
   setUserToken: (token) => set({ userToken: token }),
   setProducts: (products) => set({ products }),
+  // setTopSellingProducts: (topSellingProducts) => set({ topSellingProducts }),
   resetCart: () => set({ cartId: null, checkoutUrl: null }),
   
   // Loading state setters
