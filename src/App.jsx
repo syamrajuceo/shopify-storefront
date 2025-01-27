@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { RouterProvider } from "react-router-dom";
+import { HelmetProvider, Helmet } from "react-helmet-async";
 import {
   fetchAllCollections,
   fetchAllProducts,
-  fetchCollectionsWithProducts,
+  fetchCollectionsWithProducts
 } from "./store/products";
 import { router } from "./routes/Router";
 import { fetchCart } from "./store/cart";
-// import { fetchReviews } from "./store/review";
 import { Loading } from "./components/loading/Loading";
 
 import useShopifyStore from "./store/useShopifyStore";
 import { fetchOrders } from "./store/orders";
 import PopupModal from "./components/testPopup/EyeTest";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import { fetchReviews } from "./redux/slices/reviewsSlice";
 
 const App = () => {
@@ -32,9 +32,10 @@ const App = () => {
       try {
         setLoading(true);
         const products = await fetchAllProducts();
+        // const TopSellingProducts = await fetchTopSellingProducts();
+        // console.log("TopSellingProducts.............. :" ,TopSellingProducts)
         setLoading(false);
         const cart = await fetchCart();
-        // const reviews = await fetchReviews();
         const orders = await fetchOrders();
         const fetchedCart = await fetchCart();
         const fetchedCollections = await fetchCollectionsWithProducts();
@@ -58,10 +59,31 @@ const App = () => {
   };
 
   return (
-    <>
+    <HelmetProvider>
+      <Helmet>
+        <title>
+          Shop High-Quality Eyewear | Sunglasses, Eyeglasses & Contact Lenses
+        </title>
+        <meta
+          name="description"
+          content="Explore a wide range of sunglasses, eyeglasses, contact lenses,
+          and prescription glasses. Find stylish eyewear options to match your needs and comfort.
+          Shop now for the best prices!"
+        />
+        <meta
+          name="keywords"
+          content="Sunglasses, Eyeglasses, Contact Lenses, Prescription Glasses,
+           Fashion Eyewear, Stylish Sunglasses, Polarized Glasses, UV Protection,
+           Blue Light Glasses, Vision Accessories, Designer Eyewear,Lightweight Frames,
+           Durable Frames, Eye Care Products, Online Specs Store, Affordable Eyewear,
+           Visible Frames ,eye store, Eye Care Products Dubai,Eye Care Products UAE"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="canonical" href="https://shopify-storefront-7ct7u6sbc-salih-kms-projects.vercel.app" />
+      </Helmet>
       {showPopup && <PopupModal closeModal={closeModal} />}
       <RouterProvider router={router} />
-    </>
+    </HelmetProvider>
   );
 };
 

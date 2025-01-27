@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { signUp } from "../../store/auth";
+import { updateCartBuyerIdentity } from "../../store/cart";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -33,10 +34,27 @@ export const Register = () => {
       const { accessToken } = customer;
 
       localStorage.setItem("accessToken", accessToken);
-
+      const redirectUrl = localStorage.getItem("redirectAfterLogin");
       console.log("Account created successfully:", customer);
-      navigate("/");
-      window.location.reload();
+      if (redirectUrl && redirectUrl === "/cart") {
+        const accessToken = localStorage.getItem("accessToken");
+        const cartId = localStorage.getItem("cartId");
+        const updatedCart = await updateCartBuyerIdentity(cartId, accessToken);
+        if (updatedCart) {
+          localStorage.setItem("checkoutUrl", updatedCart.checkoutUrl);
+        }
+        console.log("Updated Cart:", updatedCart);
+
+        navigate(redirectUrl);
+        localStorage.removeItem("redirectAfterLogin");
+      } else if (redirectUrl) {
+        // Navigate to the stored URL
+        navigate(redirectUrl);
+        localStorage.removeItem("redirectAfterLogin"); // Cleanup
+      } else {
+        // Default navigation
+        navigate("/");
+      }
     } catch (error) {
       console.error("Error during registration:", error.message);
     }

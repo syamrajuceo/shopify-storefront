@@ -1,5 +1,6 @@
+import axios from "axios";
 import { shopifyClient } from "../config/shopifyClient";
-import Metacontroller from "../utils/Metacontroller";
+import { MetaSingleController, Metacontroller } from "../utils/Metacontroller";
 import useShopifyStore from "./useShopifyStore";
 
 export const fetchAllProducts = async () => {
@@ -74,7 +75,7 @@ export const fetchAllProducts = async () => {
 
   try {
     const response = await shopifyClient.post("", { query });
-    // console.log("response: " + JSON.stringify(response));
+    console.log("response: " + JSON.stringify(response));
     const products = response.data.data.products.edges.map((edge) => {
       const product = edge.node;
 
@@ -203,14 +204,39 @@ export const fetchProductByHandle = async (handle) => {
                   }
                 }
                 metafields(identifiers: [
-                  {namespace: "shopify", key: "color-pattern"},
-                  {namespace: "shopify", key: "age-group"},
-                  {namespace: "shopify", key: "eyewear-frame-design"},
-                  {namespace: "shopify", key: "target-gender"},
-                  {namespace: "shopify", key: "fabric"},
-                  {namespace: "shopify", key: "lens_polarization"},
                   {namespace: "custom", key: "express_delivery"},
                   {namespace: "custom", key: "free_delivery"}
+                  {namespace: "custom", key: "warranty_service"}
+                  {namespace: "custom", key: "uv_filter"}
+                  {namespace: "custom", key: "shipping_to"}
+                  {namespace: "custom", key: "lens_effect"}
+                  {namespace: "custom", key: "brand"}
+                  {namespace: "custom", key: "manufacturer"}
+                  {namespace: "custom", key: "upc_barcode_"}
+                  {namespace: "custom", key: "frame_size"}
+                  {namespace: "custom", key: "lens_replacement"}
+                  {namespace: "custom", key: "lens_type"}
+                  {namespace: "custom", key: "pack_size"}
+                  {namespace: "custom", key: "base_curve"}
+                  {namespace: "custom", key: "diameter"}
+                  {namespace: "custom", key: "volume"}
+                  {namespace: "custom", key: "oxygen_permeability"}
+                  {namespace: "custom", key: "water_content"}
+                  {namespace: "custom", key: "power_range"}
+                  {namespace: "custom", key: "usability_after_opening"}
+                  {namespace: "custom", key: "package_contains"}
+                  {namespace: "custom", key: "arabic_name"}
+
+                  {namespace: "shopify", key: "lens-color"},
+                  {namespace: "shopify", key: "temple-color"},
+                  {namespace: "shopify", key: "eyewear-frame-color"},
+                  {namespace: "shopify", key: "eyewear-frame-design"},
+                  {namespace: "shopify", key: "optical-frame-design"},
+                  {namespace: "shopify", key: "eyewear-lens-material"},
+                  {namespace: "shopify", key: "eyewear-frame-material"},
+                  {namespace: "shopify", key: "target-gender"},
+                  {namespace: "shopify", key: "lens_polarization"},
+                  {namespace: "shopify", key: "country-of-origin"}
                 ]) {
                   namespace
                   key
@@ -301,83 +327,15 @@ export const fetchProductByHandle = async (handle) => {
       initialOptions[option.name] = option.values[0];
     });
 
+    const newProduct = await MetaSingleController(productData);
+
     // Return product data, media, and initial options
-    return { productData: productWithMediaAndMetafields, initialOptions };
+    return { productData: newProduct, initialOptions };
   } catch (error) {
     console.error("Error fetching product variants:", error);
     throw error; // Re-throw error to allow handling at the call site
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-// export const fetchProductById = async (variantId) => {
-//   const query = `
-//     query fetchProductByVariant($id: ID!) {
-//       productVariant(id: $id) {
-//         id
-//         priceV2 {
-//           amount
-//           currencyCode
-//         }
-//         sku
-//         product {
-//           id
-//           title
-//           descriptionHtml
-//           productType
-//           images(first: 1) {
-//             edges {
-//               node {
-//                 src
-//                 altText
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   `;
-
-//   try {
-//     const response = await shopifyClient.post('', {
-//       query,
-//       variables: { id: variantId },
-//     });
-
-//     const variant = response.data.data.productVariant;
-
-//     if (!variant) {
-//       console.error('Product variant not found');
-//       throw new Error('No product variant found');
-//     }
-
-//     // Return both the variant and product details
-//     return {
-//       title: variant.product.title,
-//       descriptionHtml: variant.product.descriptionHtml,
-//       productType: variant.product.productType,
-//       price: variant.priceV2.amount,
-//       currency: variant.priceV2.currencyCode,
-//       sku: variant.sku,
-//       image: variant.product.images.edges[0]?.node.src || '',
-//       altText: variant.product.images.edges[0]?.node.altText || '',
-//     };
-//   } catch (error) {
-//     console.error('Error fetching product by variant ID:', error.message);
-//     throw error;
-//   }
-// };
 
 export const fetchVariantsByProductId = async (productId) => {
   const query = `
@@ -562,3 +520,267 @@ export const fetchCollectionsWithMetafields = async () => {
     throw error;
   }
 };
+
+
+
+
+
+// export const fetchTopSellingProducts = async () => {
+//   const query = `
+//     query {
+//       products(first: 100, query: "tag:top-selling") {
+//         edges {
+//           node {
+//             id
+//             title
+//             descriptionHtml
+//             description
+//             vendor
+//             handle
+//             productType
+//             options {
+//               name
+//               values
+//             }
+//             variants(first: 100) {
+//               edges {
+//                 node {
+//                   id
+//                   priceV2 {
+//                     amount
+//                     currencyCode
+//                   }
+//                   compareAtPriceV2 {
+//                     amount
+//                     currencyCode
+//                   }
+//                   availableForSale
+//                   sku
+//                   quantityAvailable
+//                   selectedOptions {
+//                     name
+//                     value
+//                   }
+//                 }
+//               }
+//             }
+//             images(first: 100) {
+//               edges {
+//                 node {
+//                   id
+//                   url
+//                   altText
+//                 }
+//               }
+//             }
+//             metafields(identifiers: [
+//               {namespace: "shopify", key: "color-pattern"},
+//               {namespace: "shopify", key: "age-group"},
+//               {namespace: "shopify", key: "eyewear-frame-design"},
+//               {namespace: "shopify", key: "target-gender"},
+//               {namespace: "shopify", key: "fabric"},
+//               {namespace: "shopify", key: "lens_polarization"},
+//               {namespace: "custom", key: "express_delivery"},
+//               {namespace: "custom", key: "free_delivery"}
+//             ]) {
+//               namespace
+//               key
+//               value
+//               type
+//               description
+//             }
+//           }
+//         }
+//       }
+//     }
+//   `;
+
+//   try {
+//     const response = await shopifyClient.post("", { query });
+//     console.log("response: ......................" + JSON.stringify(response));
+//     const products = response.data.data.products.edges.map((edge) => {
+//       const product = edge.node;
+
+//       // Safely map metafields if they exist and are not null
+//       const metafields = product.metafields
+//         ? product.metafields
+//             .filter((mf) => mf !== null)
+//             .map((mf) => ({
+//               key: mf.key,
+//               value: mf.value,
+//               namespace: mf.namespace,
+//               type: mf.type,
+//               description: mf.description,
+//             }))
+//         : [];
+//       return {
+//         ...product,
+//         metafields,
+//       };
+//     });
+
+//     const newProduct = await Metacontroller(products);
+
+//     // Store products in Zustand
+//     useShopifyStore.getState().setTopSellingProducts(newProduct);
+//     return newProduct;
+//   } catch (error) {
+//     console.error("Error fetching top-selling products:", error.message);
+//     throw error;
+//   }
+// };
+
+
+// const SHOPIFY_API_URL = 'https://4bz4tg-qg.myshopify.com/admin/api/2024-10/graphql.json';
+// const SHOPIFY_ACCESS_TOKEN = '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'; 
+
+
+// Function to fetch top-selling products based on order data
+// export const fetchTopSellingProducts = async () => {
+//   const productQuery = `
+//     query {
+//       products(first: 100) {
+//         edges {
+//           node {
+//             id
+//             title
+//             descriptionHtml
+//             description
+//             vendor
+//             handle
+//             productType
+//             options {
+//               name
+//               values
+//             }
+//             variants(first: 100) {
+//               edges {
+//                 node {
+//                   id
+//                   priceV2 {
+//                     amount
+//                     currencyCode
+//                   }
+//                   compareAtPriceV2 {
+//                     amount
+//                     currencyCode
+//                   }
+//                   availableForSale
+//                   sku
+//                   quantityAvailable
+//                   selectedOptions {
+//                     name
+//                     value
+//                   }
+//                 }
+//               }
+//             }
+//             images(first: 100) {
+//               edges {
+//                 node {
+//                   id
+//                   url
+//                   altText
+//                 }
+//               }
+//             }
+//             metafields(identifiers: [
+//               {namespace: "shopify", key: "color-pattern"},
+//               {namespace: "shopify", key: "age-group"},
+//               {namespace: "shopify", key: "eyewear-frame-design"},
+//               {namespace: "shopify", key: "target-gender"},
+//               {namespace: "shopify", key: "fabric"},
+//               {namespace: "shopify", key: "lens_polarization"},
+//               {namespace: "custom", key: "express_delivery"},
+//               {namespace: "custom", key: "free_delivery"}
+//             ]) {
+//               namespace
+//               key
+//               value
+//               type
+//               description
+//             }
+//           }
+//         }
+//       }
+//     }
+//   `;
+
+//   const orderQuery = `
+//     query {
+//       orders(first: 100, query: "financialStatus:paid") {
+//         edges {
+//           node {
+//             id
+//             lineItems(first: 100) {
+//               edges {
+//                 node {
+//                   title
+//                   quantity
+//                   product {
+//                     id
+//                   }
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
+//   `;
+
+//   try {
+//     // Fetch all products
+//     const productResponse = await shopifyClient.post('', { query: productQuery });
+//     console.log("productResponse : ", productResponse)
+//     const products = productResponse.data.data.products.edges.map((edge) => edge.node);
+
+//     // Fetch all orders
+//     // Fetch all orders from the Admin API (use the appropriate endpoint)
+//     const orderResponse = await axios.post(SHOPIFY_API_URL, {
+//       query: orderQuery,
+//     }, {
+//       headers: {
+//         'X-Shopify-Access-Token': SHOPIFY_ACCESS_TOKEN,
+//         'Content-Type': 'application/json',
+//       },
+//     });
+
+//     const orders = orderResponse.data.data.orders.edges;
+
+//     // Create a map to track sales count for each product
+//     const salesCount = {};
+
+//     // Calculate sales count based on line items in orders
+//     orders.forEach((order) => {
+//       order.node.lineItems.edges.forEach((item) => {
+//         const productId = item.node.product.id;
+//         const quantitySold = item.node.quantity;
+//         salesCount[productId] = (salesCount[productId] || 0) + quantitySold;
+//       });
+//     });
+
+//     // Add sales count to products
+//     const productsWithSalesCount = products.map((product) => {
+//       const sales = salesCount[product.id] || 0;
+//       return {
+//         ...product,
+//         salesCount: sales,
+//       };
+//     });
+
+//     // Sort products by sales count in descending order
+//     const sortedProducts = productsWithSalesCount.sort((a, b) => b.salesCount - a.salesCount);
+
+//     // Select top-selling products (e.g., top 10)
+//     const topSellingProducts = sortedProducts.slice(0, 10);
+
+//     // Store products in Zustand
+//     useShopifyStore.getState().setProducts(topSellingProducts);
+
+//     return topSellingProducts;
+//   } catch (error) {
+//     console.error("Error fetching top-selling products:", error.message);
+//     throw error;
+//   }
+// };

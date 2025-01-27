@@ -13,9 +13,9 @@ export const ProductVariants = () => {
         const { productData, initialOptions } = await fetchProductByHandle(
           handle
         );
-        console.log(
-          "product : " + productData + ", initialOptions : " + initialOptions
-        );
+        // console.log(
+        //   "product : " + productData + ", initialOptions : " + initialOptions
+        // );
         setProduct(productData);
         setSelectedOptions(initialOptions);
       } catch (error) {
@@ -46,7 +46,7 @@ export const ProductVariants = () => {
   };
 
 
-console.log("product :" , product)
+// console.log("product :" , product)
 
   if (!product) return <div>Loading...</div>;
 

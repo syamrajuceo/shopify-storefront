@@ -31,14 +31,14 @@ export const Home = () => {
             <ProductCategories />
             <Banner image={BannerImage1} mobile={bannerMobile} />
           </div>
-          <ProductCarousel />
-          <ProductCarousel Promoimage={Promo2} />
+          <ProductCarousel  category = {"contact lenses"}/>
+          <ProductCarousel Promoimage={Promo2} category = {"sunglasses"}/>
           <div className="flex flex-col gap-5">
             <Banner image={BannerImage2} mobile={bannerMobile2} />
             <Banner image={BannerImage3} mobile={bannerMobile3} />
           </div>
           <Brand />
-          <ProductCarousel2  tittle={'Top Selling Products'}/>
+          <ProductCarousel2  tittle={'Explore Our Products'}/>
         </>
       )}
     </div>

@@ -27,7 +27,8 @@ const OrderStatusBadge = ({ status }) => {
     },
   };
 
-  const currentConfig = statusConfig[status?.toUpperCase()] || statusConfig.UNFULFILLED;
+  const currentConfig =
+    statusConfig[status?.toUpperCase()] || statusConfig.UNFULFILLED;
   const StatusIcon = currentConfig.icon;
 
   return (
@@ -54,7 +55,8 @@ const OrderItem = ({ item }) => (
       <h4 className="font-medium">{item?.title || "Untitled Product"}</h4>
       <p className="text-gray-500">Quantity: {item?.quantity || 0}</p>
       <p className="font-medium">
-        {item?.compareAtPrice?.currencyCode || "$"} {item?.compareAtPrice?.amount || "0.00"}
+        {item?.compareAtPrice?.currencyCode || "$"}{" "}
+        {item?.compareAtPrice?.amount || "0.00"}
       </p>
     </div>
   </div>
@@ -96,17 +98,18 @@ const OrderCard = ({ orderId, date, status, items = [], total, Id }) => (
 const OrderPage = () => {
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(""); // Error state
-
+  const user = localStorage.getItem("user");
   useEffect(() => {
     const fetchOrderData = async () => {
-      try {
-        const fetchedOrders = await fetchOrders();
-        setOrders(fetchedOrders || []);
-      } catch (err) {
-        setError(err.message || "An error occurred while fetching orders.");
-      }
+      // if (user && user.email) {
+        try {
+          const fetchedOrders = await fetchOrders();
+          setOrders(fetchedOrders || []);
+        } catch (err) {
+          setError(err.message || "An error occurred while fetching orders.");
+        }
+      // }
     };
-
     fetchOrderData();
   }, []);
 
