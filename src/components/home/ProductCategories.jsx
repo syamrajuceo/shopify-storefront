@@ -9,17 +9,17 @@ const categories = [
   {
     title: "Sunglasses",
     image: sunglass,
-    path:'/sunglasses'
+    path:'/shop/sunGlasses'
   },
   {
     title: "Eyeglasses",
     image: eyeglass,
-    path:'/eyeglasses'
+    path:'/shop/eyeGlasses'
   },
   {
     title: "Contact lenses",
     image: contactlens,
-    path:'/contactLenses'
+    path:'/shop/contactLenses'
   },
 ];
 

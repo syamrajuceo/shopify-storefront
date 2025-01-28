@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import useShopifyStore from "../store/useShopifyStore";
 import CollectionComponent from "../components/Collection/Collection.component";
+import ScrollToTop from "../utils/ScrollToTop";
 
 function ShopController() {
     const { type = "ALL" } = useParams(); // Default to "ALL" if no type is provided
     const { search } = useLocation(); // Extract query string from the URL
     const [baseProducts, setBaseProducts] = useState([]);
     const products = useShopifyStore((state) => state.products);
-
+    ScrollToTop()
     // Helper to extract query parameters
     const getQueryParams = (key) => {
         const params = new URLSearchParams(search);
@@ -49,11 +50,11 @@ function ShopController() {
                         setBaseProducts(products.filter(product =>
                             product.metafields?.some(metafield =>
                                 metafield.metavalue?.some(obj =>
-                                    obj?.handle?.toLowerCase() === gender.toLowerCase()|| obj?.handle?.toLowerCase() ==="unisex"
+                                    obj?.handle?.toLowerCase() === gender.toLowerCase() || obj?.handle?.toLowerCase() === "unisex"
                                 )
                             )
                         ));
-                        
+
                     } else {
                         setBaseProducts([]); // No gender match
                     }
