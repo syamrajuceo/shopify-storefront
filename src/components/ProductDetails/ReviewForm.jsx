@@ -12,6 +12,7 @@ function ReviewForm({ SetIsShow,product_handle , handleReview}) {
   let reviewer_name = user.firstName + " " + user.lastName
   let reviewer_email = user.email
 
+  console.log("user", reviewer_email)
 
   // Handle form submission
   const onSubmit = async (data) => {
