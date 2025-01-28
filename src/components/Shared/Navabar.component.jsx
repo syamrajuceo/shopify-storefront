@@ -2,7 +2,7 @@ import logo from "../../assets/logo.png";
 import user from "../../assets/user.png";
 import cart from "../../assets/cart.png";
 import { IoIosSearch } from "react-icons/io";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import LinkData from "../../data/Link.data.json";
 import tamara from "../../assets/tamara.png";
 import tabby from "../../assets/tabby.png";
@@ -35,6 +35,7 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
   const navigate = useNavigate();
   const [hidden, setHidden] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const location = useLocation();
 
   const handleKeyDown = (e) => {
 
@@ -148,25 +149,33 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
         <MdClose className={`${hidden ? 'hidden' : ''} md:hidden text-xl absolute top-0 right-4 `} onClick={() => setHidden(true)} />
 
         <FaBars className={`${hidden ? ' ' : 'hidden'} md:hidden text-xl absolute top-0 right-4 `} onClick={() => setHidden(false)} />
+        <div className={`${hidden ? 'hidden ' : ''} md:flex gap-4`}>
+          {LinkData.map((linkobj) => {
 
-        <div className={`${hidden ? 'hidden ' : ''}md:flex gap-4`}>
-          {LinkData.map((linkobj) => (
-            <NavLink
-              to={linkobj.url === "/home" ? "/" : linkobj.url}
-              key={linkobj.name}
-              className={({ isActive }) =>
-                `block p-2 ${isActive
-                  ? "text-blue-500 font-bold border-b-2 border-blue-500"
-                  : "text-gray-700"
-                }`
-              }
-            >
-              {linkobj.name}
-            </NavLink>
-          ))}
+            // Check if the link is gender-specific
+            const isGenderActive =
+              location.pathname === `/${linkobj.url.split('?')[0]}` &&
+              location.search === `?${linkobj.url.split('?')[1]}`;
+
+            // Check if the current path includes 'gender' (for gender-related links)
+            const isGenderRoute = location.pathname.includes('gender');
+
+            return (
+              <NavLink
+                to={linkobj.url === "/home" ? "/" : linkobj.url}
+                key={linkobj.name}
+                end
+                className={({ isActive }) =>
+                  (isActive && !isGenderRoute) || isGenderActive
+                    ? "block p-2 text-blue-500 font-bold border-b-2 border-blue-500"
+                    : "block p-2 text-gray-700"
+                }
+              >
+                {linkobj.name}
+              </NavLink>
+            );
+          })}
         </div>
-
-
 
         {/* EMI Section */}
         <div className="flex items-center gap-2">
@@ -191,7 +200,7 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
               {iconMapping[linkobj.icon]}
               <span>{linkobj.name}</span>
             </NavLink>
-            
+
           ))}
         </div>
 

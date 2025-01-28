@@ -9,12 +9,6 @@ import { ProductListingPage } from "../pages/ProductListingPage";
 import { UserLayout } from "../layout/UserLayout";
 import ProtectedRoute from "../utils/ProtectedRoute";
 import Navlayout from "../layout/Navlayout";
-import SunGlasses from "../pages/SunGlasses";
-import { ContactPage } from "../pages/ContactPage";
-import MenPage from "../pages/MenPage";
-import WoMenPage from "../pages/WoMenPage";
-import EyeGlasses from "../pages/EyeGlasses";
-import ContactLenses from "../pages/ContactLenses";
 import CategoryPage from "../pages/CategoryPage";
 import Offers from "../pages/Offers";
 import SearchPage from "../pages/SearchPage";
@@ -24,6 +18,8 @@ import OrdersPage from "../pages/OrdersPage";
 import OrderSummary from "../components/Order/OrderSummary";
 import ShapePage from "../pages/ShapePage";
 import { ProductVariants } from "../components/ProductDetails/ProductByVarient";
+import ShopController from "../pages/ShopController";
+import { ContactPage } from "../pages/ContactPage";
 
 
 export const router = createBrowserRouter([
@@ -62,29 +58,17 @@ export const router = createBrowserRouter([
       {
         path: "/contact",
         element: <ContactPage />,
-      },
-      {
-        path: "/sunglasses",
-        element:<SunGlasses/>
-      },
-      {
-        path: "/contactLenses",
-        element:<ContactLenses/>
-      },
-      {
-        path: "/eyeglasses",
-        element:<EyeGlasses/>
-      },
-      {
-        path: "/Men",
-        element:<MenPage/>
-      },
-      {
-        path: "/Women",
-        element:<WoMenPage/>
       },{
         path: "/offer",
         element:<Offers/>
+      },
+      {
+        path: "/shop",
+        element:<ShopController/>
+      },
+      {
+        path: "/shop/:type",
+        element:<ShopController/>
       },
       {
         path: "/category",

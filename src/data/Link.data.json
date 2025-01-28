@@ -6,27 +6,32 @@
     },
     {
         "name": "Eyeglasses",
-        "url": "/eyeglasses",
+        "url": "shop/eyeGlasses",
         "active": false
     },
     {
         "name": "Contact Lenses",
-        "url": "/contactLenses",
+        "url": "shop/contactLenses",
         "active": false
     },
     {
         "name": "Sunglasses",
-        "url": "/sunglasses",
+        "url": "shop/sunGlasses",
         "active": false
     },
     {
         "name": "Men",
-        "url": "/men",
+        "url": "shop/gender?query=male",
         "active": false
     },
     {
         "name": "Women",
-        "url": "/women",
+        "url": "shop/gender?query=female",
+        "active": false
+    },
+    {
+        "name": "Unisex",
+        "url": "shop/gender?query=unisex",
         "active": false
     }
 ]

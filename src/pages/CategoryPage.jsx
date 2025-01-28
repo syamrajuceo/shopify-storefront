@@ -17,7 +17,7 @@ const CategoryPage = () => {
       }}
     >
       <RouterLink
-        to="/sunglasses" 
+        to="/shop/sunGlasses" 
         style={{
           width: '100%',
           display: 'flex',
@@ -49,7 +49,7 @@ const CategoryPage = () => {
       </RouterLink>
 
       <RouterLink
-        to="/eyeglasses"
+        to="/shop/eyeGlasses"
         style={{
           width: '100%', 
           display: 'flex',
@@ -81,7 +81,7 @@ const CategoryPage = () => {
       </RouterLink>
 
       <RouterLink
-        to="/contactLenses" 
+        to="/shop/contactLenses" 
         style={{
           width: '100%',
           display: 'flex',

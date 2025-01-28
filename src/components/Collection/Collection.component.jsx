@@ -3,14 +3,12 @@ import FilterBoxComponent from "./FilterBox.component";
 import { IoIosArrowForward } from "react-icons/io";
 import { ProductCard } from "../productCard/ProductCard";
 // import ProductData from "../../data/Product.data.json";
-import { FaFilter, FaSort } from "react-icons/fa6";
+import { FaFilter } from "react-icons/fa6";
 import { BiSortAlt2 } from "react-icons/bi";
-import { GoPlus } from "react-icons/go";
-import { AiOutlineClose } from "react-icons/ai";
-import faqData from "../../data/FAQ.data.json";
 import SortComponent from "./Sort.component";
 import FilterComponent from "./Filter.component";
 import FilterController from "./FilterContoiller";
+import { Link } from "react-router-dom";
 // import useShopifyStore from "../../store/useShopifyStore";
 
 function CollectionComponent({ products = [], type = "Men" }) {
@@ -110,7 +108,16 @@ function CollectionComponent({ products = [], type = "Men" }) {
     // setFilterProduct(filteredProducts);
     // console.log("Filter Options", filterOptions);
   }, [products, filterOptions, priceRange]);
+  useEffect(() => {
+    setFilterOptions({
+      Gender: [],
+      "Product Categories": [],
+      "Frame Color": [],
+      "Filter by Brands": [],
+      "Product Status": []
+    })
 
+  }, [type])
   const genderOptions = [
     "male",
     "female",
@@ -119,7 +126,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
     // "Elderly",
     // "Teenagers",
   ];
-  const categoryOptions = ["Sunglasses", "Eyeglasses", "Contact Lenses"];
+  const categoryOptions = ["sunglasses", "eyeglasses", "contact lenses"];
   const frameColorOptions = ["pink", "black", "gray", "blue"];
   const brandOptions = ["Ray-Ban", "Oakley", "Gucci", "Prada", "Versace"];
   const productStatusOptions = ["Available", "Out of Stock", "New Arrival"];
@@ -185,27 +192,27 @@ function CollectionComponent({ products = [], type = "Men" }) {
             <div className="flex  lg:flex-col xl:flex-row gap-2 mt-3 items-center">
               <div>
                 <h1 className="text-[12px]">Min Price</h1>
-              <input
-                type="number"
-                className="border w-[116.44px] h-[38px] py-1 px-3"
-                min={0}
-                value={temporarypriceRange.min}
-                onChange={(e) => handlePriceChange(e, "min")}
-              />
+                <input
+                  type="number"
+                  className="border w-[116.44px] h-[38px] py-1 px-3"
+                  min={0}
+                  value={temporarypriceRange.min}
+                  onChange={(e) => handlePriceChange(e, "min")}
+                />
               </div>
-             
+
               <span className="text-[14px] text-[#030712]">-</span>
               <div>
-              <h1 className="text-[12px]">Max Price</h1>
-              <input
-                type="number"
-                className="border w-[116.44px] h-[38px]  py-1 px-3"
-                min={1}
-                value={temporarypriceRange.max}
-                onChange={(e) => handlePriceChange(e, "max")}
-              />
+                <h1 className="text-[12px]">Max Price</h1>
+                <input
+                  type="number"
+                  className="border w-[116.44px] h-[38px]  py-1 px-3"
+                  min={1}
+                  value={temporarypriceRange.max}
+                  onChange={(e) => handlePriceChange(e, "max")}
+                />
               </div>
-             
+
             </div>
 
             <div className="flex  mt-3 items-center justify-between">
@@ -219,19 +226,19 @@ function CollectionComponent({ products = [], type = "Men" }) {
           </div>
 
           <div className="p-3">
-            <FilterBoxComponent
+            {type === "" || !["gender"].includes(type) && <FilterBoxComponent
               header="Gender"
               options={genderOptions}
               filterseletedOptions={filterOptions.Gender}
               onFilterChange={handleFilterChange}
               typeProductOption={typeProductOption}
-            />
-            <FilterBoxComponent
+            />}
+            {type === "" || !["contactLenses", "sunGlasses", "eyeGlasses"].includes(type) && <FilterBoxComponent
               header="Product Categories"
               options={categoryOptions}
               filterseletedOptions={filterOptions["Product Categories"]}
               onFilterChange={handleFilterChange}
-            />
+            />}
             <FilterBoxComponent
               header="Frame Color"
               options={frameColorOptions}
@@ -266,15 +273,16 @@ function CollectionComponent({ products = [], type = "Men" }) {
       {/* Main product section */}
       <div className="w-full lg:w-4/5 px-5">
         <div className="flex items-center space-x-2 text-sm text-gray-700 p-4">
-          <span className="hover:text-blue-600 cursor-pointer">Shop</span>
-          <IoIosArrowForward />
-          {/* <span className="hover:text-blue-600 cursor-pointer">Eyewear</span>
-          <IoIosArrowForward /> */}
-          <span className="font-semibold">{type}</span>
+          <Link className="hover:text-blue-600 cursor-pointer" to={"/shop"}>Shop</Link>
+          {type !== "" && (<>
+            <IoIosArrowForward />
+            {/* <span className="hover:text-blue-600 cursor-pointer">Eyewear</span>
+          <IoIosArrowForward />  */}
+            <span className="font-semibold">{type}</span></>)}
         </div>
 
         <div className="bg-white p-3 text-sm text-gray-700">
-        
+
           Showing {pagenatedProduct.length} of {filterProduct.length} results
 
         </div>
@@ -296,8 +304,6 @@ function CollectionComponent({ products = [], type = "Men" }) {
             pagenatedProduct.map((product) =>
               product ? <ProductCard key={product.id} product={product} /> : null
             )
-          ) : type === "ContactLenses" ? (
-            <p>Coming soon</p>
           ) : (
             <p>No product available</p>
           )}
