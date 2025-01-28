@@ -46,6 +46,7 @@ export const ProductDetails = () => {
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [videos, setVideos] = useState([]);
   const videoRef = useRef(null); // Ref for video element
+  const [showAll, setShowAll] = useState(false);
   // const [isPlaying, setIsPlaying] = useState(false); // State for play/pause
   // const [isMuted, setIsMuted] = useState(false); // State for mute/unmute
   const {
@@ -75,17 +76,17 @@ export const ProductDetails = () => {
   const expressDelivery = metafields?.some(
     (field) => field?.key === "express_delivery" && field?.value === "true"
   );
-  
+
   const freeDelivery = metafields?.some(
     (field) => field?.key === "free_delivery" && field?.value === "true"
   );
-  
+
   // Filter out null values from metafields
-  const validMetafields = metafields?.filter(field => field !== null) || [];
-  
+  const validMetafields = metafields?.filter((field) => field !== null) || [];
+
   const brand =
     validMetafields?.find((field) => field?.key === "brand")?.value || "";
-  
+
   const color = validMetafields?.length
     ? validMetafields
         .find(
@@ -96,7 +97,7 @@ export const ProductDetails = () => {
           return acc ? `${acc}, ${val.handle}` : val.handle;
         }, "")
     : "";
-  
+
   const gender = validMetafields?.length
     ? validMetafields
         .find(
@@ -107,7 +108,7 @@ export const ProductDetails = () => {
           return acc ? `${acc}, ${val.handle}` : val.handle;
         }, "")
     : "";
-  
+
   const age = validMetafields?.length
     ? validMetafields
         .find(
@@ -118,7 +119,7 @@ export const ProductDetails = () => {
           return acc ? `${acc}, ${val.handle}` : val.handle;
         }, "")
     : "";
-  
+
   const frameDesign = validMetafields?.length
     ? validMetafields
         .find(
@@ -130,7 +131,7 @@ export const ProductDetails = () => {
           return acc ? `${acc}, ${val.handle}` : val.handle;
         }, "")
     : "";
-  
+
   const countryOfOrigin = validMetafields?.length
     ? validMetafields
         .find(
@@ -142,7 +143,7 @@ export const ProductDetails = () => {
           return acc ? `${acc}, ${val.handle}` : val.handle;
         }, "")
     : "";
-  
+
   // Handle Add to Cart
   const handleAddToCart = async () => {
     try {
@@ -176,7 +177,7 @@ export const ProductDetails = () => {
         setSubImgs(allImages);
       }
       const videoItems =
-        productData.media?.filter((media) => media.type === "video") || [];
+        productData?.media?.filter((media) => media.type === "video") || [];
       setVideos(videoItems);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -190,7 +191,7 @@ export const ProductDetails = () => {
   useEffect(() => {
     // Find the matching variant based on selected options
     if (product) {
-      const matchingVariant = product.variants.edges.find(({ node }) =>
+      const matchingVariant = product?.variants?.edges?.find(({ node }) =>
         node.selectedOptions.every(
           (option) => selectedOptions[option.name] === option.value
         )
@@ -295,22 +296,22 @@ export const ProductDetails = () => {
     }
   };
 
-  // Handle deleting a review
-  const handleDeleteReview = (reviewId) => {
-    dispatch(deleteReview(reviewId)).then(() => {
-      dispatch(fetchReviews()); // Re-fetch reviews after successfully deleting a review
-    });
-  };
+  // // Handle deleting a review
+  // const handleDeleteReview = (reviewId) => {
+  //   dispatch(deleteReview(reviewId)).then(() => {
+  //     dispatch(fetchReviews()); // Re-fetch reviews after successfully deleting a review
+  //   });
+  // };
 
-  // Handle updating a review
-  const handleUpdateReview = (reviewId, updatedData) => {
-    dispatch(updateReview({ reviewId, updatedData })).then(() => {
-      dispatch(fetchReviews()); // Re-fetch reviews after successfully updating a review
-    });
-  };
+  // // Handle updating a review
+  // const handleUpdateReview = (reviewId, updatedData) => {
+  //   dispatch(updateReview({ reviewId, updatedData })).then(() => {
+  //     dispatch(fetchReviews()); // Re-fetch reviews after successfully updating a review
+  //   });
+  // };
 
   function getColorClass(color) {
-    return colorMap[color] || "#939393";
+    return colorMap[color] || "#ffffff0";
   }
 
   return (
@@ -619,80 +620,88 @@ export const ProductDetails = () => {
 
             {/* Render options (e.g., colors, sizes) */}
             <div className="my-2 h-auto">
-              {product?.options?.map((option) => (
-                <div key={option.name}>
-                  <h3 className="my-2">{option.name}</h3>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "10px",
-                      alignItems: "center",
-                      paddingLeft: "5px",
-                      // overflowX: "auto",
-                      maxWidth: "450px",
-                      // height: "40px",
-                      padding: "2px",
-                      // border: "1px solid #000",
-                    }}
-                  >
-                    {option.values.map((value) => {
-                      const isColorOption = option.name
-                        .toLowerCase()
-                        .includes("color");
-                      const isSelected = selectedOptions[option.name] === value;
-                      const newColor = getColorClass(value);
-                      console.log("isColorOption :", isColorOption);
-                      console.log("newColor :", newColor);
-                      return (
-                        <label
-                          key={value}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            width: isColorOption ? "27px" : "auto",
-                            height: isColorOption ? "27px" : "auto",
-                            borderRadius: isColorOption ? "50%" : "4px", // Rounded for color, square for text
-                            background: isColorOption
-                              ? newColor
-                              : "transparent",
-                            border: isSelected
-                              ? "3px solid #ffffff" // Black border for selected option
-                              : "2px solid #969696", // Transparent border for unselected
-                            outline: isSelected
-                              ? "1px solid #2f2f2f" // Black border for selected option
-                              : "1px solid transparent", // Transparent border for unselected
-                            cursor: "pointer",
-                            // padding: isColorOption ? "0" : "5px 10px",
-                            textAlign: "center",
-                            // boxShadow: isSelected
-                            //   ? "0 0 5px rgba(0, 0, 0, 0.5)" // Optional shadow for selected
-                            //   : "none",
-                          }}
-                        >
-                          <input
-                            type="radio"
-                            name={option.name}
-                            value={value}
-                            checked={isSelected}
-                            onChange={() =>
-                              handleOptionChange(option.name, value)
-                            }
-                            style={{ display: "none" }}
-                          />
-                          {!isColorOption && (
-                            <span className="bg-[#E0E0E04D] py-[2px] px-[5px] text-[#3F4646] text-14px] font-semibold">
-                              {value}
-                            </span>
-                          )}
-                        </label>
-                      );
-                    })}
+              {product?.options?.map((option) => {
+                const isColorOption = option.name
+                  .toLowerCase()
+                  .includes("color");
+
+                return (
+                  <div key={option.name}>
+                    <h3 className="my-2">{option.name}</h3>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: "10px",
+                        alignItems: "center",
+                        paddingLeft: "5px",
+                        maxWidth: "450px",
+                        padding: "2px",
+                        overflow: showAll ? "visible" : "hidden", // Control overflow
+                        maxHeight: showAll ? "none" : "50px", // Limit initial height to one line
+                        transition: "max-height 0.3s ease-in-out", // Smooth toggle transition
+                      }}
+                    >
+                      {option.values.map((value) => {
+                        const isSelected =
+                          selectedOptions[option.name] === value;
+                        const newColor = getColorClass(value);
+
+                        return (
+                          <label
+                            key={value}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              width: isColorOption ? "27px" : "auto",
+                              height: isColorOption ? "27px" : "auto",
+                              borderRadius: isColorOption ? "50%" : "4px",
+                              background: isColorOption
+                                ? newColor
+                                : "transparent",
+                              border: isSelected
+                                ? "3px solid #ffffff"
+                                : "2px solid #969696",
+                              outline: isSelected
+                                ? "1px solid #2f2f2f"
+                                : "1px solid transparent",
+                              cursor: "pointer",
+                            }}
+                          >
+                            <input
+                              type="radio"
+                              name={option.name}
+                              value={value}
+                              checked={isSelected}
+                              onChange={() =>
+                                handleOptionChange(option.name, value)
+                              }
+                              style={{ display: "none" }}
+                            />
+                            {!isColorOption && (
+                              <span className="bg-[#E0E0E04D] py-[2px] px-[5px] text-[#3F4646] text-14px font-semibold">
+                                {value}
+                              </span>
+                            )}
+                          </label>
+                        );
+                      })}
+                    </div>
+                    {option.values.length > 10 && (
+                      <button
+                        className="mt-2 text-gray-500 flex items-center gap-1 w-full justify-center border max-w-[450px] bg-[#f9f9f973] rounded "
+                        onClick={() => setShowAll(!showAll)}
+                      >
+                        {showAll ? "Show Less" : "Load More"}
+                        <span>{showAll ? "↑" : "↓"}</span>
+                      </button>
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
+
             <div className="flex justify-start items-center w-auto max-w-[350px] text-gray-600 gap-2">
               {qtyAvailable > 0 && freeDelivery && (
                 <div className="flex justify-between items-center bg-[#EBF1FC] px-2 py-1 rounded-md gap-2">
@@ -767,10 +776,10 @@ export const ProductDetails = () => {
         </div>
 
         <div className="">
-          <ProductList title={"Similar Products"} category = {productType}/>
+          <ProductList title={"Similar Products"} category={productType} />
         </div>
         <div className="">
-          <ProductList title={"Popular Products"} category = {""}/>
+          <ProductList title={"Popular Products"} category={""} />
         </div>
 
         {/* Mobile fixed bottom Add to Cart */}

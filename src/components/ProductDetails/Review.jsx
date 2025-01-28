@@ -37,7 +37,9 @@ export const Review = ({
             <div className="flex-col md:flex-row flex h-full w-full">
               <div className="relative md:sticky h-full md:top-10 w-full md:w-1/2 pr-1 md:pr-10">
                 {/* Overall rating section */}
-                <h1 className="text-[22px] text-gray-800 font-[500]">Reviews</h1>
+                <h1 className="text-[22px] text-gray-800 font-[500]">
+                  Reviews
+                </h1>
                 <div className="flex items-center gap-3 mt-4 ">
                   <Rating
                     value={averageRating.toFixed(1)}
@@ -153,19 +155,20 @@ export const Review = ({
                   ) : (
                     <p>Reviews not available</p>
                   )}
-
-                  <div className="flex items-center justify-center mt-6">
-                    <button
-                      className="rounded px-3 py-1 font-[500] bg-orange-500 text-white"
-                      onClick={() => handleLoadmore(loadmore + 3)}
-                    >
-                      Load more
-                    </button>
-                  </div>
+                  {filteredReviews.length > 3 &&
+                    loadmore < filteredReviews.length && (
+                      <div className="flex items-center justify-center mt-6">
+                        <button
+                          className="rounded px-3 py-1 font-[500] bg-orange-500 text-white"
+                          onClick={() => handleLoadmore(loadmore + 3)}
+                        >
+                          Load more
+                        </button>
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
-            
           </div>
         </div>
       </section>
