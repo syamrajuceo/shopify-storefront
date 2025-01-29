@@ -146,26 +146,39 @@ function CollectionComponent({ products = [], type = "Men" }) {
     });
   };
   const handlePriceChange = (e, type) => {
-    const value = parseInt(e.target.value, 10) || 0; // Get the input value
-    const step = 50; // Define step increment/decrement value
-
-    let adjustedValue = value;
-
-    if (type === "min") {
-      // Ensure min value is adjusted in multiples of 50
-      adjustedValue = value > temporarypriceRange.min ? value + step - (value % step) : value - step - (value % step);
-      adjustedValue = Math.min(adjustedValue, temporarypriceRange.max); // Prevent min from exceeding max
-    } else if (type === "max") {
-      // Ensure max value is adjusted in multiples of 50
-      adjustedValue = value > temporarypriceRange.max ? value + step - (value % step) : value - step - (value % step);
-      adjustedValue = Math.max(adjustedValue, temporarypriceRange.min); // Prevent max from being below min
-    }
-
+    // Update state dynamically while user types
     temporarysetPriceRange((prev) => ({
       ...prev,
-      [type]: adjustedValue,
+      [type]: e.target.value, // Keep live user input
     }));
   };
+  
+  const handleKeyDownPriceChange = (e, type) => {
+    const step = 50; // Define step increment/decrement value
+    let value = parseInt(e.target.value, 10) || 0; // Get the input value
+  
+    if (e.key === "ArrowUp") {
+      value += step-1;
+    } else if (e.key === "ArrowDown") {
+      value = Math.max(value - step+1, 0); // Prevent negative values
+    } else {
+      return; // Exit if it's not an arrow key
+    }
+  
+    // Ensure value is within range
+    if (type === "min") {
+      value = Math.min(value, temporarypriceRange.max); // Prevent min > max
+    } else if (type === "max") {
+      value = Math.max(value, temporarypriceRange.min); // Prevent max < min
+    }
+  
+    // Update the state with the adjusted value
+    temporarysetPriceRange((prev) => ({
+      ...prev,
+      [type]: value,
+    }));
+  };
+  
 
 
   const handleFilterChange = (header, selectedOptions) => {
@@ -198,6 +211,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
                   min={0}
                   value={temporarypriceRange.min}
                   onChange={(e) => handlePriceChange(e, "min")}
+                  onKeyDown={(e) => handleKeyDownPriceChange(e, "min")}
                 />
               </div>
 
@@ -210,6 +224,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
                   min={1}
                   value={temporarypriceRange.max}
                   onChange={(e) => handlePriceChange(e, "max")}
+                  onKeyDown={(e) => handleKeyDownPriceChange(e, "max")}
                 />
               </div>
 
