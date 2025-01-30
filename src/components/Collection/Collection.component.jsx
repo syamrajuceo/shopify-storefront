@@ -7,20 +7,14 @@ import { FaFilter } from "react-icons/fa6";
 import { BiSortAlt2 } from "react-icons/bi";
 import SortComponent from "./Sort.component";
 import FilterComponent from "./Filter.component";
-import FilterController from "./FilterContoiller";
+import FilterController from "./FilterController";
 import { Link } from "react-router-dom";
+import { categoryOptions, ColorDataOptions, EyeDataBrands, filterDataOptions, FilterName, genderDataOptions, productDataStatus } from "../../data/Collection.data";
 // import useShopifyStore from "../../store/useShopifyStore";
 
 function CollectionComponent({ products = [], type = "Men" }) {
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 500 });
   const [temporarypriceRange, temporarysetPriceRange] = useState({ min: 0, max: 500 });
-  const [typeProductOption, SetTypeProductOption] = useState({
-    Gender: [],
-    "Product Categories": [],
-    "Frame Color": [],
-    "Filter by Brands": [],
-    "Product Status": []
-  })
+  const [priceRange, setPriceRange] = useState(temporarypriceRange);
   const [filterProduct, setFilterProduct] = useState(products);
 
   const [pagenatedProduct, setPagenatedProduct] = useState(() => {
@@ -57,34 +51,8 @@ function CollectionComponent({ products = [], type = "Men" }) {
   };
 
 
-  const [filterOptions, setFilterOptions] = useState({
-    Gender: [],
-    "Product Categories": [],
-    "Frame Color": [],
-    "Filter by Brands": [],
-    "Product Status": []
-  });
-  useEffect(() => {
-    if (type === "Men") {
-      // setFilterOptions((prevState) => ({
-      //   ...prevState,
-      //   Gender: prevState.Gender ? [...prevState.Gender, "male"] : ["male"],
-      // }));
-      SetTypeProductOption((prevState) => ({
-        ...prevState,
-        Gender: prevState.Gender ? [...prevState.Gender, "male"] : ["male"],
-      }));
-    }
-    if (type === "Women") {
-      SetTypeProductOption((prevState) => ({
-        ...prevState,
-        Gender: prevState.Gender ? [...prevState.Gender, "female"] : ["female"],
-      }));
-    }
-
-  }, [])
-
-  // const products = useShopifyStore((state) => state.products);
+  const [filterOptions, setFilterOptions] = useState(filterDataOptions);
+  
   useEffect(() => {
     // let filteredProducts = [...products];
 
@@ -109,42 +77,26 @@ function CollectionComponent({ products = [], type = "Men" }) {
     // console.log("Filter Options", filterOptions);
   }, [products, filterOptions, priceRange]);
   useEffect(() => {
-    setFilterOptions({
-      Gender: [],
-      "Product Categories": [],
-      "Frame Color": [],
-      "Filter by Brands": [],
-      "Product Status": []
-    })
-
+    setFilterOptions(filterDataOptions)
   }, [type])
-  const genderOptions = [
-    "male",
-    "female",
-    "unisex",
-    // "Kids",
-    // "Elderly",
-    // "Teenagers",
-  ];
-  const categoryOptions = ["sunglasses", "eyeglasses", "contact lenses"];
-  const frameColorOptions = ["pink", "black", "gray", "blue"];
-  const brandOptions = ["Ray-Ban", "Oakley", "Gucci", "Prada", "Versace"];
-  const productStatusOptions = ["Available", "Out of Stock", "New Arrival"];
+  const genderOptions =genderDataOptions;
+  const frameColorOptions = ColorDataOptions;
+  const brandOptions = EyeDataBrands;
+  const productStatusOptions = productDataStatus;
   const [appliedfilter, SetAppliedFilter] = useState(0);
-  const [isopen, setIsOpen] = useState(false);
-  const [openindexs, setOpenIndexs] = useState([]);
+  // const [isopen, setIsOpen] = useState(false);
   const [selectedfilter, SetSelectedFilter] = useState(null);
-  const toggleAnswer = (index) => {
-    setOpenIndexs((prevOpenIndexs) => {
-      const newOpenIndexs = [...prevOpenIndexs];
-      if (newOpenIndexs.includes(index)) {
-        newOpenIndexs.splice(newOpenIndexs.indexOf(index), 1);
-      } else {
-        newOpenIndexs.push(index);
-      }
-      return newOpenIndexs;
-    });
-  };
+  // const toggleAnswer = (index) => {
+  //   setOpenIndexs((prevOpenIndexs) => {
+  //     const newOpenIndexs = [...prevOpenIndexs];
+  //     if (newOpenIndexs.includes(index)) {
+  //       newOpenIndexs.splice(newOpenIndexs.indexOf(index), 1);
+  //     } else {
+  //       newOpenIndexs.push(index);
+  //     }
+  //     return newOpenIndexs;
+  //   });
+  // };
   const handlePriceChange = (e, type) => {
     // Update state dynamically while user types
     temporarysetPriceRange((prev) => ({
@@ -195,10 +147,12 @@ function CollectionComponent({ products = [], type = "Men" }) {
   return (
     <div className="flex flex-col lg:flex-row relative">
       {/* Sidebar for filters */}
-      <div
+      {/* <div
         className={`bg-[#FFFFFF] lg:block ${isopen ? "block" : "hidden"
           } lg:w-1/5`}
-      >
+      > */}
+      <div
+        className={`bg-[#FFFFFF] lg:block lg:w-1/5 hidden`}>
         <div className="p-3">
           <div className="pl-3">
             <h1 className="font-semibold text-xl">Price</h1>
@@ -242,48 +196,46 @@ function CollectionComponent({ products = [], type = "Men" }) {
 
           <div className="p-3">
             {type === "" || !["gender"].includes(type) && <FilterBoxComponent
-              header="Gender"
+              header={FilterName.Gender}
               options={genderOptions}
               filterseletedOptions={filterOptions.Gender}
               onFilterChange={handleFilterChange}
-              typeProductOption={typeProductOption}
+              type={type}
             />}
             {type === "" || !["contactLenses", "sunGlasses", "eyeGlasses"].includes(type) && <FilterBoxComponent
-              header="Product Categories"
+              header={FilterName.Category}
               options={categoryOptions}
-              filterseletedOptions={filterOptions["Product Categories"]}
+              filterseletedOptions={filterOptions[FilterName.Category]}
               onFilterChange={handleFilterChange}
+              type={type}
             />}
             <FilterBoxComponent
-              header="Frame Color"
+              header={FilterName.Color}
               options={frameColorOptions}
-              filterseletedOptions={filterOptions["Frame Color"]}
+              filterseletedOptions={filterOptions[FilterName.Color]}
               onFilterChange={handleFilterChange}
+              type={type}
             />
             <FilterBoxComponent
-              header="Filter by Brands"
+              header={FilterName.Brand}
               options={brandOptions}
-              filterseletedOptions={filterOptions["Filter by Brands"]}
+              filterseletedOptions={filterOptions[FilterName.Brand]}
               onFilterChange={handleFilterChange}
+              type={type}
             />
             <FilterBoxComponent
-              header="Product Status"
+              header={FilterName.Status}
               options={productStatusOptions}
-              filterseletedOptions={filterOptions["Product Status"]}
+              filterseletedOptions={filterOptions[FilterName.Status]}
               onFilterChange={handleFilterChange}
+              type={type}
             />
 
           </div>
         </div>
       </div>
 
-      {/* Mobile filter toggle
-            <button
-                className="lg:hidden p-2 m-2 bg-slate-300 rounded-full absolute right-0"
-                onClick={() => setIsOpen(!isopen)}
-            >
-                {isopen ? <MdClose size={24} /> : <FaBars size={24} />}
-            </button> */}
+      
 
       {/* Main product section */}
       <div className="w-full lg:w-4/5 px-5">
@@ -402,6 +354,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
               filterOptions={filterOptions}
               onFilterChange={handleFilterChange}
               priceRange={priceRange} setPriceRange={setPriceRange}
+              UrlType={type}
             />
           )}
         </div>

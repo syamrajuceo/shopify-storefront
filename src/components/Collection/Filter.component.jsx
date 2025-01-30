@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaFilter } from "react-icons/fa";
+import { categoryOptions, ColorDataOptions, EyeDataBrands, filterDataOptions, FilterName, genderDataOptions, PriceDataHelper, PriceDataRangeMap, PriceRangeList, productDataStatus } from "../../data/Collection.data";
 
 function FilterComponent({
     SetSelectedFilter,
@@ -9,57 +10,38 @@ function FilterComponent({
     setPriceRange,
     filterOptions,
     onFilterChange,
+    UrlType
 }) {
     const [type, setType] = useState("");
     const [selectedOptions, setSelectedOptions] = useState({
         Price: [],
-        Category: [],
-        Brand: [],
-        Color: [],
-        Status: [],
+        ...filterDataOptions
     });
 
-    const pricelist = [
-        "Below 2000",
-        "2000 - 3000",
-        "3000 - 6000",
-        "6000 - 10000",
-        "10000 - 15000",
-    ];
-    const categories = [
-        "Prescription Glasses",
-        "Sunglasses",
-        "Reading Glasses",
-        "Sports Glasses",
-        "Kids' Glasses",
-    ];
-    const brands = ["Ray-Ban", "Oakley", "Titan", "Vogue", "Fastrack"];
-    const colors = ["pink", "black", "gray", "blue"];
-    const statusOptions = ["Available", "Out of Stock", "Coming Soon"];
+    const pricelist = PriceRangeList;
+    const brands = EyeDataBrands;
+    const colors = ColorDataOptions;
+    const statusOptions = productDataStatus;
 
     const filters = {
         Price: pricelist,
-        Category: categories,
-        Brand: brands,
-        Color: colors,
-        Status: statusOptions,
+        ...(!["contactLenses", "sunGlasses", "eyeGlasses"].includes(UrlType) && { [FilterName.Category]: categoryOptions }),
+        [FilterName.Brand]: brands,
+        [FilterName.Color]: colors,
+        [FilterName.Status]: statusOptions,
+        ...(!["gender"].includes(UrlType) && { [FilterName.Gender]: genderDataOptions }),
+
     };
+
 
     const handleFilterChange = (filterType, option) => {
         setSelectedOptions((prev) => {
-            const newSelectedOptions = { ...prev };
+            let newSelectedOptions = { ...prev };
 
             if (filterType === "Price") {
                 // Exclusive selection for Price
                 newSelectedOptions[filterType] = [option];
-                const priceMap = {
-                    "Below 2000": { min: 0, max: 2000 },
-                    "2000 - 3000": { min: 2000, max: 3000 },
-                    "3000 - 6000": { min: 3000, max: 6000 },
-                    "6000 - 10000": { min: 6000, max: 10000 },
-                    "10000 - 15000": { min: 10000, max: 15000 },
-                };
-                setPriceRange(priceMap[option]);
+                setPriceRange(PriceDataRangeMap[option]);
             } else {
                 const currentOptions = newSelectedOptions[filterType] || [];
                 if (currentOptions.includes(option)) {
@@ -71,10 +53,21 @@ function FilterComponent({
                 }
             }
 
-            if (filterType === "Color") {
-                onFilterChange("Frame Color", newSelectedOptions.Color || []);
+            if (filterType === FilterName.Color) {
+                onFilterChange(FilterName.Color, newSelectedOptions[FilterName.Color] || []);
             }
-
+            if (filterType === FilterName.Category) {
+                onFilterChange(FilterName.Category, newSelectedOptions[FilterName.Category] || []);
+            }
+            if (filterType === FilterName.Brand) {
+                onFilterChange(FilterName.Brand, newSelectedOptions[FilterName.Brand] || []);
+            }
+            if (filterType === FilterName.Gender) {
+                onFilterChange(FilterName.Gender, newSelectedOptions[FilterName.Gender] || []);
+            }
+            if (filterType === FilterName.Status) {
+                onFilterChange(FilterName.Status, newSelectedOptions[FilterName.Status] || []);
+            }
             // Update the filter count
             SetFilterCount(
                 Object.values(newSelectedOptions).reduce(
@@ -86,6 +79,22 @@ function FilterComponent({
             return newSelectedOptions;
         });
     };
+    
+useEffect(() => {
+    const priceData = PriceDataHelper(priceRange); 
+  
+    if (priceData.default) {
+      setPriceRange(priceData.option); 
+    }
+  
+    setSelectedOptions({
+      Price: [priceData.key], 
+      [FilterName.Category]: filterOptions[FilterName.Category] || [],
+      [FilterName.Brand]: filterOptions[FilterName.Brand] || [],
+      [FilterName.Color]: filterOptions[FilterName.Color] || [],
+      [FilterName.Status]: filterOptions[FilterName.Status] || [],
+    });
+  }, []); 
 
     return (
         <div className="border-r-1 bg-[#CFCFCF] rounded shadow-lg w-full  lg:w-1/3">
@@ -106,11 +115,10 @@ function FilterComponent({
                         <button
                             key={filter}
                             onClick={() => setType(filter)}
-                            className={`w-full h-[48px] pl-2 text-left rounded ${
-                                type === filter
+                            className={`w-full h-[48px] pl-2 text-left rounded ${type === filter
                                     ? "bg-[#E2E3E7] text-[#424242]"
                                     : "hover:bg-[#E2E3E7]"
-                            }`}
+                                }`}
                         >
                             {filter}
                         </button>
@@ -118,7 +126,7 @@ function FilterComponent({
                 </div>
 
                 {/* Filter Options */}
-                <div className="w-2/3 bg-[#FFFFFF]">
+                <div className="w-2/3 bg-[#FFFFFF] overflow-y-auto">
                     {type ? (
                         <div className="space-y-2  px-2 bg-[#DFDFDF7D]">
                             {/* <h3 className="text-lg font-semibold">{type} Options</h3> */}
