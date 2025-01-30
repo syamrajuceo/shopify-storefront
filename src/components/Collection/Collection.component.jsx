@@ -68,7 +68,6 @@ function CollectionComponent({ products = [], type = "Men" }) {
     //   }
     // });
     const filteredProducts = FilterController(products, filterOptions, priceRange);
-
     // Set the filtered products in the state
     setFilterProduct(filteredProducts);
 
@@ -345,7 +344,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
       ) : (
         <div className="block lg:hidden fixed z-30 bottom-[70px]  bg-[#FFFFFF]  w-full">
           {selectedfilter === "sort" && (
-            <SortComponent SetSelectedFilter={SetSelectedFilter} />
+            <SortComponent SetSelectedFilter={SetSelectedFilter}   Sortoption={filterOptions[FilterName.Sort]} setSortOption={setFilterOptions}/>
           )}
           {selectedfilter === "filter" && (
             <FilterComponent

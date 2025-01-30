@@ -6,15 +6,44 @@ export const FilterName = {
   Category: "Product Categories",
   Color: "Frame Color",
   Brand: "Filter by Brands",
-  Status: "Product Status"
+  Status: "Product Status",
+  Sort:"Sort By"
 }
+
+// Define SortName object if it's missing
+export const SortName = {
+  Recommended: "recommended",
+  // Bestseller: "bestseller",
+  // NewArrivals: "new_arrivals",
+  PriceLowHigh: "price_low_high",
+  PriceHighLow: "price_high_low",
+};
+export const sortDataOptions = [
+  { value: SortName.Recommended, label: "Recommended (Default)" },
+  // { value: SortName.Bestseller, label: "Bestseller" },
+  // { value: SortName.NewArrivals, label: "New Arrivals" },
+  { value: SortName.PriceLowHigh, label: "Price: Low to High" },
+  { value: SortName.PriceHighLow, label: "Price: High to Low" },
+];
+
+
+export const SortHelper = (value) => {
+  return sortDataOptions.find((obj) => obj.value === value) || sortDataOptions[0];
+};
+
+
+// Correct usage of SortHelper
+const defaultSort = SortHelper(SortName.Recommended);
+
 export const filterDataOptions = {
   [FilterName.Gender]: [],
-  [FilterName.Category]: [], // Correct way to use a dynamic key
+  [FilterName.Category]: [],
   [FilterName.Color]: [],
   [FilterName.Brand]: [],
-  [FilterName.Status]: []
-}
+  [FilterName.Status]: [],
+  [FilterName.Sort]: defaultSort,
+};
+
 export const ColorDataOptions = [
   "Air Force Blue", "Amethyst", "Aqua", "Black", "Black Iridium", "Blue",
   "Blue Hawaii", "Bronze", "Brown", "Brown and Blue", "Brown and Pink",

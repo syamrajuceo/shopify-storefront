@@ -1,7 +1,6 @@
-import { FilterName } from "../../data/Collection.data";
+import { FilterName, SortName } from "../../data/Collection.data";
 
 const FilterController = (products, filterOptions, priceRange) => {
-  console.log(products);
 
   // Apply price filter
   let filteredProducts = products.filter((productObj) => {
@@ -83,11 +82,27 @@ const FilterController = (products, filterOptions, priceRange) => {
         filteredProducts = filteredProducts.filter((product) => {
 
           const is_available = product.variants?.edges?.[0]?.node?.availableForSale || false
-          const is_available_stock =product.variants?.edges?.[0]?.node?.quantityAvailable || 0
-          return filterOptions[key].includes("Available") &&(is_available && is_available_stock>0)||filterOptions[key].includes("Out of Stock") &&(!is_available || is_available_stock<=0)
+          const is_available_stock = product.variants?.edges?.[0]?.node?.quantityAvailable || 0
+          return filterOptions[key].includes("Available") && (is_available && is_available_stock > 0)
+            || filterOptions[key].includes("Out of Stock") && (!is_available || is_available_stock <= 0);
+
         });
       }
     }
+
+    if (key === FilterName.Sort) {
+      const sortType = filterOptions[FilterName.Sort]?.value;
+    
+      if (sortType === SortName.PriceLowHigh || sortType === SortName.PriceHighLow) {
+        filteredProducts.sort((a, b) => {
+          const priceA = parseFloat(a.variants?.edges?.[0]?.node?.priceV2?.amount) || 0;
+          const priceB = parseFloat(b.variants?.edges?.[0]?.node?.priceV2?.amount) || 0;
+          
+          return sortType === SortName.PriceLowHigh ? priceA - priceB : priceB - priceA;
+        });
+      }
+    }
+    
   });
 
 
