@@ -17,7 +17,7 @@ function ShopController() {
     };
 
     useEffect(() => {
-        console.log("Products:", products); // Debug: Log products array
+        console.log("Products:", JSON.stringify(products)); // Debug: Log products array
         if (products && products.length > 0) {
             switch (type) {
                 case "ALL":

@@ -59,7 +59,12 @@ export const fetchAllProducts = async () => {
               {namespace: "shopify", key: "fabric"},
               {namespace: "shopify", key: "lens_polarization"},
               {namespace: "custom", key: "express_delivery"},
-              {namespace: "custom", key: "free_delivery"}
+              {namespace: "custom", key: "free_delivery"},
+              {namespace: "custom", key: "brand"},
+              {namespace: "shopify", key: "lens-color"},
+              {namespace: "shopify", key: "temple-color"},
+              {namespace: "shopify", key: "eyewear-frame-color"},
+
             ]) {
               namespace
               key
@@ -82,14 +87,14 @@ export const fetchAllProducts = async () => {
       // Safely map metafields if they exist and are not null
       const metafields = product.metafields
         ? product.metafields
-            .filter((mf) => mf !== null)
-            .map((mf) => ({
-              key: mf.key,
-              value: mf.value,
-              namespace: mf.namespace,
-              type: mf.type,
-              description: mf.description,
-            }))
+          .filter((mf) => mf !== null)
+          .map((mf) => ({
+            key: mf.key,
+            value: mf.value,
+            namespace: mf.namespace,
+            type: mf.type,
+            description: mf.description,
+          }))
         : [];
       return {
         ...product,
@@ -304,14 +309,14 @@ export const fetchProductByHandle = async (handle) => {
     // Safely map metafields if they exist and are not null
     const metafields = productData.metafields
       ? productData.metafields
-          .filter((mf) => mf !== null)
-          .map((mf) => ({
-            key: mf.key,
-            value: mf.value,
-            namespace: mf.namespace,
-            type: mf.type,
-            description: mf.description,
-          }))
+        .filter((mf) => mf !== null)
+        .map((mf) => ({
+          key: mf.key,
+          value: mf.value,
+          namespace: mf.namespace,
+          type: mf.type,
+          description: mf.description,
+        }))
       : [];
 
     // Add media and metafields to the product data
@@ -632,7 +637,7 @@ export const fetchCollectionsWithMetafields = async () => {
 
 
 // const SHOPIFY_API_URL = 'https://4bz4tg-qg.myshopify.com/admin/api/2024-10/graphql.json';
-// const SHOPIFY_ACCESS_TOKEN = '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'; 
+// const SHOPIFY_ACCESS_TOKEN = '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';
 
 
 // Function to fetch top-selling products based on order data

@@ -1,14 +1,9 @@
 import { BiSortAlt2 } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
+import { FilterName, sortDataOptions } from "../../data/Collection.data";
 
-function SortComponent({ SetSelectedFilter, onSortChange, selectedSort }) {
-  const sortOptions = [
-    { value: "recommended", label: "Recommended (Default)" },
-    { value: "bestseller", label: "Bestseller" },
-    { value: "new_arrivals", label: "New Arrivals" },
-    { value: "price_low_high", label: "Price: Low to High" },
-    { value: "price_high_low", label: "Price: High to Low" },
-  ];
+function SortComponent({ SetSelectedFilter ,Sortoption,setSortOption}) {
+  
 
   return (
     <div className="border-r-1 bg-[#FFFFFF] rounded  w-full lg:w-1/3">
@@ -23,14 +18,19 @@ function SortComponent({ SetSelectedFilter, onSortChange, selectedSort }) {
         />
       </div>
       <div className="p-4 space-y-3">
-        {sortOptions.map((option) => (
+        {sortDataOptions.map((option) => (
           <label key={option.value} className="flex items-center gap-2">
             <input
               type="radio"
               name="sortOption"
               value={option.value}
-              checked={selectedSort === option.value}
-              onChange={() => onSortChange(option.value)}
+              checked={Sortoption?.value === option.value}
+              onChange={() => 
+                setSortOption((prev) => ({
+                  ...prev,
+                  [FilterName.Sort]: option
+                }))
+              }              
               className="accent-blue-600"
             />
             <span className="text-gray-700">{option.label}</span>
