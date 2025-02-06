@@ -17,7 +17,7 @@ import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 export const CartCard = ({ product, handleQuantityChange, handleRemove }) => {
-  const { quantity, id, handle } = product;
+  const { quantity, id } = product;
 
   const [loading, setLoading] = useState(false);
 
@@ -41,7 +41,7 @@ export const CartCard = ({ product, handleQuantityChange, handleRemove }) => {
   return (
     <CartCardWrapper>
       <div className="flex flex-col gap-2">
-        <Link to={`/product/${product.merchandise.product.handle}`}>
+        <Link to={`/product/${product?.merchandise?.product?.handle}`}>
           <ImageWrapper>
             <img
               src={product?.merchandise?.product?.images?.edges[0]?.node?.src}
@@ -75,11 +75,11 @@ export const CartCard = ({ product, handleQuantityChange, handleRemove }) => {
         </QuantityMobile>
       </div>
       <ContentWrapper>
-        <Link to={`/product/${product.merchandise.product.handle}`}>
+        <Link to={`/product/${product?.merchandise?.product?.handle}`}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div className="max-w-[100%] md:max-w-[60%]">
               <Title>{product.merchandise?.product?.title}</Title>
-              <span className="text-gray-500 font-medium border px-[5px] py-[2px] my-1">{product.merchandise?.title}</span>
+              <span className="text-gray-500 font-medium border px-[5px] py-[2px] my-1">{product?.merchandise?.title}</span>
             </div>
             <PriceWrapper>
               <p className="original">

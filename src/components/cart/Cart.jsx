@@ -2,157 +2,204 @@ import React, { useEffect, useState } from "react";
 import tamaraIcon from "../../assets/image 1.png";
 import tabbyIcon from "../../assets/image 2.png";
 import cartIcon from "../../assets/Vector (1).png";
-// import { shopifyClient } from "../../config/shopifyClient";
-import { deleteCart, fetchCart, updateCart } from "../../store/cart";
 import { Link, useNavigate } from "react-router-dom";
 import { CartCard } from "./CartCard";
 import useShopifyStore from "../../store/useShopifyStore";
-// import { Discount } from "@mui/icons-material";
 import { CartPageSkeleton } from "../skeleton/Cart";
-// import SimilarProductsCarousel from "../carousel/Carousel";
 import { ProductCarousel2 } from "../home/ProductCarousel2";
-import { Category } from "@mui/icons-material";
+// import { Category } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCart, updateCart } from "../../redux/slices/cartSlice";
+import toast from "react-hot-toast";
 
 const accessToken = localStorage.getItem("accessToken");
 const user = localStorage.getItem("user");
 
 export const Cart = () => {
   const Navigate = useNavigate();
-  const { cart } = useShopifyStore.getState();
-  const [cartData, setCartData] = useState(cart);
-  const [error, setError] = useState(null);
-  // const [discountCode, setDiscountCode] = useState("");
   const [subTotal, setSubTotal] = useState(0);
   const [discountedTotal, setDiscountedTotal] = useState(0);
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [currency, setCurrency] = useState("AED");
   const [totalItems, setTotalItems] = useState(0);
-  // const cartId = localStorage.getItem("cartId");
   const setLoading = useShopifyStore((state) => state.setLoading);
   const loading = useShopifyStore((state) => state.loading);
   const userObject = localStorage.getItem("user");
   const user = JSON.parse(userObject);
   const [categories, setCategories] = useState([]);
+  const dispatch = useDispatch();
+  const { id, items, status, error } = useSelector((state) => state.cart);
+  const [cartData, setCartData] = useState(items);
+  // const loadData = async () => {
+  //   setLoading(true);
+  //   try {
+  //     if (Array.isArray(items) && items.length > 0) {
+  //       setCartData(items);
 
-  const loadData = async () => {
-    setLoading(true);
-    try {
-      const fetchedCart = await fetchCart();
-      console.log("fetched cart :", fetchedCart);
-      if (fetchedCart) {
-        setCartData(fetchedCart);
-        if (fetchedCart.lines.edges.length > 0) {
-          const subTotal = fetchedCart.lines.edges
-            .map((node) =>
-              parseFloat(
-                node?.node?.merchandise?.compareAtPriceV2?.amount *
-                  node.node.quantity
-              )
-            )
-            .reduce((acc, curr) => acc + curr, 0);
-          setSubTotal(subTotal);
+  //       const subTotal = items.reduce(
+  //         (acc, item) =>
+  //           acc +
+  //           (item?.merchandise?.compareAtPriceV2?.amount
+  //             ? parseFloat(item.merchandise.compareAtPriceV2.amount) *
+  //               item.quantity
+  //             : 0),
+  //         0
+  //       );
+  //       setSubTotal(subTotal);
 
-          const discountedTotal = fetchedCart.lines.edges
-            .map((node) =>
-              parseFloat(
-                node.node.merchandise.priceV2.amount * node.node.quantity
-              )
-            )
-            .reduce((acc, curr) => acc + curr, 0);
-          setDiscountedTotal(discountedTotal);
+  //       const discountedTotal = items.reduce(
+  //         (acc, item) =>
+  //           acc +
+  //           (item?.merchandise?.priceV2?.amount
+  //             ? parseFloat(item.merchandise.priceV2.amount) * item.quantity
+  //             : 0),
+  //         0
+  //       );
+  //       setDiscountedTotal(discountedTotal);
 
-          const totalItems = fetchedCart.lines.edges
-            .map((node) => parseFloat(node.node.quantity))
-            .reduce((acc, curr) => acc + curr, 0);
-          setTotalItems(totalItems);
+  //       setTotalItems(
+  //         items.reduce((acc, item) => acc + (item?.quantity || 0), 0)
+  //       );
+  //       setTotalDiscount(subTotal - discountedTotal);
 
-          const totalDiscount = fetchedCart.lines.edges
-            .map((node) =>
-              parseFloat(
-                node.node.merchandise.compareAtPriceV2.amount *
-                  node.node.quantity
-              )
-            )
-            .reduce((acc, curr) => acc + curr, 0);
-          setTotalDiscount(totalDiscount);
+  //       const currency =
+  //         items[0]?.merchandise?.compareAtPriceV2?.currencyCode || "USD";
+  //       setCurrency(currency);
+  //     } else {
+  //       setCartData([]);
+  //       setSubTotal(0);
+  //       setDiscountedTotal(0);
+  //       setTotalItems(0);
+  //       setTotalDiscount(0);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during initial fetch:", error.message);
+  //     setError(error.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  // useEffect(() => {
+  //   dispatch(fetchCart());
+  //   loadData();
+  // }, [dispatch]);
 
-          const currency =
-            fetchedCart.lines.edges[0].node.merchandise.compareAtPriceV2
-              .currencyCode;
-          setCurrency(currency);
-        }
-      } else {
-        setCartData(null);
-      }
-    } catch (error) {
-      console.error("Error during initial fetch:", error.message);
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Fetch cart data from the server
   useEffect(() => {
-    loadData();
-  }, []);
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchCart()).unwrap();
+      } catch (error) {
+        console.error("Failed to fetch cart:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [dispatch]);
+
+  // Update cartData and perform calculations when Redux state changes
+  useEffect(() => {
+    if (Array.isArray(items) && items.length > 0) {
+      setCartData(items);
+
+      const subTotal = items.reduce(
+        (acc, item) =>
+          acc +
+          (item?.merchandise?.compareAtPriceV2?.amount
+            ? parseFloat(item.merchandise.compareAtPriceV2.amount) *
+              item.quantity
+            : 0),
+        0
+      );
+      setSubTotal(subTotal);
+
+      const discountedTotal = items.reduce(
+        (acc, item) =>
+          acc +
+          (item?.merchandise?.priceV2?.amount
+            ? parseFloat(item.merchandise.priceV2.amount) * item.quantity
+            : 0),
+        0
+      );
+      setDiscountedTotal(discountedTotal);
+
+      setTotalItems(
+        items.reduce((acc, item) => acc + (item?.quantity || 0), 0)
+      );
+      setTotalDiscount(subTotal - discountedTotal);
+
+      const currency =
+        items[0]?.merchandise?.compareAtPriceV2?.currencyCode || "USD";
+      setCurrency(currency);
+    } else {
+      setCartData([]);
+      setSubTotal(0);
+      setDiscountedTotal(0);
+      setTotalItems(0);
+      setTotalDiscount(0);
+    }
+  }, [items]);
 
   const handleQuantityChange = async (newQuantity, id) => {
     if (newQuantity < 1) return;
     try {
-      const updatedCart = await updateCart(id, newQuantity);
-      console.log("Updated Cart:", updatedCart);
-      await loadData();
+      setLoading(true);
+      await dispatch(
+        updateCart({ lineItemId: id, quantity: newQuantity })
+      ).unwrap();
+      await dispatch(fetchCart()).unwrap();
+      setLoading(false);
+      toast.success("Cart quantity updated successfully");
     } catch (error) {
+      setLoading(false);
       console.error("Failed to update cart quantity:", error.message);
+      toast.error("Failed to update cart quantity");
     }
   };
 
   const handleRemove = async (id) => {
     try {
-      const removedCart = await updateCart(id, 0);
-      console.log("removedCart :", removedCart);
-      await loadData();
+      setLoading(true);
+      await dispatch(updateCart({ lineItemId: id, quantity: 0 })).unwrap();
+      await dispatch(fetchCart()).unwrap();
+      setLoading(false);
+      toast.success("Item removed from cart successfully");
     } catch (error) {
+      setLoading(false);
       console.error("Failed to remove item from cart:", error.message);
+      toast.error("Failed to remove item from cart");
     }
   };
 
-  const handleCheckoutButtonClick = async () => {
-    try {
-      // Check authentication
-      if (!accessToken || !user) {
-        // Save the current page URL to localStorage
-        localStorage.setItem("redirectAfterLogin", window.location.pathname);
-        Navigate("/login");
-        return;
-      }
-
-      // Get checkout URL
-      const checkoutUrl = localStorage.getItem("checkoutUrl");
-      if (!checkoutUrl) {
-        console.error("Checkout URL is missing.");
-        return;
-      }
-      // Redirect to checkout page
-      window.location.href = checkoutUrl;
-      // Cleanup local storage after successful redirection
-      // localStorage.removeItem("cartId");
-      // localStorage.removeItem("checkoutUrl");
-    } catch (error) {
-      console.error("Error during checkout:", error.message);
+  const handleCheckoutButtonClick = () => {
+    if (!accessToken || !user) {
+      localStorage.setItem("redirectAfterLogin", window.location.pathname);
+      Navigate("/login");
+      return;
     }
+    const checkoutUrl = localStorage.getItem("checkoutUrl");
+    if (!checkoutUrl) {
+      console.error("Checkout URL is missing.");
+      return;
+    }
+    window.location.href = checkoutUrl;
   };
-
 
   useEffect(() => {
-    const fetchedCategories = cartData?.lines?.edges?.map(({ node }) => node.merchandise.product.productType);
-    setCategories([...new Set(fetchedCategories)]);
+    if (Array.isArray(cartData) && cartData.length > 0) {
+      const fetchedCategories = cartData.map(
+        (item) => item?.merchandise?.product?.productType
+      );
+      setCategories([...new Set(fetchedCategories)]);
+    } else {
+      setCategories([]);
+    }
   }, [cartData]);
 
-  console.log("fetchedCategories : ", categories)
-  if (loading) {
-    return <CartPageSkeleton />;
-  }
+
+  if (loading) return <CartPageSkeleton />;
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -160,14 +207,14 @@ export const Cart = () => {
   return (
     <div>
       <div className="py-8 px-4 md:py-16 md:px-10 bg-white mb-18">
-        {cartData?.lines?.edges?.length > 0 ? (
+        {Array.isArray(cartData) && cartData.length > 0 ? (
           <div className="h-auto lg:max-h-[33rem] flex flex-col lg:flex-row gap-4">
             {/* ------------------Cart Items------------------ */}
             <div className="w-full lg:w-[60%] pr-0 lg:pr-4 flex flex-col gap-2 overflow-y-auto overflow-x-hidden no-scrollbar">
-              {cartData.lines.edges.map(({ node }) => (
+              {cartData.map((item) => (
                 <CartCard
-                  key={node.id}
-                  product={node}
+                  key={item.id}
+                  product={item}
                   handleQuantityChange={handleQuantityChange}
                   handleRemove={handleRemove}
                 />
@@ -259,7 +306,7 @@ export const Cart = () => {
                     {currency} {Number(subTotal).toFixed(2)}
                   </p>
                 </div>
-                
+
                 <div className="flex justify-between items-center mt-1">
                   <p className="text-[16px] font-normal">Shipping Fee</p>
                   <p className="text-[16px] font-semibold text-[#228944]">
@@ -319,7 +366,7 @@ export const Cart = () => {
               <p className="text-[16px] font-normal text-[#787878]">
                 Looks like you haven’t added anything to your cart.
               </p>
-              <Link to="/sunglasses">
+              <Link to="/shop">
                 <button className="bg-[#464646] w-[287px] px-3 py-2 text-[#fff] mt-3 rounded">
                   Continue Shopping
                 </button>
@@ -328,7 +375,7 @@ export const Cart = () => {
           </div>
         )}
         {/* ------------------Similar Products------------------ */}
-        <ProductCarousel2 title={"Similar Products"} category = {categories} />
+        <ProductCarousel2 title={"Similar Products"} category={categories} />
       </div>
       {/* ------------------Checkout Button for mobile------------------ */}
       {cartData?.lines?.edges?.length > 0 && (
@@ -356,86 +403,72 @@ export const Cart = () => {
   );
 };
 
+// Apply discount code
+// const handleApplyDiscountCode = async () => {
+//   try {
+//     const query = `
+//       mutation checkoutDiscountCodeApplyV2($checkoutId: ID!, $discountCode: String!) {
+//         checkoutDiscountCodeApplyV2(checkoutId: $checkoutId, discountCode: $discountCode) {
+//           checkout {
+//             discountApplications(first: 10) {
+//               edges {
+//                 node {
+//                   allocationMethod
+//                   targetSelection
+//                   targetType
+//                 }
+//               }
+//             }
+//             checkoutUserErrors {
+//               message
+//               code
+//               field
+//             }
+//           }
+//         }
+//       }
+//     `;
 
+//     const response = await shopifyClient.post("", {
+//       query,
+//       variables: {
+//         checkoutId: cartId,
+//         discountCode: discountCode,
+//       },
+//     });
 
+//     console.log("GraphQL Response:", response.data);
 
+//     if (
+//       response.data?.checkoutDiscountCodeApplyV2?.checkoutUserErrors?.length >
+//       0
+//     ) {
+//       console.error(
+//         "Error applying discount:",
+//         response.data.checkoutDiscountCodeApplyV2.checkoutUserErrors
+//       );
+//     } else {
+//       console.log("Discount applied successfully:", response.data);
+//     }
+//   } catch (error) {
+//     console.error("Error applying discount code:", error.message);
+//   }
+// };
 
-
-
-
-
-
-
-
-
-
-
- // Apply discount code
-  // const handleApplyDiscountCode = async () => {
-  //   try {
-  //     const query = `
-  //       mutation checkoutDiscountCodeApplyV2($checkoutId: ID!, $discountCode: String!) {
-  //         checkoutDiscountCodeApplyV2(checkoutId: $checkoutId, discountCode: $discountCode) {
-  //           checkout {
-  //             discountApplications(first: 10) {
-  //               edges {
-  //                 node {
-  //                   allocationMethod
-  //                   targetSelection
-  //                   targetType
-  //                 }
-  //               }
-  //             }
-  //             checkoutUserErrors {
-  //               message
-  //               code
-  //               field
-  //             }
-  //           }
-  //         }
-  //       }
-  //     `;
-
-  //     const response = await shopifyClient.post("", {
-  //       query,
-  //       variables: {
-  //         checkoutId: cartId,
-  //         discountCode: discountCode,
-  //       },
-  //     });
-
-  //     console.log("GraphQL Response:", response.data);
-
-  //     if (
-  //       response.data?.checkoutDiscountCodeApplyV2?.checkoutUserErrors?.length >
-  //       0
-  //     ) {
-  //       console.error(
-  //         "Error applying discount:",
-  //         response.data.checkoutDiscountCodeApplyV2.checkoutUserErrors
-  //       );
-  //     } else {
-  //       console.log("Discount applied successfully:", response.data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error applying discount code:", error.message);
-  //   }
-  // };
-
-
-
-  {/* <div className="flex justify-between items-center mt-1">
+{
+  /* <div className="flex justify-between items-center mt-1">
                   <p className="text-[16px] font-normal">Coupon</p>
                   <p className="text-[16px] font-semibold text-[#228944]">
                     - {currency} 00.00
                   </p>
-                </div> */}
+                </div> */
+}
 
-
-
-
-                {/* ------------------Coupon Code------------------ */}
-              {/* <div>
+{
+  /* ------------------Coupon Code------------------ */
+}
+{
+  /* <div>
                 <div className="mt-3 flex items-center w-full h-[50px] border-2 border-[#dddddd] bg-white p-0 rounded-md overflow-hidden">
                   <input
                     type="text"
@@ -457,4 +490,5 @@ export const Cart = () => {
                     Coupon Applied: AKG0101
                   </p>
                 </div>
-              </div> */}
+              </div> */
+}

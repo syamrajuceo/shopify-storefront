@@ -27,6 +27,7 @@ function Navlayout() {
   useEffect(() => {
     fetchCartData();
   }, []);
+  
 
   // Filter products based on the search query
   useEffect(() => {

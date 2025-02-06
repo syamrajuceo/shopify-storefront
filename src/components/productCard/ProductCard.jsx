@@ -18,12 +18,14 @@ import {
 } from "../../ui/CardStyle";
 import expressLogo from "../../assets/Frame 390 1.png";
 import deliveryLogo from "../../assets/Group.png";
-import { addToCart } from "../../store/cart";
+// import { addToCart } from "../../store/cart";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import CircularProgress from "@mui/material/CircularProgress";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import Model from '../../assets/model.png'
+import { useDispatch } from "react-redux";
+import { addToCart, fetchCart } from "../../redux/slices/cartSlice";
 const accessToken = localStorage.getItem("accessToken");
 export const ProductCard = ({ product = {}, home = false }) => {
 
@@ -32,6 +34,7 @@ export const ProductCard = ({ product = {}, home = false }) => {
   const user = userObject ? JSON.parse(userObject) : { email: "" };
   const [loading, setLoading] = useState(false);
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const {
@@ -67,28 +70,27 @@ export const ProductCard = ({ product = {}, home = false }) => {
     (field) => field.key === "free_delivery" && field.value === "true"
   );
 
-  // Handle Add to Cart
-  const handleAddToCart = async () => {
-    try {
-      if (!variantId) {
-        console.error("Variant ID not found.");
-        return;
-      }
-      if (home) {
-        return navigate(`/product/${handle}`)
-      }
-      setLoading(true);
-      const quantity = 1;
-      const cart = await addToCart(variantId, quantity, user.email);
-      setLoading(false);
-      console.log("Cart updated:", cart);
-      if (cart.id) {
-        toast.success("Added to cart successfully");
-      }
-    } catch (error) {
-      console.error("Failed to add product to cart:", error.message);
+const handleAddToCart = async () => {
+  try {
+    if (!variantId) {
+      console.error("Variant ID not found.");
+      return;
     }
-  };
+    if (home) {
+      return navigate(`/product/${handle}`);
+    }
+    setLoading(true);
+    await dispatch(addToCart({ variantId, quantity: 1 })).unwrap();
+    await dispatch(fetchCart()).unwrap();
+    setLoading(false);
+    toast.success("Added to cart successfully"); 
+    console.log("Item added and cart updated successfully!");
+  } catch (error) {
+    setLoading(false);
+    console.error("Failed to add product to cart:", error.message);
+    toast.error("Failed to add product to cart"); // Show error toast
+  }
+};
 
   return (
     <Card>
