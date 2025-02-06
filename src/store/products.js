@@ -231,7 +231,7 @@ export const fetchProductByHandle = async (handle) => {
                   {namespace: "custom", key: "usability_after_opening"}
                   {namespace: "custom", key: "package_contains"}
                   {namespace: "custom", key: "arabic_name"}
-
+                  
                   {namespace: "shopify", key: "lens-color"},
                   {namespace: "shopify", key: "temple-color"},
                   {namespace: "shopify", key: "eyewear-frame-color"},

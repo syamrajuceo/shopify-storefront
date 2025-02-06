@@ -3,6 +3,7 @@ import { ScrollButton } from "./ScrollButton";
 import { ProductCard } from "../productCard/ProductCard";
 import { FaArrowRight } from "react-icons/fa";
 import useShopifyStore from "../../store/useShopifyStore";
+import { Link } from "react-router-dom";
 
 export function ProductCarousel2({ title, category = "" }) {
   const scrollContainerRef = useRef(null);
@@ -29,10 +30,12 @@ export function ProductCarousel2({ title, category = "" }) {
         <h2 className="mb-4 text-[22px] md:text-[28px]  md:text-1xl font-bold tracking-tight text-gray-900">
           {title ? title : "Explore Our Products"}
         </h2>
-        <span className=" items-center justify-center gap-3 hidden md:flex">
-          <p className="text-lg text-gray-600 ">View all</p>
-          <FaArrowRight />
-        </span>
+        <Link to="/shop">
+          <span className=" items-center justify-center gap-3 hidden md:flex">
+            <p className="text-lg text-gray-600 ">View all</p>
+            <FaArrowRight />
+          </span>
+        </Link>
       </div>
 
       {/* Carousel */}

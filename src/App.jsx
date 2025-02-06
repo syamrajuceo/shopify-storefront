@@ -7,25 +7,29 @@ import {
   fetchCollectionsWithProducts
 } from "./store/products";
 import { router } from "./routes/Router";
-import { fetchCart } from "./store/cart";
 import { Loading } from "./components/loading/Loading";
 
 import useShopifyStore from "./store/useShopifyStore";
 import { fetchOrders } from "./store/orders";
 import PopupModal from "./components/testPopup/EyeTest";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchReviews } from "./redux/slices/reviewsSlice";
+import { fetchCart } from "./redux/slices/cartSlice";
+
 
 const App = () => {
   const setLoading = useShopifyStore((state) => state.setLoading);
   const loading = useShopifyStore((state) => state.loading);
   const [showPopup, setShowPopup] = useState(false);
-
+  const { id, items, status, error } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchReviews());
+    dispatch(fetchCart());
   }, [dispatch]);
+
+  console.log("cart items : ",items)
 
   useEffect(() => {
     const loadData = async () => {
@@ -35,7 +39,8 @@ const App = () => {
         // const TopSellingProducts = await fetchTopSellingProducts();
         // console.log("TopSellingProducts.............. :" ,TopSellingProducts)
         setLoading(false);
-        const cart = await fetchCart();
+        // const cart = await fetchCart();
+
         const orders = await fetchOrders();
         const fetchedCart = await fetchCart();
         const fetchedCollections = await fetchCollectionsWithProducts();

@@ -17,6 +17,7 @@ import { BiSolidTagAlt } from "react-icons/bi";
 import ProductSearchList from "./ProductSeatchlist";
 import basari from "../../assets/basari.png"
 import flag from "../../assets/Flags.png"
+import { useSelector } from "react-redux";
 const iconMapping = {
   FaHome: <FaHome className="text-yellow-500 text-2xl" />,
   FaOffer: <BiSolidOffer className="text-red-600 text-2xl" />,
@@ -57,6 +58,12 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
       setSearchQuery('')
     }
   };
+
+  const { id, items, status, error } = useSelector((state) => state.cart);
+
+  let cartQty = items?.length
+
+  console.log("cartQty :", cartQty);
 
   return (
     <div className="bg-white p-1">
@@ -108,9 +115,9 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
           <Link className="relative hidden md:inline-block" to="/cart">
             {/* <img src={cart} alt="Go to cart" className="w-6 h-6" /> */}
             <FaShoppingCart className="text-2xl text-gray-700" />
-            {cartnumber > 0 && (
+            {cartQty > 0 && (
               <span className={`absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full px-${cartnumber > 99 ? '3' : '2'} py-1 text-xs bg-red-500 text-white`}>
-                {cartnumber > 99 ? "99+" : cartnumber}
+                {cartQty > 99 ? "99+" : cartQty}
               </span>
             )}
           </Link>

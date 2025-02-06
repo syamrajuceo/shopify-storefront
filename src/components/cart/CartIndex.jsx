@@ -320,3 +320,52 @@
 //     </div>
 //   );
 // };
+
+
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCart } from "../../redux/slices/cartSlice";
+
+const CartComponent = () => {
+  const dispatch = useDispatch();
+
+  // Access the cart state from the Redux store
+  const { id, items, status, error } = useSelector((state) => state.cart);
+
+  useEffect(() => {
+    dispatch(fetchCart());
+  }, [dispatch]);
+
+  // Render loading state
+  if (status === "loading") {
+    return <div>Loading cart...</div>;
+  }
+
+  // Render error state
+  if (status === "failed") {
+    return <div>Error: {error}</div>;
+  }
+
+  // Render cart details
+  return (
+    <div>
+      <h1>Cart</h1>
+      {id ? (
+        <div>
+          <p>Cart ID: {id}</p>
+          <ul>
+            {items.map((item) => (
+              <li key={item.id}>
+                {item.merchandise.title} - Quantity: {item.quantity}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <p>Your cart is empty.</p>
+      )}
+    </div>
+  );
+};
+
+export default CartComponent;
