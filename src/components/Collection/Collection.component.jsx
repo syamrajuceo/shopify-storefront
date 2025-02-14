@@ -144,14 +144,13 @@ function CollectionComponent({ products = [], type = "Men" }) {
 
 
   return (
-    <div className="flex flex-col lg:flex-row relative">
+    <div className="flex flex-col lg:flex-row relative h-full">
       {/* Sidebar for filters */}
       {/* <div
         className={`bg-[#FFFFFF] lg:block ${isopen ? "block" : "hidden"
           } lg:w-1/5`}
       > */}
-      <div
-        className={`bg-[#FFFFFF] lg:block lg:w-1/5 hidden`}>
+      <div className={`bg-[#FFFFFF] lg:block lg:w-1/5 hidden border-2 sticky h-full top-2`}>
         <div className="p-3">
           <div className="pl-3">
             <h1 className="font-semibold text-xl">Price</h1>
@@ -237,7 +236,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
       
 
       {/* Main product section */}
-      <div className="w-full lg:w-4/5 px-5">
+      <div className="w-full lg:w-4/5 px-5 sticky h-full top-2">
         <div className="flex items-center space-x-2 text-sm text-gray-700 p-4">
           <Link className="hover:text-blue-600 cursor-pointer" to={"/shop"}>Shop</Link>
           {type !== "" && (<>

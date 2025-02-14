@@ -24,7 +24,7 @@ import toast from "react-hot-toast";
 import CircularProgress from "@mui/material/CircularProgress";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import Model from '../../assets/model.png'
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart, fetchCart } from "../../redux/slices/cartSlice";
 const accessToken = localStorage.getItem("accessToken");
 export const ProductCard = ({ product = {}, home = false }) => {
@@ -36,6 +36,7 @@ export const ProductCard = ({ product = {}, home = false }) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { items} = useSelector((state) => state.cart);
 
   const {
     title = "",
@@ -69,6 +70,10 @@ export const ProductCard = ({ product = {}, home = false }) => {
   const freeDelivery = metafields.some(
     (field) => field.key === "free_delivery" && field.value === "true"
   );
+
+  console.log("items :........." , items);
+
+  const isInCart = items.some((item) => item.merchandise.id === variantId);
 
 const handleAddToCart = async () => {
   try {
@@ -135,18 +140,32 @@ const handleAddToCart = async () => {
           </CardDelivery>
         </Link>
         <div>
-          <CardButton
-            onClick={home || is_available && is_available_stock > 0 ? handleAddToCart : undefined}
-            className={`flex items-center justify-center ${is_available || home ? " bg-slate-900" : "bg-slate-800 opacity-60"} `}
+        <CardButton
+            onClick={
+              home
+                ? () => navigate(`/product/${handle}`)
+                : isInCart
+                ? () => navigate("/cart")
+                : is_available && is_available_stock > 0
+                ? handleAddToCart
+                : undefined
+            }
+            className={`flex items-center justify-center ${
+              is_available || home ? "bg-slate-900" : "bg-slate-800 opacity-60"
+            } `}
           >
             {loading ? (
               <CircularProgress size="20px" />
             ) : (
               <div className="flex items-center gap-[5px]">
                 <ShoppingBagOutlinedIcon />
-                {
-                  home ? "View Product" : is_available && is_available_stock > 0 ? "Add To Cart" : "Out Of Stock"
-                }
+                {home
+                  ? "View Product"
+                  : isInCart
+                  ? "View in Cart"
+                  : is_available && is_available_stock > 0
+                  ? "Add To Cart"
+                  : "Out Of Stock"}
               </div>
             )}
           </CardButton>

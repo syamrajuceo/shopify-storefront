@@ -5,7 +5,7 @@ import { CartPage } from "../pages/CartPage";
 import  ProfilePage  from "../pages/ProfilePage";
 import { HomePage } from "../pages/HomePage";
 import { ProductDetailsPage } from "../pages/ProductDetailsPage";
-import { ProductListingPage } from "../pages/ProductListingPage";
+// import { ProductListingPage } from "../pages/ProductListingPage";
 import { UserLayout } from "../layout/UserLayout";
 import ProtectedRoute from "../utils/ProtectedRoute";
 import Navlayout from "../layout/Navlayout";
@@ -46,10 +46,10 @@ export const router = createBrowserRouter([
         path: "/",
         element: < HomePage/>,
       },
-      {
-        path: "/products",
-        element: <ProductListingPage />,
-      },
+      // {
+      //   path: "/products",
+      //   element: <ProductListingPage />,
+      // },
       {
         path: "/product/:handle",
         // element: <ProductVariants />,
