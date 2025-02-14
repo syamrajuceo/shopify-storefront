@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { signUp } from "../../store/auth";
 import { updateCartBuyerIdentity } from "../../store/cart";
+import toast from "react-hot-toast";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -56,6 +57,8 @@ export const Register = () => {
         navigate("/");
       }
     } catch (error) {
+      setLoading(false);
+      // toast.error(error.message);
       console.error("Error during registration:", error.message);
     }
   };
