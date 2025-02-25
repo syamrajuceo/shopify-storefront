@@ -22,7 +22,7 @@ const navigationSections = {
       { href: "/account", label: "My Account" },
       { href: "/privacy", label: "Privacy Policy" },
       { href: "/terms-and-conditions", label: "Terms and Conditions" },
-      { href: "/refund-policy", label: "Refund Policy" },
+      { href: "/return-policy", label: "Return & Refund Policy" },
     ],
   },
   category: {
@@ -47,15 +47,16 @@ const ContactInfo = () => (
   <div className="space-y-4 border-1 ">
     <h3 className="font-semibold text-lg text-gray-900">Do You Need Help?</h3>
     <p className="text-sm text-gray-600">
-      Autosisigen syr. Nek diärask föbomba. När antipol kynoda nynat. Pressa
-      fåmosku.
+      ﻣﺪﻳﻨﺔ اﻟﺸﺎرﻗﺔ ﻟﻺﻋﻼم – اﻟﺸﺎرﻗﺔ – إ ع م Eye Store LLC , Sharjah Media City
     </p>
     <div className="space-y-3">
       <div className="flex items-center gap-2">
         <Phone className="h-5 w-5 text-gray-600" />
         <div>
-          <p className="text-sm text-gray-600">Monday-Friday: 09am-5pm</p>
-          <p className="font-semibold text-gray-900">0 800 300-353</p>
+          <p className="text-sm text-gray-600">
+            Monday-Friday: 9.00 AM - 5.00 PM
+          </p>
+          <p className="font-semibold text-gray-900">+971 528405129</p>
         </div>
       </div>
       <div className="flex items-center gap-2 flex-wrap">
@@ -63,7 +64,7 @@ const ContactInfo = () => (
         <div>
           <p className="text-sm text-gray-600">Need help with your order?</p>
           <p className="font-semibold text-gray-900 whitespace-nowrap">
-            info@example.com
+            support@eyestore.ae
           </p>
         </div>
       </div>
@@ -176,11 +177,11 @@ const FooterComponent = () => {
               <PaymentMethods />
             </div>
             <div className="flex gap-4 text-sm">
-              <Link href="/terms" className="text-gray-600 hover:text-gray-900">
+              <Link to="/terms-and-conditions" className="text-gray-600 hover:text-gray-900">
                 Terms and Conditions
               </Link>
               <Link
-                href="/privacy"
+                to="/privacy"
                 className="text-gray-600 hover:text-gray-900"
               >
                 Privacy Policy

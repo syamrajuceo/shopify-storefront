@@ -3,9 +3,12 @@ import { useLocation } from "react-router-dom";
 
 const ScrollToTop = () => {
     const location = useLocation();
+    
     useLayoutEffect(() => {
-        document.documentElement.scroll(0, 0);
+        window.scrollTo(0, 0); // Ensure correct scrolling method
     }, [location.pathname]);
+
+    return null; // Ensure the component returns something
 }
 
-export default ScrollToTop;
+export default ScrollToTop;
