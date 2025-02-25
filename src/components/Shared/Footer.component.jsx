@@ -177,11 +177,11 @@ const FooterComponent = () => {
               <PaymentMethods />
             </div>
             <div className="flex gap-4 text-sm">
-              <Link href="/terms" className="text-gray-600 hover:text-gray-900">
+              <Link to="/terms-and-conditions" className="text-gray-600 hover:text-gray-900">
                 Terms and Conditions
               </Link>
               <Link
-                href="/privacy"
+                to="/privacy"
                 className="text-gray-600 hover:text-gray-900"
               >
                 Privacy Policy
