@@ -20,6 +20,8 @@ import ShapePage from "../pages/ShapePage";
 import { ProductVariants } from "../components/ProductDetails/ProductByVarient";
 import ShopController from "../pages/ShopController";
 import { ContactPage } from "../pages/ContactPage";
+import { RefundPolicyPage } from "../pages/RefundPolicyPage";
+import TermsAndConditions from "../pages/TermsAndConditions";
 
 
 export const router = createBrowserRouter([
@@ -81,6 +83,14 @@ export const router = createBrowserRouter([
       {
         path: "/shape",
         element:<ShapePage/>
+      },
+      {
+        path: "/refund-policy",
+        element:<RefundPolicyPage/>
+      },
+      {
+        path: "/terms-and-conditions",
+        element:<TermsAndConditions/>
       },
       // User routes
       {
