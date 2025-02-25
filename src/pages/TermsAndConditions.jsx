@@ -321,7 +321,7 @@ const TermsAndConditions = () => {
        14.1.1 Governing Law:
       </p>
       <p className="mb-4 ml-2">
-      14.1.1 We will not trade with or provide any services to OFAC (Office of Foreign Assets Control) and sanctioned countries in accordance with the law of UAE.
+       14.1.1 We will not trade with or provide any services to OFAC (Office of Foreign Assets Control) and sanctioned countries in accordance with the law of UAE.
       </p>
       <p className="mb-4 ml-2">
        14.1.1 Dispute Resolution:
