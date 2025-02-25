@@ -22,6 +22,8 @@ import ShopController from "../pages/ShopController";
 import { ContactPage } from "../pages/ContactPage";
 import { RefundPolicyPage } from "../pages/RefundPolicyPage";
 import TermsAndConditions from "../pages/TermsAndConditions";
+import PrivacyPolicyPage from "../pages/Privacy";
+import ShippingDelivery from "../pages/ShippingDelivery";
 
 
 export const router = createBrowserRouter([
@@ -91,6 +93,14 @@ export const router = createBrowserRouter([
       {
         path: "/terms-and-conditions",
         element:<TermsAndConditions/>
+      },
+      {
+        path: "/privacy-policy",
+        element:<PrivacyPolicyPage/>
+      },
+      {
+        path: "/shipping-delivery",
+        element:<ShippingDelivery/>
       },
       // User routes
       {
