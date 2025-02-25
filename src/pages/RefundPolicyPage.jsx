@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
+import ScrollToTop from "../utils/ScrollToTop";
+
 
 export const RefundPolicyPage = () => {
+  // useEffect(() => {
+  //   ScrollToTop();
+  // }, []);
+  
+  
   return (
     <div className="px-[60px] pt-[30px] pb-[30px] text-gray-800">
-      <h1 className="text-3xl font-bold mb-6">Refund Policy</h1>
+      <h1 className="text-3xl font-bold mb-6">Return & Refund Policy</h1>
 
       <h2 className="text-2xl font-semibold mb-4">Exchanges</h2>
       <p className="mb-4">

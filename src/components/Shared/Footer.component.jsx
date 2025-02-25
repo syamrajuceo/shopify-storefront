@@ -22,7 +22,7 @@ const navigationSections = {
       { href: "/account", label: "My Account" },
       { href: "/privacy", label: "Privacy Policy" },
       { href: "/terms-and-conditions", label: "Terms and Conditions" },
-      { href: "/refund-policy", label: "Refund Policy" },
+      { href: "/return-policy", label: "Return & Refund Policy" },
     ],
   },
   category: {

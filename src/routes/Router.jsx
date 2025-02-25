@@ -85,7 +85,7 @@ export const router = createBrowserRouter([
         element:<ShapePage/>
       },
       {
-        path: "/refund-policy",
+        path: "/return-policy",
         element:<RefundPolicyPage/>
       },
       {
