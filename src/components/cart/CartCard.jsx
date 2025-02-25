@@ -56,6 +56,10 @@ export const CartCard = ({ product, handleQuantityChange, handleRemove }) => {
           <span
             className="control"
             onClick={() => handleQtyUpdate(quantity - 1, id)}
+            style={{
+              opacity: quantity <= 1 ? 0.5 : 1,
+              pointerEvents: quantity <= 1 ? "none" : "auto",
+            }}
           >
             -
           </span>
@@ -69,6 +73,14 @@ export const CartCard = ({ product, handleQuantityChange, handleRemove }) => {
           <span
             className="control"
             onClick={() => handleQtyUpdate(quantity + 1, id)}
+            style={{
+              opacity:
+                product.merchandise?.quantityAvailable <= quantity ? 0.5 : 1,
+              pointerEvents:
+                product.merchandise?.quantityAvailable <= quantity
+                  ? "none"
+                  : "auto",
+            }}
           >
             +
           </span>
@@ -79,7 +91,9 @@ export const CartCard = ({ product, handleQuantityChange, handleRemove }) => {
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div className="max-w-[100%] md:max-w-[60%]">
               <Title>{product.merchandise?.product?.title}</Title>
-              <span className="text-gray-500 font-medium border px-[5px] py-[2px] my-1">{product?.merchandise?.title}</span>
+              <span className="text-gray-500 font-medium border px-[5px] py-[2px] my-1">
+                {product?.merchandise?.title}
+              </span>
             </div>
             <PriceWrapper>
               <p className="original">
@@ -116,6 +130,10 @@ export const CartCard = ({ product, handleQuantityChange, handleRemove }) => {
             <span
               className="control"
               onClick={() => handleQtyUpdate(quantity - 1, id)}
+              style={{
+                opacity: quantity <= 1 ? 0.5 : 1,
+                pointerEvents: quantity <= 1 ? "none" : "auto",
+              }}
             >
               -
             </span>
@@ -129,6 +147,14 @@ export const CartCard = ({ product, handleQuantityChange, handleRemove }) => {
             <span
               className="control"
               onClick={() => handleQtyUpdate(quantity + 1, id)}
+              style={{
+                opacity:
+                  product.merchandise?.quantityAvailable <= quantity ? 0.5 : 1,
+                pointerEvents:
+                  product.merchandise?.quantityAvailable <= quantity
+                    ? "none"
+                    : "auto",
+              }}
             >
               +
             </span>

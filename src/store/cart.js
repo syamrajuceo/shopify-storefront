@@ -163,299 +163,299 @@ export const addToCart = async (variantId, quantity, userEmail = null) => {
   }
 };
 
-export const updateCart = async (lineItemId, quantity, userEmail = null) => {
-  let cartId = localStorage.getItem("cartId");
-  console.log("local cartid : ", cartId);
-  if (!cartId) {
-    console.warn("No cart ID available, creating a new cart...");
-  }
-  const query = `
-    mutation updateCartLineItem($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
-      cartLinesUpdate(cartId: $cartId, lines: $lines) {
-        cart {
-          id
-          checkoutUrl
-          lines(first: 10) {
-            edges {
-              node {
-                id
-                quantity
-                merchandise {
-                  ... on ProductVariant {
-                    id
-                    title
-                  }
-                }
-              }
-            }
-          }
-        }
-        userErrors {
-          field
-          message
-        }
-      }
-    }
-  `;
-  if (!cartId) {
-    console.error("No cart ID available.");
-    return null;
-  }
-  const variables = {
-    cartId,
-    lines: [{ id: lineItemId, quantity }],
-  };
-  try {
-    const response = await shopifyClient.post("", { query, variables });
-    console.log("cart update res : ", response);
-    const errors = response?.data?.data?.cartLinesUpdate?.userErrors || [];
-    if (errors.length > 0) {
-      console.error("API User Errors:", errors);
-      throw new Error(errors.map((err) => err.message).join(", "));
-    }
-    const cart = response?.data?.data?.cartLinesUpdate?.cart;
-    // Store cart in localStorage and update Zustand
-    storeCartInLocalStorage(cart.id, cart.checkoutUrl);
-    useShopifyStore.getState().setCart(cart.id, cart.checkoutUrl);
-    return cart;
-  } catch (error) {
-    console.error("Error updating cart:", error.message);
-    throw error;
-  }
-};
+// export const updateCart = async (lineItemId, quantity, userEmail = null) => {
+//   let cartId = localStorage.getItem("cartId");
+//   console.log("local cartid : ", cartId);
+//   if (!cartId) {
+//     console.warn("No cart ID available, creating a new cart...");
+//   }
+//   const query = `
+//     mutation updateCartLineItem($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+//       cartLinesUpdate(cartId: $cartId, lines: $lines) {
+//         cart {
+//           id
+//           checkoutUrl
+//           lines(first: 10) {
+//             edges {
+//               node {
+//                 id
+//                 quantity
+//                 merchandise {
+//                   ... on ProductVariant {
+//                     id
+//                     title
+//                   }
+//                 }
+//               }
+//             }
+//           }
+//         }
+//         userErrors {
+//           field
+//           message
+//         }
+//       }
+//     }
+//   `;
+//   if (!cartId) {
+//     console.error("No cart ID available.");
+//     return null;
+//   }
+//   const variables = {
+//     cartId,
+//     lines: [{ id: lineItemId, quantity }],
+//   };
+//   try {
+//     const response = await shopifyClient.post("", { query, variables });
+//     console.log("cart update res : ", response);
+//     const errors = response?.data?.data?.cartLinesUpdate?.userErrors || [];
+//     if (errors.length > 0) {
+//       console.error("API User Errors:", errors);
+//       throw new Error(errors.map((err) => err.message).join(", "));
+//     }
+//     const cart = response?.data?.data?.cartLinesUpdate?.cart;
+//     // Store cart in localStorage and update Zustand
+//     storeCartInLocalStorage(cart.id, cart.checkoutUrl);
+//     useShopifyStore.getState().setCart(cart.id, cart.checkoutUrl);
+//     return cart;
+//   } catch (error) {
+//     console.error("Error updating cart:", error.message);
+//     throw error;
+//   }
+// };
 
-export const fetchInitialCart = async (email) => {
-  console.log("fetchInitialCart ....", email);
-  let cartId = "";
-  try {
-    const accessToken = localStorage.getItem("accessToken");
-    cartId = localStorage.getItem("cartId");
-    if (cartId === "" || cartId === null || cartId === undefined) {
-      console.log("No cart ID available.");
-      return null;
-    }
-    const query = `
-      query fetchCartDetails($cartId: ID!) {
-        cart(id: $cartId) {
-          id
-          checkoutUrl
-          createdAt
-          updatedAt
-          lines(first: 10) {
-            edges {
-              node {
-                id
-                quantity
-                merchandise {
-                  ... on ProductVariant {
-                    id
-                    title
-                    priceV2 {
-                      amount
-                      currencyCode
-                    }
-                    compareAtPriceV2{
-                      amount
-                      currencyCode
-                    }
-                    product {
-                      title
-                      productType
-                      images(first: 1) {
-                        edges {
-                          node {
-                            src
-                            altText
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-                attributes {
-                  key
-                  value
-                }
-              }
-            }
-          }
-          buyerIdentity {
-            email
-          }
-        }
-      }
-    `;
+// // export const fetchInitialCart = async (email) => {
+// //   console.log("fetchInitialCart ....", email);
+// //   let cartId = "";
+// //   try {
+// //     const accessToken = localStorage.getItem("accessToken");
+// //     cartId = localStorage.getItem("cartId");
+// //     if (cartId === "" || cartId === null || cartId === undefined) {
+// //       console.log("No cart ID available.");
+// //       return null;
+// //     }
+// //     const query = `
+// //       query fetchCartDetails($cartId: ID!) {
+// //         cart(id: $cartId) {
+// //           id
+// //           checkoutUrl
+// //           createdAt
+// //           updatedAt
+// //           lines(first: 10) {
+// //             edges {
+// //               node {
+// //                 id
+// //                 quantity
+// //                 merchandise {
+// //                   ... on ProductVariant {
+// //                     id
+// //                     title
+// //                     priceV2 {
+// //                       amount
+// //                       currencyCode
+// //                     }
+// //                     compareAtPriceV2{
+// //                       amount
+// //                       currencyCode
+// //                     }
+// //                     product {
+// //                       title
+// //                       productType
+// //                       images(first: 1) {
+// //                         edges {
+// //                           node {
+// //                             src
+// //                             altText
+// //                           }
+// //                         }
+// //                       }
+// //                     }
+// //                   }
+// //                 }
+// //                 attributes {
+// //                   key
+// //                   value
+// //                 }
+// //               }
+// //             }
+// //           }
+// //           buyerIdentity {
+// //             email
+// //           }
+// //         }
+// //       }
+// //     `;
 
-    const response = await shopifyClient.post("", {
-      query,
-      variables: { cartId },
-    });
-    const cart = response?.data?.data?.cart;
+// //     const response = await shopifyClient.post("", {
+// //       query,
+// //       variables: { cartId },
+// //     });
+// //     const cart = response?.data?.data?.cart;
 
-    if (!cart) {
-      throw new Error("Cart not found.");
-    }
+// //     if (!cart) {
+// //       throw new Error("Cart not found.");
+// //     }
 
-    // Store cart in Zustand state and localStorage
-    localStorage.setItem("cartId", cart.id);
-    localStorage.setItem("checkoutUrl", cart.checkoutUrl);
+// //     // Store cart in Zustand state and localStorage
+// //     localStorage.setItem("cartId", cart.id);
+// //     localStorage.setItem("checkoutUrl", cart.checkoutUrl);
 
-    return cart;
-  } catch (error) {
-    console.error("Error fetching cart:", error.message);
-    throw error;
-  }
-};
+// //     return cart;
+// //   } catch (error) {
+// //     console.error("Error fetching cart:", error.message);
+// //     throw error;
+// //   }
+// // };
 
-export const fetchCart = async () => {
-  const accessToken = localStorage.getItem("accessToken");
-  const cartId = localStorage.getItem("cartId");
+// export const fetchCart = async () => {
+//   const accessToken = localStorage.getItem("accessToken");
+//   const cartId = localStorage.getItem("cartId");
 
-  console.log("Cart Id ...", cartId);
-  if (!cartId) {
-    console.log("No cart ID available.");
-    return null;
-  }
+//   console.log("Cart Id ...", cartId);
+//   if (!cartId) {
+//     console.log("No cart ID available.");
+//     return null;
+//   }
 
-  const query = `
-    query fetchCartDetails($cartId: ID!) {
-      cart(id: $cartId) {
-        id
-        checkoutUrl
-        createdAt
-        updatedAt
-        lines(first: 10) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-               ... on ProductVariant {
-                 id
-                 title
+//   const query = `
+//     query fetchCartDetails($cartId: ID!) {
+//       cart(id: $cartId) {
+//         id
+//         checkoutUrl
+//         createdAt
+//         updatedAt
+//         lines(first: 10) {
+//           edges {
+//             node {
+//               id
+//               quantity
+//               merchandise {
+//                ... on ProductVariant {
+//                  id
+//                  title
                  
-                 priceV2 {
-                   amount
-                   currencyCode
-                 }
-                compareAtPriceV2 {
-                  amount
-                  currencyCode
-                }
-                 product {
-                   title
-                   productType
-                   handle
-                   images(first: 1) {
-                     edges {
-                       node {
-                         src
-                         altText
-                       }
-                     }
-                   }
-                 }
-               }
-              }
-              attributes {
-                key
-                value
-              }
-            }
-          }
-        }
-        buyerIdentity {
-          email
-          phone
-          customer {
-            id
-          }
-          countryCode
-          deliveryAddressPreferences {
-            ... on MailingAddress {
-              address1
-              address2
-              city
-              provinceCode
-              countryCodeV2
-              zip
-            }
-          }
-          preferences {
-            delivery {
-              deliveryMethod
-            }
-          }
-        }
-      }
-    }
-  `;
+//                  priceV2 {
+//                    amount
+//                    currencyCode
+//                  }
+//                 compareAtPriceV2 {
+//                   amount
+//                   currencyCode
+//                 }
+//                  product {
+//                    title
+//                    productType
+//                    handle
+//                    images(first: 1) {
+//                      edges {
+//                        node {
+//                          src
+//                          altText
+//                        }
+//                      }
+//                    }
+//                  }
+//                }
+//               }
+//               attributes {
+//                 key
+//                 value
+//               }
+//             }
+//           }
+//         }
+//         buyerIdentity {
+//           email
+//           phone
+//           customer {
+//             id
+//           }
+//           countryCode
+//           deliveryAddressPreferences {
+//             ... on MailingAddress {
+//               address1
+//               address2
+//               city
+//               provinceCode
+//               countryCodeV2
+//               zip
+//             }
+//           }
+//           preferences {
+//             delivery {
+//               deliveryMethod
+//             }
+//           }
+//         }
+//       }
+//     }
+//   `;
 
-  try {
-    const response = await shopifyClient.post("", {
-      query,
-      variables: { cartId },
-    });
+//   try {
+//     const response = await shopifyClient.post("", {
+//       query,
+//       variables: { cartId },
+//     });
 
-    const cart = response?.data?.data?.cart;
+//     const cart = response?.data?.data?.cart;
 
-    console.log("Caaaaart : ", response);
+//     console.log("Caaaaart : ", response);
 
-    if (!cart) {
-      throw new Error("Cart not found.");
-    }
-    // Store cart in localStorage and update Zustand
-    storeCartInLocalStorage(cart.id, cart.checkoutUrl);
-    useShopifyStore.getState().setCart(cart, cart.id, cart.checkoutUrl);
-    cart.quantity = cart.lines.edges.length;
+//     if (!cart) {
+//       throw new Error("Cart not found.");
+//     }
+//     // Store cart in localStorage and update Zustand
+//     storeCartInLocalStorage(cart.id, cart.checkoutUrl);
+//     useShopifyStore.getState().setCart(cart, cart.id, cart.checkoutUrl);
+//     cart.quantity = cart.lines.edges.length;
 
-    cart.itemquantity = cart.lines.edges.reduce((total, edge) => {
-      return total + edge.node.quantity;
-    }, 0);
+//     cart.itemquantity = cart.lines.edges.reduce((total, edge) => {
+//       return total + edge.node.quantity;
+//     }, 0);
 
-    console.log("getcart:", JSON.stringify(cart));
-    return cart;
-  } catch (error) {
-    console.error("Error fetching cart:", error.message);
-    throw error;
-  }
-};
-export const updateCartBuyerIdentity = async (cartId, accessToken) => {
-  const query = `
-    mutation cartBuyerIdentityUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) {
-      cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
-        cart {
-          id
-          checkoutUrl
-        }
-        userErrors {
-          field
-          message
-        }
-      }
-    }
-  `;
+//     console.log("getcart:", JSON.stringify(cart));
+//     return cart;
+//   } catch (error) {
+//     console.error("Error fetching cart:", error.message);
+//     throw error;
+//   }
+// };
+// export const updateCartBuyerIdentity = async (cartId, accessToken) => {
+//   const query = `
+//     mutation cartBuyerIdentityUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) {
+//       cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
+//         cart {
+//           id
+//           checkoutUrl
+//         }
+//         userErrors {
+//           field
+//           message
+//         }
+//       }
+//     }
+//   `;
 
-  const variables = {
-    cartId,
-    buyerIdentity: {
-      customerAccessToken: accessToken,
-    },
-  };
+//   const variables = {
+//     cartId,
+//     buyerIdentity: {
+//       customerAccessToken: accessToken,
+//     },
+//   };
 
-  try {
-    const response = await shopifyClient.post("", { query, variables });
-    const errors =
-      response?.data?.data?.cartBuyerIdentityUpdate?.userErrors || [];
+//   try {
+//     const response = await shopifyClient.post("", { query, variables });
+//     const errors =
+//       response?.data?.data?.cartBuyerIdentityUpdate?.userErrors || [];
 
-    if (errors.length > 0) {
-      throw new Error(errors.map((err) => err.message).join(", "));
-    }
+//     if (errors.length > 0) {
+//       throw new Error(errors.map((err) => err.message).join(", "));
+//     }
 
-    const cart = response?.data?.data?.cartBuyerIdentityUpdate?.cart;
-    return cart;
-  } catch (error) {
-    console.error("Error updating cart buyer identity:", error.message);
-    throw error;
-  }
-};
+//     const cart = response?.data?.data?.cartBuyerIdentityUpdate?.cart;
+//     return cart;
+//   } catch (error) {
+//     console.error("Error updating cart buyer identity:", error.message);
+//     throw error;
+//   }
+// };

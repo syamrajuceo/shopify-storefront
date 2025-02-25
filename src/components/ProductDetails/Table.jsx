@@ -1,7 +1,7 @@
 import React from "react";
 
 export const TableComponent = ({ metafields = [] }) => {
-  console.log("metafields.... : ", metafields);
+  // console.log("metafields.... : ", metafields);
 
   // Helper function to process the value
   const processValue = (field) => {

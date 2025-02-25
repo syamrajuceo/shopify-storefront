@@ -3,7 +3,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { FaPlay, FaPause, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
+// import { FaPlay, FaPause, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { Breadcrumbs, Rating, Typography } from "@mui/material";
 import deliveryIcon from "../../assets/images/hugeicons_truck-delivery.png";
 import stockIcon from "../../assets/images/Vector.png";
@@ -12,13 +12,14 @@ import tabbyLogo from "../../assets/images/image 2.png";
 import ProductList from "./ProductList";
 import { Review } from "./Review";
 import ProductDescription from "./ProductDescription";
-import { useParams } from "react-router-dom";
-import useShopifyStore from "../../store/useShopifyStore";
+import { useNavigate, useParams } from "react-router-dom";
+// import useShopifyStore from "../../store/useShopifyStore";
 import { useEffect, useRef, useState } from "react";
 import { addToCart } from "../../store/cart";
+import {  fetchCart } from "../../redux/slices/cartSlice";
 import toast from "react-hot-toast";
 // import { addReview, fetchReviews } from "../../store/review";
-import { ProductCarousel2 } from "../home/ProductCarousel2";
+// import { ProductCarousel2 } from "../home/ProductCarousel2";
 import CircularProgress from "@mui/material/CircularProgress";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import { fetchProductByHandle } from "../../store/products";
@@ -31,6 +32,8 @@ import {
 } from "../../redux/slices/reviewsSlice";
 import { Helmet } from "react-helmet-async";
 import { colorMap } from "../../utils/colors";
+import { TabbyPromo } from "../tabby/TabbyPromo";
+import  TamaraPromo  from "../tamara/TamaraPromo";
 
 export const ProductDetails = () => {
   const [product, setProduct] = useState(null);
@@ -49,6 +52,12 @@ export const ProductDetails = () => {
   const [showAll, setShowAll] = useState(false);
   // const [isPlaying, setIsPlaying] = useState(false); // State for play/pause
   // const [isMuted, setIsMuted] = useState(false); // State for mute/unmute
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { items} = useSelector((state) => state.cart);
+
+
   const {
     title = "",
     descriptionHtml = "",
@@ -144,6 +153,15 @@ export const ProductDetails = () => {
         }, "")
     : "";
 
+
+
+
+
+
+
+
+
+
   // Handle Add to Cart
   const handleAddToCart = async () => {
     try {
@@ -160,6 +178,31 @@ export const ProductDetails = () => {
       console.error("Failed to add product to cart:", error.message);
     }
   };
+
+
+  // const handleAddToCart = async () => {
+  //   try {
+  //     if (!variantId) {
+  //       console.error("Variant ID not found.");
+  //       return;
+  //     }
+  //     setLoading(true);
+  //     await dispatch(addToCart({ variantId, quantity })).unwrap();
+  //     await dispatch(fetchCart()).unwrap();
+  //     setLoading(false);
+  //     toast.success("Added to cart successfully"); 
+  //     console.log("Item added and cart updated successfully!");
+  //   } catch (error) {
+  //     setLoading(false);
+  //     console.error("Failed to add product to cart:", error.message);
+  //     toast.error("Failed to add product to cart");
+  //   }
+  // };
+
+
+
+
+
   const handleQty = (qty) => {
     setQuantity(qty);
   };
@@ -213,7 +256,6 @@ export const ProductDetails = () => {
 
   // --------------------- review --------------------
 
-  const dispatch = useDispatch();
   const { reviews, error } = useSelector((state) => state.reviews);
 
   // Local state for derived data
@@ -654,12 +696,16 @@ export const ProductDetails = () => {
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
-                              width: isColorOption ? "27px" : "auto",
+                              // width: isColorOption ? "27px" : "auto",
                               height: isColorOption ? "27px" : "auto",
-                              borderRadius: isColorOption ? "50%" : "4px",
-                              background: isColorOption
+                              // borderRadius: isColorOption ? "50%" : "4px",
+                              borderRadius:"4px",
+                              // background: isColorOption
+                              //   ? newColor
+                              //   : "transparent",
+                              color: isColorOption
                                 ? newColor
-                                : "transparent",
+                                : "black",
                               border: isSelected
                                 ? "3px solid #ffffff"
                                 : "2px solid #969696",
@@ -667,8 +713,9 @@ export const ProductDetails = () => {
                                 ? "1px solid #2f2f2f"
                                 : "1px solid transparent",
                               cursor: "pointer",
+                              padding: "1px 2px",
                             }}
-                          >
+                          > {value}
                             <input
                               type="radio"
                               name={option.name}
@@ -746,12 +793,27 @@ export const ProductDetails = () => {
                   Complaints
                 </p>
               </div>
-              <div className="flex justify-between items-center gap-3 w-auto max-w-[400px] bg-[#ecffec] border rounded px-2 py-1">
+              {/* <div className="flex justify-between items-center gap-3 w-auto max-w-[400px] bg-[#ecffec] border rounded px-2 py-1">
                 <img src={tabbyLogo} alt="" />
                 <p className="text-[12px]">
                   4 interest-free payments of AED 15.50. No fees.
                   Shariah-compliant
                 </p>
+              </div> */}
+              {/* <div className="flex justify-between items-center gap-3 w-auto max-w-[400px] px-2 py-1 bg-[#ecffec] border rounded">
+                <TamaraPromo
+                  price={discountPrice}
+                  currency={productCurrency}
+                  countryCode={"AE"}
+                />
+              </div> */}
+              <div className="flex justify-between items-center gap-3 w-auto max-w-[400px]  ">
+                <TabbyPromo
+                  price={discountPrice}
+                  currency={productCurrency}
+                  apiKey={"pk_test_7584decc-10fe-4ffc-a5b6-ad847a229ac3"}
+                  merchantCode={"default"}
+                />
               </div>
             </div>
             <div className="w-full">

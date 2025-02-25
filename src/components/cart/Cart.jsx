@@ -11,6 +11,7 @@ import { ProductCarousel2 } from "../home/ProductCarousel2";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCart, updateCart } from "../../redux/slices/cartSlice";
 import toast from "react-hot-toast";
+import { TabbyPromo } from "../tabby/TabbyPromo";
 
 const accessToken = localStorage.getItem("accessToken");
 const user = localStorage.getItem("user");
@@ -179,11 +180,18 @@ export const Cart = () => {
       Navigate("/login");
       return;
     }
+
     const checkoutUrl = localStorage.getItem("checkoutUrl");
     if (!checkoutUrl) {
       console.error("Checkout URL is missing.");
       return;
     }
+
+    // Remove checkoutUrl and cartId from localStorage
+    // localStorage.removeItem("checkoutUrl");
+    // localStorage.removeItem("cartId");
+
+    // Redirect to checkout URL
     window.location.href = checkoutUrl;
   };
 
@@ -198,6 +206,7 @@ export const Cart = () => {
     }
   }, [cartData]);
 
+  console.log("cartData: " + JSON.stringify(cartData));
 
   if (loading) return <CartPageSkeleton />;
 
@@ -280,12 +289,20 @@ export const Cart = () => {
                     Complaints
                   </p>
                 </div>
-                <div className="flex items-center gap-2 mt-2 w-full px-3 py-1 border rounded border-[#9BFFBC]">
+                {/* <div className="flex items-center gap-2 mt-2 w-full px-3 py-1 border rounded border-[#9BFFBC]">
                   <img src={tabbyIcon} alt="" />
                   <p className="text-[14px]">
                     4 interest-free payments of AED 15.50. No fees.
                     Shariah-compliant
                   </p>
+                </div> */}
+                <div className="flex items-center gap-2 mt-2 w-full py-1  ">
+                  <TabbyPromo
+                    price={discountedTotal}
+                    currency={currency}
+                    apiKey={"pk_test_7584decc-10fe-4ffc-a5b6-ad847a229ac3"}
+                    merchantCode={"default"}
+                  />
                 </div>
               </div>
             </div>
@@ -378,7 +395,7 @@ export const Cart = () => {
         <ProductCarousel2 title={"Similar Products"} category={categories} />
       </div>
       {/* ------------------Checkout Button for mobile------------------ */}
-      {cartData?.lines?.edges?.length > 0 && (
+      {cartData && (
         <div className="fixed lg:hidden bottom-[70px] md:bottom-[0px] w-full text-[#5A5A5A] flex justify-between items-center bg-[#fff] px-4 py-2">
           <div className="flex flex-col">
             <p className="text-[14px]">

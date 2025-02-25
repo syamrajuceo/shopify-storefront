@@ -1,5 +1,10 @@
 import { shopifyClient } from "../config/shopifyClient";
-import { createCart, fetchCart, fetchInitialCart, updateCartBuyerIdentity } from "./cart";
+import { createCart, updateCartBuyerIdentity } from "../redux/slices/cartSlice";
+// import {
+//   createCart,
+//   fetchCart,
+//   updateCartBuyerIdentity,
+// } from "./cart";
 import useShopifyStore from "./useShopifyStore";
 
 const { setUser } = useShopifyStore.getState();
@@ -78,17 +83,9 @@ export const signIn = async (email, password) => {
       };
 
       localStorage.setItem("user", JSON.stringify(localUser));
-
-      // Step 4: Check if the user has an existing cart
-      const cart = await fetchInitialCart(localUser.email); // Retrieve existing cart
-      if (cart) {
-        console.log("Fetched cart for logged-in user:", cart);
-        await updateCartBuyerIdentity(cart.id, accessToken);
-      } else {
-        console.log("No existing cart found, creating a new cart...");
-        const newCart = await createCart();
-        await updateCartBuyerIdentity(newCart.id, accessToken);
-      }
+      console.log("No existing cart found, creating a new cart...");
+      const newCart = await createCart();
+      await updateCartBuyerIdentity(newCart.id, accessToken);
 
       return accessToken;
     } else {
