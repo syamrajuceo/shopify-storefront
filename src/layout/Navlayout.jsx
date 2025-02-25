@@ -2,8 +2,9 @@ import { Outlet } from "react-router-dom";
 import NavabarComponent from "../components/Shared/Navabar.component";
 import FooterComponent from "../components/Shared/Footer.component";
 import { useEffect, useState } from "react";
-import { fetchCart } from "../store/cart";
+// import { fetchCart } from "../store/cart";
 import useShopifyStore from "../store/useShopifyStore";
+import { fetchCart } from "../redux/slices/cartSlice";
 
 function Navlayout() {
   const [fetchedCart, setFetchedCart] = useState(null);

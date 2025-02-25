@@ -158,6 +158,9 @@ export const updateCart = createAsyncThunk(
 
     try {
       const response = await shopifyClient.post("", { query, variables });
+      // console.log(
+      //   "updateCart response : ", response
+      // )
       const errors = response.data.data.cartLinesUpdate.userErrors || [];
       if (errors.length) {
         throw new Error(errors.map((err) => err.message).join(", "));
@@ -169,83 +172,83 @@ export const updateCart = createAsyncThunk(
   }
 );
 
-export const fetchInitialCart = createAsyncThunk(
-  "cart/fetchInitial",
-  async (_, { getState, rejectWithValue }) => {
-    try {
-      const cartId = localStorage.getItem("cartId");
-      if (!cartId) {
-        console.log("No cart ID available.");
-        return null;
-      }
+// export const fetchInitialCart = createAsyncThunk(
+//   "cart/fetchInitial",
+//   async (_, { getState, rejectWithValue }) => {
+//     try {
+//       const cartId = localStorage.getItem("cartId");
+//       if (!cartId) {
+//         console.log("No cart ID available.");
+//         return null;
+//       }
 
-      const query = `
-        query fetchCartDetails($cartId: ID!) {
-          cart(id: $cartId) {
-            id
-            checkoutUrl
-            createdAt
-            updatedAt
-            lines(first: 10) {
-              edges {
-                node {
-                  id
-                  quantity
-                  merchandise {
-                    ... on ProductVariant {
-                      id
-                      title
-                      priceV2 {
-                        amount
-                        currencyCode
-                      }
-                      compareAtPriceV2 {
-                        amount
-                        currencyCode
-                      }
-                      product {
-                        title
-                        productType
-                        images(first: 1) {
-                          edges {
-                            node {
-                              src
-                              altText
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                  attributes {
-                    key
-                    value
-                  }
-                }
-              }
-            }
-            buyerIdentity {
-              email
-            }
-          }
-        }
-      `;
+//       const query = `
+//         query fetchCartDetails($cartId: ID!) {
+//           cart(id: $cartId) {
+//             id
+//             checkoutUrl
+//             createdAt
+//             updatedAt
+//             lines(first: 10) {
+//               edges {
+//                 node {
+//                   id
+//                   quantity
+//                   merchandise {
+//                     ... on ProductVariant {
+//                       id
+//                       title
+//                       priceV2 {
+//                         amount
+//                         currencyCode
+//                       }
+//                       compareAtPriceV2 {
+//                         amount
+//                         currencyCode
+//                       }
+//                       product {
+//                         title
+//                         productType
+//                         images(first: 1) {
+//                           edges {
+//                             node {
+//                               src
+//                               altText
+//                             }
+//                           }
+//                         }
+//                       }
+//                     }
+//                   }
+//                   attributes {
+//                     key
+//                     value
+//                   }
+//                 }
+//               }
+//             }
+//             buyerIdentity {
+//               email
+//             }
+//           }
+//         }
+//       `;
 
-      const response = await shopifyClient.post("", {
-        query,
-        variables: { cartId },
-      });
-      const cart = response?.data?.data?.cart;
-      if (!cart) throw new Error("Cart not found.");
+//       const response = await shopifyClient.post("", {
+//         query,
+//         variables: { cartId },
+//       });
+//       const cart = response?.data?.data?.cart;
+//       if (!cart) throw new Error("Cart not found.");
 
-      localStorage.setItem("cartId", cart.id);
-      localStorage.setItem("checkoutUrl", cart.checkoutUrl);
-      return cart;
-    } catch (error) {
-      return rejectWithValue(error.message || "Failed to fetch cart");
-    }
-  }
-);
+//       localStorage.setItem("cartId", cart.id);
+//       localStorage.setItem("checkoutUrl", cart.checkoutUrl);
+//       return cart;
+//     } catch (error) {
+//       return rejectWithValue(error.message || "Failed to fetch cart");
+//     }
+//   }
+// );
 
 export const fetchCart = createAsyncThunk(
   "cart/fetch",
@@ -278,6 +281,7 @@ export const fetchCart = createAsyncThunk(
                         amount
                         currencyCode
                       }
+                      quantityAvailable
                       product {
                         title
                         productType
@@ -429,18 +433,18 @@ const cartSlice = createSlice({
         state.items = [];
         state.buyerIdentity = null;
       })
-      .addCase(fetchInitialCart.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(fetchInitialCart.fulfilled, (state, action) => {
-        if (action.payload) {
-          state.id = action.payload.id;
-          state.checkoutUrl = action.payload.checkoutUrl;
-          state.items = action.payload.lines.edges.map((edge) => edge.node);
-          state.buyerIdentity = action.payload.buyerIdentity;
-        }
-        state.status = "succeeded";
-      })
+      // .addCase(fetchInitialCart.pending, (state) => {
+      //   state.status = "loading";
+      // })
+      // .addCase(fetchInitialCart.fulfilled, (state, action) => {
+      //   if (action.payload) {
+      //     state.id = action.payload.id;
+      //     state.checkoutUrl = action.payload.checkoutUrl;
+      //     state.items = action.payload.lines.edges.map((edge) => edge.node);
+      //     state.buyerIdentity = action.payload.buyerIdentity;
+      //   }
+      //   state.status = "succeeded";
+      // })
       .addCase(fetchCart.pending, (state) => {
         state.status = "loading";
       })

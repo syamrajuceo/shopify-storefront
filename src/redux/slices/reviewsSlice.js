@@ -10,7 +10,7 @@ export const fetchReviews = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API_URL}/reviews`);
-      console.log("Fetched reviews response: ", response.data);
+      // console.log("Fetched reviews response: ", response.data);
       return response.data.reviews; // Ensure this structure matches the backend response
     } catch (error) {
       console.error("Error fetching reviews:", error.message);

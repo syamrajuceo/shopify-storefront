@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { signUp } from "../../store/auth";
-import { updateCartBuyerIdentity } from "../../store/cart";
+// import { updateCartBuyerIdentity } from "../../store/cart";
 import toast from "react-hot-toast";
+import { updateCartBuyerIdentity } from "../../redux/slices/cartSlice";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ export const Register = () => {
         }
         console.log("Updated Cart:", updatedCart);
 
-        navigate(redirectUrl);
+        navigate(updatedCart.checkoutUrl);
         localStorage.removeItem("redirectAfterLogin");
       } else if (redirectUrl) {
         // Navigate to the stored URL

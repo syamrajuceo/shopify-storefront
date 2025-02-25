@@ -71,7 +71,7 @@ export const ProductCard = ({ product = {}, home = false }) => {
     (field) => field.key === "free_delivery" && field.value === "true"
   );
 
-  console.log("items :........." , items);
+  // console.log("items :........." , items);
 
   const isInCart = items.some((item) => item.merchandise.id === variantId);
 

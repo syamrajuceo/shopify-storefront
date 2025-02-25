@@ -44,7 +44,7 @@ export const Login = () => {
                   localStorage.setItem("checkoutUrl", updatedCart.checkoutUrl);
                   console.log("Updated Cart:", updatedCart);
                 }
-                navigate(redirectUrl);
+                navigate(updatedCart.checkoutUrl);
               })
               .catch((error) => {
                 toast.error("Failed to update cart: " + error);
