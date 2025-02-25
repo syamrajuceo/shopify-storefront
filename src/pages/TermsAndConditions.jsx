@@ -188,8 +188,165 @@ const TermsAndConditions = () => {
 
       <p className="mb-4">7.8 Non-Delivery:</p>
       <p className="mb-4 ml-2">
-      7.8.1 If we are unable to deliver, we will contact the customer to make alternative arrangements.
+       7.8.1 If we are unable to deliver, we will contact the customer to make alternative arrangements.
       </p>
+      <p className="mb-4 ml-2">
+       7.8.2 If the customer is not available at the time of delivery, we will make a maximum of two attempts to deliver.
+      </p>
+      <p className="mb-4 ml-2">
+       7.8.3 If delivery is not possible after two attempts, we will return the order to our warehouse.
+      </p>
+      <p className="mb-4 ml-2">
+       7.8.4 Refunds will be issued for non-delivery within 7-21 working days.
+      </p>
+
+      <h2 className="text-2xl font-semibold mt-6 mb-2">Damaged Goods</h2>
+      <p className="mb-4">
+       8.1 If the customer receives damaged goods, they should contact our customer service team within 24 hours of delivery.
+      </p>
+      <p className="mb-4">
+       8.2 The customer should provide photographic evidence of the damage.
+      </p>
+      <p className="mb-4">
+       8.3 We will arrange for a replacement or refund depending on the customer's preference.
+      </p>
+      <p className="mb-4">
+       8.4 We reserve the right to investigate any claims of damage before issuing a replacement or refund.
+      </p>
+
+      <h2 className="text-2xl font-semibold mt-6 mb-2">Warranty and Repairs</h2>
+      <p className="mb-4">
+       9.1 Manufacturer's Warranty: The optical products sold on our website come with a manufacturer's warranty.
+        The duration and coverage of the warranty may vary depending on the specific product.
+        Please refer to the product description or contact our customer support for more information.     
+      </p>
+      <p className="mb-4">
+       9.2 Warranty Claims: If you encounter any defects or issues with a product covered under warranty, please follow these steps:     
+      </p>
+      <p className="mb-4">
+       Contact our customer support within the warranty period.     
+      </p>
+      <p className="mb-4">
+       Provide proof of purchase, such as your order number or receipt.     
+      </p>
+      <p className="mb-4">
+       Our customer support team will guide you through the warranty claim process, which may involve returning the product for evaluation and repair.    
+      </p>
+      <p className="mb-4">9.3 Repair Services:</p>
+      <p className="mb-4">
+       In addition to the manufacturer's warranty, we offer repair services for optical products. If your product is no longer covered by the warranty or the issue is not covered by the warranty, you can still avail of our repair services.    
+      </p>
+      <p className="mb-4">
+       Please contact our customer support for assistance with repair requests. They will provide you with the necessary instructions and address for sending the product. process, which may involve returning the product for evaluation and repair.    
+      </p>
+      <p className="mb-4">
+       9.4 Exclusions and Limitations: The warranty and repair services may have certain exclusions and limitations, including but not limited to:     
+      </p>
+      <p className="mb-4">
+       Damages caused by misuse, neglect, or improper handling of the product.    
+      </p>
+      <p className="mb-4">
+       Unauthorized repairs or modifications.     
+      </p>
+      <p className="mb-4">
+       Normal wear and tear.      
+      </p>
+      <p className="mb-4">
+       9.5 Please refer to the specific warranty terms provided by the manufacturer or contact our customer support for more details on exclusions and limitations.
+      </p>
+
+      <h2 className="text-2xl font-semibold mt-6 mb-2">Returns and Refunds</h2>
+      <p className="mb-4">
+       10.1 Buyers have the right to return products within a specified period, in accordance with the applicable laws of the UAE.
+      </p>
+      <p className="mb-4">
+       10.2 Products must be returned in their original condition, unused and undamaged, with all original packaging and tags.
+      </p>
+      <p className="mb-4">
+       10.3 Buyers must contact sellers to initiate the return process within 7 days and obtain approval.
+      </p>
+      <p className="mb-4">
+       10.4 Refunds will be issued to the original payment method within a reasonable time period after the returned products have been received and inspected.
+      </p>
+      <p className="mb-4">
+       10.5 For return acceptance box should be in good condition.
+      </p>
+
+      <h2 className="text-2xl font-semibold mt-6 mb-2">Intellectual Property</h2>
+      <p className="mb-4">
+       11.1 All content and materials on the Website, including but not limited to text, images, logos, and trademarks, are the property of the sellers and are protected by copyright laws.
+      </p>
+      <p className="mb-4">
+       11.2 Buyers are prohibited from using, reproducing, or modifying any content from the Website without prior written consent from the sellers.
+      </p>
+
+      <h2 className="text-2xl font-semibold mt-6 mb-2">Limitations of Liability</h2>
+      <p className="mb-4">
+       12.1 Disclaimer of Warranty: We provide the optical products and information on our website "as is," without any warranties or representations, expressed or implied. We do not guarantee the accuracy, reliability, or availability of the information or products.12.1 Disclaimer of Warranty: We provide the optical products and information on our website "as is," without any warranties or representations, expressed or implied. We do not guarantee the accuracy, reliability, or availability of the information or products.
+      </p>
+      <p className="mb-4">
+       12.2 Limitation of Liability: To the fullest extent permitted by law, we shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising out of or related to the use of our website, products, or services. This limitation of liability applies to any claims, damages, or losses, whether based on warranty, contract, tort, or any other legal theory.
+      </p>
+      <p className="mb-4">
+       12.1 Indemnification: By using our website, you agree to indemnify and hold us and our affiliates, employees, and agents harmless from any claims, losses, damages, liabilities, or expenses arising from your use of the website, violation of the terms and conditions, or infringement of any third-party rights.
+      </p>
+
+      <h2 className="text-2xl font-semibold mt-6 mb-2">Privacy and Data Protection:</h2>
+      <p className="mb-4">
+       13.1 Collection of Personal Information: We collect certain personal information from customers during the ordering and registration process. This may include your name, contact details, and payment information. We collect this information for the purpose of order processing, customer support, and improving our services.
+      </p>
+      <p className="mb-4">
+       13.2 Use and Disclosure of Personal Information: We use your personal information for the following purposes:
+      </p>
+      <p className="mb-4">13.3 Data Security:</p>
+      <p className="mb-4 ml-2">
+       13.3.1 We take appropriate measures to protect the security of your personal information. This includes implementing industry-standard security technologies and procedures to prevent unauthorized access, disclosure, alteration, or loss of your information.
+      </p>
+      <p className="mb-4 ml-2">
+       13.3.2 Our payment processing partners use secure encryption protocols to ensure the safety of your payment information.
+      </p>
+      <p className="mb-4 ml-2">
+       13.3.3 The user is responsible for maintaining the confidentiality of his account.
+      </p>
+      <p className="mb-4">13.4 Cookies and Tracking Technologies:</p>
+      <p className="mb-4 ml-2">
+       13.4.1 Cookies:
+      </p>
+      <p className="mb-4 ml-2">
+       13.4.2 Tracking Technologies:
+      </p>
+
+      <h2 className="text-2xl font-semibold mt-6 mb-2">Governing Law and Dispute Resolution:</h2>
+      <p className="mb-4 ml-2">
+       14.1.1 Governing Law:
+      </p>
+      <p className="mb-4 ml-2">
+      14.1.1 We will not trade with or provide any services to OFAC (Office of Foreign Assets Control) and sanctioned countries in accordance with the law of UAE.
+      </p>
+      <p className="mb-4 ml-2">
+       14.1.1 Dispute Resolution:
+      </p>
+
+      <h2 className="text-2xl font-semibold mt-6 mb-2">General Provisions:</h2>
+      <p className="mb-4 ml-2">
+       15.1.1 Severability:
+      </p>
+      <p className="mb-4 ml-2">
+       15.1.1 Amendments:
+      </p>
+      <p className="mb-4 ml-2">
+       15.1.1 Entire Agreement:
+      </p>
+      <p className="mb-4 ml-2">
+       15.1.2 Waiver:
+      </p>
+
+      
+
+      
+
+       
+
 
     
       {/* <h2 className="text-2xl font-semibold mt-6">Definitions</h2>
