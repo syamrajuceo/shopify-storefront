@@ -173,52 +173,25 @@ const TermsAndConditions = () => {
       </p>
       <p className="mb-4">7.7 Delivery Time:</p>
       <p className="mb-4 ml-2">
-      7.7.1 Delivery time is between 1-3 working days for regular and 4-8 weeks for special orders within UAE.
+        7.7.1 Delivery time is between 1-3 working days for regular and 4-8
+        weeks for special orders within UAE.
       </p>
       <p className="mb-4 ml-2">
-      7.7.2 Delivery time may vary for orders outside UAE and will be communicated to the customer.
+        7.7.2 Delivery time may vary for orders outside UAE and will be
+        communicated to the customer.
       </p>
       <p className="mb-4 ml-2">
-      7.7.3 Delivery time may be affected by unforeseen circumstances which are outside our control. In such cases, we will inform our customers about any delays.
+        7.7.3 Delivery time may be affected by unforeseen circumstances which
+        are outside our control. In such cases, we will inform our customers
+        about any delays.
       </p>
 
-
-
-      <h2 className="text-2xl font-semibold mt-6 mb-2">Delivery</h2>
-      <p className="mb-4">
-        7.1 Sellers will make reasonable efforts to deliver the products in a
-        timely manner.
-      </p>
-      <p className="mb-4">
-        7.2 Delivery times may vary depending on the buyer's location and other
-        external factors.
-      </p>
-      <p className="mb-4">
-        7.3 Sellers are not responsible for any delays or damages caused during
-        the delivery process.
-      </p>
-      <p className="mb-4">
-        7.4 Buyers are responsible for providing accurate and complete delivery
-        address information.
-      </p>
-      <p className="mb-4">
-        7.5 Buyers may be required to pay additional charges for customs duties
-        or import taxes, depending on their location.
-      </p>
-      <p className="mb-4">7.6 Delivery Restrictions:</p>
-      <p className="mb-4 ml-2">7.6.1 We only deliver to physical addresses.</p>
+      <p className="mb-4">7.8 Non-Delivery:</p>
       <p className="mb-4 ml-2">
-        7.6.2 Deliveries cannot be made to P.O. Box addresses.
-      </p>
-      <p className="mb-4 ml-2">
-        7.6.3 Customers must provide accurate and complete delivery information
-        including the full name, address, and contact number of the recipient.
-      </p>
-      <p className="mb-4 ml-2">
-        7.6.4 We reserve the right to refuse delivery to certain areas based on
-        security or other reasons.
+      7.8.1 If we are unable to deliver, we will contact the customer to make alternative arrangements.
       </p>
 
+    
       {/* <h2 className="text-2xl font-semibold mt-6">Definitions</h2>
       <p className="mb-2">
         <strong>Buyer:</strong> Any individual or entity purchasing products.
