@@ -29,13 +29,25 @@ export const createCart = createAsyncThunk(
     };
 
     try {
+      // Step 1: Create cart in Shopify
       const response = await shopifyClient.post("", { query, variables });
+
       if (response.data.errors) {
-        throw new Error(response.data.errors[0].message);
+        throw new Error(`GraphQL Error: ${response.data.errors[0].message}`);
       }
-      return response.data.data.cartCreate.cart;
+
+      const { cart } = response.data.data.cartCreate;
+      if (!cart) {
+        throw new Error("Failed to create a cart.");
+      }
+      localStorage.setItem("checkoutUrl" , cart.checkoutUrl);
+      localStorage.setItem("cartId" , cart.id)
+      console.log("Cart created successfully:", cart);
+
+      return cart;
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to create a cart");
+      console.error("Cart Creation Error:", error.message || error);
+      throw error;
     }
   }
 );
@@ -103,13 +115,23 @@ export const addToCart = createAsyncThunk(
 
     try {
       const response = await shopifyClient.post("", { query, variables });
-      const errors = response.data.data.cartLinesAdd.userErrors || [];
-      if (errors.length) {
+      console.log("cart res : ", response);
+      const errors = response?.data?.data?.cartLinesAdd?.userErrors || [];
+      if (errors.length > 0) {
+        console.error("API User Errors:", errors);
         throw new Error(errors.map((err) => err.message).join(", "));
       }
-      return response.data.data.cartLinesAdd.cart;
+      const cart = response?.data?.data?.cartLinesAdd?.cart;
+      if (!cart) {
+        console.error("Failed to update cart: No cart returned.");
+        throw new Error("Failed to update cart.");
+      }
+      localStorage.setItem("cartId", cart.id);
+      localStorage.setItem("checkoutUrl", cart.checkoutUrl);
+      return cart;
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to add item to cart");
+      console.error("Error adding product to cart:", error.message);
+      throw error;
     }
   }
 );
@@ -337,7 +359,6 @@ export const fetchCart = createAsyncThunk(
       });
 
       console.log("response ....", response);
-
 
       const cart = response?.data?.data?.cart;
       if (!cart) throw new Error("Cart not found.");

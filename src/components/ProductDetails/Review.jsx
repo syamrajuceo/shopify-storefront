@@ -113,7 +113,15 @@ export const Review = ({
                     className="font-bold text-blue-500 cursor-pointer"
                     onClick={() => {
                       {
-                        accessToken ? SetIsShow(true) : navigate("/login");
+                        if (!accessToken) {
+                          localStorage.setItem(
+                            "redirectAfterLogin",
+                            window.location.pathname
+                          );
+                          navigate("/login");
+                          return;
+                        }
+                        SetIsShow(true);
                       }
                       window.scrollTo({ top: 0, behavior: "smooth" });
                     }}

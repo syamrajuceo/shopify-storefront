@@ -44,7 +44,7 @@ export const Login = () => {
                   localStorage.setItem("checkoutUrl", updatedCart.checkoutUrl);
                   console.log("Updated Cart:", updatedCart);
                 }
-                navigate(updatedCart.checkoutUrl);
+                window.location.href = updatedCart.checkoutUrl;
               })
               .catch((error) => {
                 toast.error("Failed to update cart: " + error);
@@ -57,7 +57,7 @@ export const Login = () => {
           navigate(redirectUrl || "/");
         }
 
-        window.location.reload();
+        // window.location.reload();
       }
     } catch (error) {
       setLoading(false);
