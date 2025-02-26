@@ -15,8 +15,8 @@ import ProductDescription from "./ProductDescription";
 import { useNavigate, useParams } from "react-router-dom";
 // import useShopifyStore from "../../store/useShopifyStore";
 import { useEffect, useRef, useState } from "react";
-import { addToCart } from "../../store/cart";
-import {  fetchCart } from "../../redux/slices/cartSlice";
+// import { addToCart } from "../../store/cart";
+import {  addToCart,fetchCart } from "../../redux/slices/cartSlice";
 import toast from "react-hot-toast";
 // import { addReview, fetchReviews } from "../../store/review";
 // import { ProductCarousel2 } from "../home/ProductCarousel2";
@@ -162,24 +162,7 @@ export const ProductDetails = () => {
 
 
 
-  // Handle Add to Cart
-  const handleAddToCart = async () => {
-    try {
-      if (!variantId) {
-        console.error("Variant ID not found.");
-        return;
-      }
-      setLoading(true);
-      const cart = await addToCart(variantId, quantity);
-      setLoading(false);
-      console.log("Cart updated:", cart);
-      toast.success("Product added to cart!");
-    } catch (error) {
-      console.error("Failed to add product to cart:", error.message);
-    }
-  };
-
-
+  // // Handle Add to Cart
   // const handleAddToCart = async () => {
   //   try {
   //     if (!variantId) {
@@ -187,17 +170,34 @@ export const ProductDetails = () => {
   //       return;
   //     }
   //     setLoading(true);
-  //     await dispatch(addToCart({ variantId, quantity })).unwrap();
-  //     await dispatch(fetchCart()).unwrap();
+  //     const cart = await addToCart(variantId, quantity);
   //     setLoading(false);
-  //     toast.success("Added to cart successfully"); 
-  //     console.log("Item added and cart updated successfully!");
+  //     console.log("Cart updated:", cart);
+  //     toast.success("Product added to cart!");
   //   } catch (error) {
-  //     setLoading(false);
   //     console.error("Failed to add product to cart:", error.message);
-  //     toast.error("Failed to add product to cart");
   //   }
   // };
+
+
+  const handleAddToCart = async () => {
+    try {
+      if (!variantId) {
+        console.error("Variant ID not found.");
+        return;
+      }
+      setLoading(true);
+      await dispatch(addToCart({ variantId, quantity })).unwrap();
+      await dispatch(fetchCart()).unwrap();
+      setLoading(false);
+      toast.success("Added to cart successfully"); 
+      console.log("Item added and cart updated successfully!");
+    } catch (error) {
+      setLoading(false);
+      console.error("Failed to add product to cart:", error.message);
+      toast.error("Failed to add product to cart");
+    }
+  };
 
 
 
