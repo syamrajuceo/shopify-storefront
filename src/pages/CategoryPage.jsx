@@ -3,6 +3,7 @@ import { FaGlasses, FaRegEye } from 'react-icons/fa';
 import { Link as RouterLink } from 'react-router-dom';
 
 const CategoryPage = () => {
+  
   return (
     <Box
       sx={{

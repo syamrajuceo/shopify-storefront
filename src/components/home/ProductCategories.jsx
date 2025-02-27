@@ -75,7 +75,7 @@ function ProductCategories() {
 
       {/* //mobile  */}
       <div className="w-full p-4 flex flex-col gap-3 md:hidden ">
-        <div className="flex" onClick={()=>{navigate('/sunglasses')}}>
+        <div className="flex" onClick={()=>{navigate('/shop/sunGlasses')}}>
           <div className="flex items-center justify-center gap-2 h-[150px] bg-custom-gray w-[40%] rounded-tl-xl rounded-bl-xl ">
             <h1 className="text-md">sunglass </h1>
             <IoMdArrowForward />
@@ -90,7 +90,7 @@ function ProductCategories() {
           </div>
         </div>
 
-        <div className="flex" onClick={()=>{navigate('/eyeglasses')}}>
+        <div className="flex" onClick={()=>{navigate('/shop/eyeGlasses')}}>
           <div className="flex items-center justify-center gap-2 h-[150px]  w-[60%] ">
             <img
               src={eyeglass2}
@@ -104,7 +104,7 @@ function ProductCategories() {
           </div>
         </div>
 
-        <div className="flex"  onClick={()=>{navigate('/eyeglasses')}}>
+        <div className="flex"  onClick={()=>{navigate('/shop/contactLenses')}}>
           <div className="flex items-center justify-center gap-2 h-[150px] bg-custom-gray w-[40%] rounded-tl-[18px] rounded-bl-[18px] ">
             <h1 className="text-md">Contact lenses </h1>
             <IoMdArrowForward />

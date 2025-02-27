@@ -7,7 +7,7 @@ export const RefundPolicyPage = () => {
   //   ScrollToTop();
   // }, []);
   
-  
+  ScrollToTop()
   return (
     <div className="px-[60px] pt-[30px] pb-[30px] text-gray-800">
       <h1 className="text-3xl font-bold mb-6">Return & Refund Policy</h1>

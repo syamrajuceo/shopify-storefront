@@ -1,6 +1,8 @@
 import React from "react";
+import ScrollToTop from "../utils/ScrollToTop";
 
 const PrivacyPolicyPage = () => {
+  ScrollToTop()
   return (
     <div className="px-10 pt-8 pb-8 text-gray-800 max-w-auto mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center">Privacy Policy</h1>

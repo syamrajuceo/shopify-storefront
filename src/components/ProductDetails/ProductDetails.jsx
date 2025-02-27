@@ -16,7 +16,7 @@ import { useNavigate, useParams } from "react-router-dom";
 // import useShopifyStore from "../../store/useShopifyStore";
 import { useEffect, useRef, useState } from "react";
 // import { addToCart } from "../../store/cart";
-import {  addToCart,fetchCart } from "../../redux/slices/cartSlice";
+import { addToCart, fetchCart } from "../../redux/slices/cartSlice";
 import toast from "react-hot-toast";
 // import { addReview, fetchReviews } from "../../store/review";
 // import { ProductCarousel2 } from "../home/ProductCarousel2";
@@ -33,7 +33,7 @@ import {
 import { Helmet } from "react-helmet-async";
 import { colorMap } from "../../utils/colors";
 import { TabbyPromo } from "../tabby/TabbyPromo";
-import  TamaraPromo  from "../tamara/TamaraPromo";
+import TamaraPromo from "../tamara/TamaraPromo";
 
 export const ProductDetails = () => {
   const [product, setProduct] = useState(null);
@@ -55,8 +55,7 @@ export const ProductDetails = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { items} = useSelector((state) => state.cart);
-
+  const { items } = useSelector((state) => state.cart);
 
   const {
     title = "",
@@ -153,15 +152,6 @@ export const ProductDetails = () => {
         }, "")
     : "";
 
-
-
-
-
-
-
-
-
-
   // // Handle Add to Cart
   // const handleAddToCart = async () => {
   //   try {
@@ -179,7 +169,6 @@ export const ProductDetails = () => {
   //   }
   // };
 
-
   const handleAddToCart = async () => {
     try {
       if (!variantId) {
@@ -190,7 +179,7 @@ export const ProductDetails = () => {
       await dispatch(addToCart({ variantId, quantity })).unwrap();
       await dispatch(fetchCart()).unwrap();
       setLoading(false);
-      toast.success("Added to cart successfully"); 
+      toast.success("Added to cart successfully");
       console.log("Item added and cart updated successfully!");
     } catch (error) {
       setLoading(false);
@@ -198,10 +187,6 @@ export const ProductDetails = () => {
       toast.error("Failed to add product to cart");
     }
   };
-
-
-
-
 
   const handleQty = (qty) => {
     setQuantity(qty);
@@ -242,7 +227,7 @@ export const ProductDetails = () => {
       setSelectedVariant(matchingVariant ? matchingVariant.node : null);
       setMainContent({
         type: "image",
-        content: matchingVariant?.node?.image?.url || null,
+        content: matchingVariant?.node?.image?.url || subImgs[0],
       });
     }
   }, [selectedOptions, product]);
@@ -352,9 +337,9 @@ export const ProductDetails = () => {
   //   });
   // };
 
-  function getColorClass(color) {
-    return colorMap[color] || "#ffffff0";
-  }
+  // function getColorClass(color) {
+  //   return colorMap[color] || "#ffffff0";
+  // }
 
   return (
     <>
@@ -375,7 +360,7 @@ export const ProductDetails = () => {
         />
         <link
           rel="canonical"
-          href={`https://shopify-storefront-7ct7u6sbc-salih-kms-projects.vercel.app/product/${handle}`}
+          href={`https://eyestore.ae/product/${handle}`}
         />
         <meta property="og:title" content={`${title} - Available Now`} />
         <meta
@@ -390,7 +375,7 @@ export const ProductDetails = () => {
         />
         <meta
           property="og:url"
-          content={`https://shopify-storefront-7ct7u6sbc-salih-kms-projects.vercel.app/product/${handle}`}
+          content={`https://eyestore.ae/product/${handle}`}
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${title} - Buy Now`} />
@@ -425,7 +410,7 @@ export const ProductDetails = () => {
               price: discountPrice || "0.00",
               priceCurrency: productCurrency || "USD", // Updated to use `productCurrency`
               availability: quantity > 0 ? "In Stock" : "Out of Stock",
-              url: `https://shopify-storefront-7ct7u6sbc-salih-kms-projects.vercel.app/products/${handle}`,
+              url: `https://eyestore.ae/products/${handle}`,
             },
             aggregateRating: {
               "@type": "AggregateRating",
@@ -564,7 +549,7 @@ export const ProductDetails = () => {
 
                 <p
                   onClick={() => {
-                    if (quantity < qtyAvailable) handleQty(quantity + 1); // Only increase if available stock allows
+                    if (quantity < qtyAvailable) handleQty(quantity + 1);
                   }}
                   className={`${
                     quantity >= qtyAvailable
@@ -660,16 +645,14 @@ export const ProductDetails = () => {
               </p>
             </div>
 
-            {/* Render options (e.g., colors, sizes) */}
+            {/* Render options (excluding colors) */}
             <div className="my-2 h-auto">
-              {product?.options?.map((option) => {
-                const isColorOption = option.name
-                  .toLowerCase()
-                  .includes("color");
-
-                return (
+              {product?.options
+                ?.filter(
+                  (option) => !option.name.toLowerCase().includes("color")
+                ) // Exclude color options
+                .map((option) => (
                   <div key={option.name}>
-                    <h3 className="my-2">{option.name}</h3>
                     <div
                       style={{
                         display: "flex",
@@ -679,33 +662,20 @@ export const ProductDetails = () => {
                         paddingLeft: "5px",
                         maxWidth: "450px",
                         padding: "2px",
-                        overflow: showAll ? "visible" : "hidden", // Control overflow
-                        maxHeight: showAll ? "none" : "50px", // Limit initial height to one line
-                        transition: "max-height 0.3s ease-in-out", // Smooth toggle transition
+                        overflow: showAll ? "visible" : "hidden",
+                        maxHeight: showAll ? "none" : "50px",
+                        transition: "max-height 0.3s ease-in-out",
                       }}
                     >
                       {option.values.map((value) => {
                         const isSelected =
                           selectedOptions[option.name] === value;
-                        const newColor = getColorClass(value);
-
                         return (
                           <label
                             key={value}
                             style={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              // width: isColorOption ? "27px" : "auto",
-                              height: isColorOption ? "27px" : "auto",
-                              // borderRadius: isColorOption ? "50%" : "4px",
-                              borderRadius:"4px",
-                              // background: isColorOption
-                              //   ? newColor
-                              //   : "transparent",
-                              color: isColorOption
-                                ? newColor
-                                : "black",
+                              borderRadius: "4px",
+                              color: "black",
                               border: isSelected
                                 ? "3px solid #ffffff"
                                 : "2px solid #969696",
@@ -715,7 +685,7 @@ export const ProductDetails = () => {
                               cursor: "pointer",
                               padding: "1px 2px",
                             }}
-                          > {value}
+                          >
                             <input
                               type="radio"
                               name={option.name}
@@ -726,18 +696,16 @@ export const ProductDetails = () => {
                               }
                               style={{ display: "none" }}
                             />
-                            {!isColorOption && (
-                              <span className="bg-[#E0E0E04D] py-[2px] px-[5px] text-[#3F4646] text-14px font-semibold">
-                                {value}
-                              </span>
-                            )}
+                            <span className="bg-[#E0E0E04D] py-[2px] px-[5px] text-[#3F4646] text-14px font-semibold">
+                              {value}
+                            </span>
                           </label>
                         );
                       })}
                     </div>
                     {option.values.length > 10 && (
                       <button
-                        className="mt-2 text-gray-500 flex items-center gap-1 w-full justify-center border max-w-[450px] bg-[#f9f9f973] rounded "
+                        className="mt-2 text-gray-500 flex items-center gap-1 w-full justify-center border max-w-[450px] bg-[#f9f9f973] rounded"
                         onClick={() => setShowAll(!showAll)}
                       >
                         {showAll ? "Show Less" : "Load More"}
@@ -745,8 +713,7 @@ export const ProductDetails = () => {
                       </button>
                     )}
                   </div>
-                );
-              })}
+                ))}
             </div>
 
             <div className="flex justify-start items-center w-auto max-w-[350px] text-gray-600 gap-2">

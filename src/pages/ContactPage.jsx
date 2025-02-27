@@ -1,7 +1,9 @@
 import logo from "../assets/logo.png"
 import { FaPhoneAlt, FaUser, FaEnvelope, FaCommentDots, FaPaperPlane } from "react-icons/fa";
+import ScrollToTop from "../utils/ScrollToTop";
 
 export const ContactPage = () => {
+  ScrollToTop()
   const handleSubmit = (e) => {
     e.preventDefault();
     alert("Message sent successfully!");
