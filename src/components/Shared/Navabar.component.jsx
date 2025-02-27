@@ -3,10 +3,17 @@ import user from "../../assets/user.png";
 // import cart from "../../assets/cart.png";
 import {
   CartIcon,
-  PersonIcon
+  PersonIcon,
+  HomeIcon,
+  HomeFilledIcon,
+  DiscountIcon,
+  DiscountFilledIcon,
+  ProductIcon,
+  ProductFilledIcon,
+  CartFilledIcon
 } from '@shopify/polaris-icons';
 import { IoIosSearch } from "react-icons/io";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation,useMatch } from "react-router-dom";
 import LinkData from "../../data/Link.data.json";
 import tamara from "../../assets/tamara.png";
 import tabby from "../../assets/tabby.png";
@@ -22,18 +29,36 @@ import ProductSearchList from "./ProductSeatchlist";
 import basari from "../../assets/basari.png"
 import flag from "../../assets/Flags.png"
 import { useSelector } from "react-redux";
-const iconMapping = {
-  FaHome: <FaHome className="text-yellow-500 text-2xl" />,
-  FaOffer: <BiSolidOffer className="text-red-600 text-2xl" />,
-  FaTag: (
-    <BiSolidTagAlt
-      className="text-blue-600 text-2xl"
-      style={{ transform: "rotate(270deg)" }}
-    />
-  ),
-  FaShoppingCart: <CartIcon />
-};
 
+// const iconMapping = {
+//   FaHome: <FaHome className="text-yellow-500 text-2xl" />,
+//   FaOffer: <BiSolidOffer className="text-red-600 text-2xl" />,
+//   FaTag: (
+//     <BiSolidTagAlt
+//       className="text-blue-600 text-2xl"
+//       style={{ transform: "rotate(270deg)" }}
+//     />
+//   ),
+//   FaShoppingCart: <CartIcon />
+// };
+
+const iconMapping ={
+  FaHomeFalse: <HomeIcon className="w-10 h-10"/>,
+    FaOfferFalse: <DiscountIcon className="w-10 h-10"/>,
+    FaTagFalse: (
+      <ProductIcon
+      className="w-10 h-10" />
+    ),
+    FaShoppingCartFalse: <CartIcon className="w-10 h-10" />,
+
+    FaHomeTrue: <HomeFilledIcon className="w-10 h-10" />,
+    FaOfferTrue: <DiscountFilledIcon  className="w-10 h-10"/>,
+    FaTagTrue: (
+      <ProductFilledIcon
+      className="w-10 h-10"/>
+    ),
+    FaShoppingCartTrue: <CartFilledIcon className="w-10 h-10" />
+}
 
 
 function NavabarComponent({ cartNumber = 0, searchResult, setSearchQuery, searchQuery, queryType }) {
@@ -171,7 +196,7 @@ function NavabarComponent({ cartNumber = 0, searchResult, setSearchQuery, search
 
             // Check if the current path includes 'gender' (for gender-related links)
             const isGenderRoute = location.pathname.includes('gender');
-
+          
             return (
               <NavLink
                 to={linkObj.url === "/home" ? "/" : linkObj.url}
@@ -197,24 +222,25 @@ function NavabarComponent({ cartNumber = 0, searchResult, setSearchQuery, search
         </div>
       </div>
       <div className="block md:hidden fixed bottom-[0%] z-20 w-full p-3 bg-white">
-
-        <div className="flex justify-between w-full">
-          {MobileLinkData.map((linkObj, index) => (
-            <NavLink
-              key={index}
-              to={linkObj.url === "/home" ? "/" : linkObj.url}
-              className={({ isActive }) =>
-                isActive
-                  ? "flex  flex-col items-center sm:gap-2 text-blue-600 font-bold"
-                  : "flex  flex-col items-center sm:gap-2 text-gray-800 hover:text-blue-600"
-              }
-            >
-              {iconMapping[linkObj.icon]}
-              <span>{linkObj.name}</span>
-            </NavLink>
-
-          ))}
-        </div>
+      <div className="flex justify-between w-full">
+  {MobileLinkData.map((linkObj, index) => {
+    const match = useMatch(linkObj.url === "/home" ? "/" : linkObj.url); // ✅ Declare inside the function body
+    return (
+      <NavLink
+        key={index}
+        to={linkObj.url === "/home" ? "/" : linkObj.url}
+        className={({ isActive }) =>
+          isActive
+            ? "flex flex-col items-center sm:gap-2 text-blue-600 font-bold"
+            : "flex flex-col items-center sm:gap-2 text-gray-800 hover:text-blue-600"
+        }
+      >
+        {iconMapping[`${linkObj.icon}${match ? "True" : "False"}`]}
+        <span>{linkObj.name}</span>
+      </NavLink>
+    );
+  })}
+</div>
 
 
 
