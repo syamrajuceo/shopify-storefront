@@ -25,19 +25,19 @@ function ShopController() {
                     setBaseProducts(products);
                     break;
                 }
-                case "contactLenses": {
+                case "ContactLenses": {
                     setBaseProducts(products.filter(product =>
                         product.productType?.toLowerCase().includes("contact lenses")
                     ));
                     break;
                 }
-                case "sunGlasses": {
+                case "Sunglasses": {
                     setBaseProducts(products.filter(product =>
                         product.productType?.toLowerCase().includes("sunglasses")
                     ));
                     break;
                 }
-                case "eyeGlasses": {
+                case "Eyeglasses": {
                     setBaseProducts(products.filter(product =>
                         product.productType?.toLowerCase().includes("eyeglasses")
                     ));

@@ -11,6 +11,12 @@ import FilterController from "./FilterController";
 import { Link } from "react-router-dom";
 import { categoryOptions, ColorDataOptions, EyeDataBrands, filterDataOptions, FilterName, genderDataOptions, productDataStatus } from "../../data/Collection.data";
 // import useShopifyStore from "../../store/useShopifyStore";
+const currencyFormat = "AED";
+
+const formatPrice = (price) =>
+  new Intl.NumberFormat("en-US", { style: "currency", currency: currencyFormat })
+    .format(price)
+    .split(".")[0]; // Removes decimal places
 
 function CollectionComponent({ products = [], type = "Men" }) {
   const [temporarypriceRange, temporarysetPriceRange] = useState({ min: 0, max: 500 });
@@ -183,9 +189,8 @@ function CollectionComponent({ products = [], type = "Men" }) {
             </div>
 
             <div className="flex  mt-3 items-center justify-between">
-              <div>
-                Price: ${temporarypriceRange.min} — ${temporarypriceRange.max}
-              </div>
+            <div> Price: {formatPrice(temporarypriceRange.min)} — {formatPrice(temporarypriceRange.max)}</div>
+
               <button className="border  px-3 py-2 bg-[#E5E7EB]  transition" onClick={() => { setPriceRange(temporarypriceRange) }}>
                 Apply
               </button>

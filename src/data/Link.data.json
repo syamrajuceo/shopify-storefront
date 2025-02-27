@@ -6,17 +6,17 @@
     },
     {
         "name": "Eyeglasses",
-        "url": "shop/eyeGlasses",
+        "url": "shop/Eyeglasses",
         "active": false
     },
     {
         "name": "Contact Lenses",
-        "url": "shop/contactLenses",
+        "url": "shop/ContactLenses",
         "active": false
     },
     {
         "name": "Sunglasses",
-        "url": "shop/sunGlasses",
+        "url": "shop/Sunglasses",
         "active": false
     },
     {

@@ -1,6 +1,10 @@
 import logo from "../../assets/logo.png";
 import user from "../../assets/user.png";
-import cart from "../../assets/cart.png";
+// import cart from "../../assets/cart.png";
+import {
+  CartIcon,
+  PersonIcon
+} from '@shopify/polaris-icons';
 import { IoIosSearch } from "react-icons/io";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import LinkData from "../../data/Link.data.json";
@@ -27,12 +31,12 @@ const iconMapping = {
       style={{ transform: "rotate(270deg)" }}
     />
   ),
-  FaShoppingCart: <FaShoppingCart className="text-blue-500 text-2xl" />
+  FaShoppingCart: <CartIcon />
 };
 
 
 
-function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, searchQuery, querytype }) {
+function NavabarComponent({ cartNumber = 0, searchResult, setSearchQuery, searchQuery, queryType }) {
   const navigate = useNavigate();
   const [hidden, setHidden] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -101,7 +105,7 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
             searchQuery={searchQuery}
             searchResult={searchResult}
             setSearchQuery={setSearchQuery}
-            querytype={querytype}
+            queryType={queryType}
             selectedIndex={selectedIndex}
           />
         </div>
@@ -110,13 +114,14 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
           <Link className="hidden md:block text-[15px] text-[#030712] font-[600]" to={"https://booking.eyestore.ae/"}>Eye test</Link>
           <Link className="hidden md:block text-[15px] text-[#030712] font-[600]" to={"/contact"}>Contact</Link>
           <Link to={"/login"}>
-            <img src={user} alt="user" />
+            {/* <img src={user} alt="user" /> */}
+            <PersonIcon className="text-black w-8 h-8"/>
           </Link>
           <Link className="relative hidden md:inline-block" to="/cart">
             {/* <img src={cart} alt="Go to cart" className="w-6 h-6" /> */}
-            <FaShoppingCart className="text-2xl text-gray-700" />
+            <CartIcon  className="text-black w-8 h-8"/>
             {cartQty > 0 && (
-              <span className={`absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full px-${cartnumber > 99 ? '3' : '2'} py-1 text-xs bg-red-500 text-white`}>
+              <span className={`absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full px-${cartNumber > 99 ? '3' : '2'} py-1 text-xs bg-red-500 text-white`}>
                 {cartQty > 99 ? "99+" : cartQty}
               </span>
             )}
@@ -145,7 +150,7 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
           searchQuery={searchQuery}
           searchResult={searchResult}
           setSearchQuery={setSearchQuery}
-          querytype={querytype}
+          queryType={queryType}
           selectedIndex={selectedIndex}
           small={true}
         />
@@ -157,20 +162,20 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
 
         <FaBars className={`${hidden ? ' ' : 'hidden'} md:hidden text-xl absolute top-0 right-4 `} onClick={() => setHidden(false)} />
         <div className={`${hidden ? 'hidden ' : ''} md:flex gap-4`}>
-          {LinkData.map((linkobj) => {
+          {LinkData.map((linkObj) => {
 
             // Check if the link is gender-specific
             const isGenderActive =
-              location.pathname === `/${linkobj.url.split('?')[0]}` &&
-              location.search === `?${linkobj.url.split('?')[1]}`;
+              location.pathname === `/${linkObj.url.split('?')[0]}` &&
+              location.search === `?${linkObj.url.split('?')[1]}`;
 
             // Check if the current path includes 'gender' (for gender-related links)
             const isGenderRoute = location.pathname.includes('gender');
 
             return (
               <NavLink
-                to={linkobj.url === "/home" ? "/" : linkobj.url}
-                key={linkobj.name}
+                to={linkObj.url === "/home" ? "/" : linkObj.url}
+                key={linkObj.name}
                 end
                 className={({ isActive }) =>
                   (isActive && !isGenderRoute) || isGenderActive
@@ -178,7 +183,7 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
                     : "block p-2 text-gray-700"
                 }
               >
-                {linkobj.name}
+                {linkObj.name}
               </NavLink>
             );
           })}
@@ -194,18 +199,18 @@ function NavabarComponent({ cartnumber = 0, searchResult, setSearchQuery, search
       <div className="block md:hidden fixed bottom-[0%] z-20 w-full p-3 bg-white">
 
         <div className="flex justify-between w-full">
-          {MobileLinkData.map((linkobj, index) => (
+          {MobileLinkData.map((linkObj, index) => (
             <NavLink
               key={index}
-              to={linkobj.url === "/home" ? "/" : linkobj.url}
+              to={linkObj.url === "/home" ? "/" : linkObj.url}
               className={({ isActive }) =>
                 isActive
                   ? "flex  flex-col items-center sm:gap-2 text-blue-600 font-bold"
                   : "flex  flex-col items-center sm:gap-2 text-gray-800 hover:text-blue-600"
               }
             >
-              {iconMapping[linkobj.icon]}
-              <span>{linkobj.name}</span>
+              {iconMapping[linkObj.icon]}
+              <span>{linkObj.name}</span>
             </NavLink>
 
           ))}

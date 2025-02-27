@@ -3,10 +3,15 @@ import { FilterName, SortName } from "../../data/Collection.data";
 const FilterController = (products, filterOptions, priceRange) => {
 
   // Apply price filter
-  let filteredProducts = products.filter((productObj) => {
-    const productPrice = productObj.variants.edges[0].node.priceV2.amount;
-    return productPrice >= priceRange.min && productPrice <= priceRange.max;
-  });
+let filteredProducts = products.filter((productObj) => {
+  const productPrice = parseFloat(productObj.variants.edges[0].node.priceV2.amount); // Convert to number
+  const minPrice = parseFloat(priceRange.min); // Convert min price to number
+  const maxPrice = parseFloat(priceRange.max); // Convert max price to number
+
+  return productPrice >= minPrice && productPrice <= maxPrice;
+});
+
+  console.log("price",priceRange.min,priceRange.max,filteredProducts.length)
 
 
   // Object.keys(filterOptions).forEach((key) => {
