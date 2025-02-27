@@ -4,6 +4,7 @@ import user from "../../assets/user.png";
 import {
   CartIcon,
   PersonIcon,
+  PersonFilledIcon,
   HomeIcon,
   HomeFilledIcon,
   DiscountIcon,
@@ -13,11 +14,11 @@ import {
   CartFilledIcon
 } from '@shopify/polaris-icons';
 import { IoIosSearch } from "react-icons/io";
-import { Link, NavLink, useLocation,useMatch } from "react-router-dom";
+import { Link, NavLink, useLocation, useMatch } from "react-router-dom";
 import LinkData from "../../data/Link.data.json";
 import tamara from "../../assets/tamara.png";
 import tabby from "../../assets/tabby.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa6";
 import { MdClose } from "react-icons/md";
 import MobileLinkData from "../../data/Moblielink.data.json";
@@ -42,22 +43,22 @@ import { useSelector } from "react-redux";
 //   FaShoppingCart: <CartIcon />
 // };
 
-const iconMapping ={
-  FaHomeFalse: <HomeIcon className="w-10 h-10"/>,
-    FaOfferFalse: <DiscountIcon className="w-10 h-10"/>,
-    FaTagFalse: (
-      <ProductIcon
+const iconMapping = {
+  FaHomeFalse: <HomeIcon className="w-10 h-10" />,
+  FaOfferFalse: <DiscountIcon className="w-10 h-10" />,
+  FaTagFalse: (
+    <ProductIcon
       className="w-10 h-10" />
-    ),
-    FaShoppingCartFalse: <CartIcon className="w-10 h-10" />,
+  ),
+  FaShoppingCartFalse: <CartIcon className="w-10 h-10" />,
 
-    FaHomeTrue: <HomeFilledIcon className="w-10 h-10" />,
-    FaOfferTrue: <DiscountFilledIcon  className="w-10 h-10"/>,
-    FaTagTrue: (
-      <ProductFilledIcon
-      className="w-10 h-10"/>
-    ),
-    FaShoppingCartTrue: <CartFilledIcon className="w-10 h-10" />
+  FaHomeTrue: <HomeFilledIcon className="w-10 h-10" />,
+  FaOfferTrue: <DiscountFilledIcon className="w-10 h-10" />,
+  FaTagTrue: (
+    <ProductFilledIcon
+      className="w-10 h-10" />
+  ),
+  FaShoppingCartTrue: <CartFilledIcon className="w-10 h-10" />
 }
 
 
@@ -66,6 +67,7 @@ function NavabarComponent({ cartNumber = 0, searchResult, setSearchQuery, search
   const [hidden, setHidden] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const location = useLocation();
+  const [isLogin, setIsLogin] = useState(false)
 
   const handleKeyDown = (e) => {
 
@@ -92,7 +94,14 @@ function NavabarComponent({ cartNumber = 0, searchResult, setSearchQuery, search
 
   let cartQty = items?.length
 
-  console.log("cartQty :", cartQty);
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      setIsLogin(true)
+    } else {
+      setIsLogin(false)
+    }
+  }, [localStorage.getItem('accessToken')]);
 
   return (
     <div className="bg-white p-1">
@@ -140,17 +149,25 @@ function NavabarComponent({ cartNumber = 0, searchResult, setSearchQuery, search
           <Link className="hidden md:block text-[15px] text-[#030712] font-[600]" to={"/contact"}>Contact</Link>
           <Link to={"/login"}>
             {/* <img src={user} alt="user" /> */}
-            <PersonIcon className="text-black w-8 h-8"/>
+            {isLogin ? <PersonFilledIcon className="text-black w-8 h-8" /> : <PersonIcon className="text-black w-8 h-8" />}
           </Link>
           <Link className="relative hidden md:inline-block" to="/cart">
-            {/* <img src={cart} alt="Go to cart" className="w-6 h-6" /> */}
-            <CartIcon  className="text-black w-8 h-8"/>
+            {cartQty > 0 ? (
+              <CartFilledIcon className="text-black w-8 h-8" />
+            ) : (
+              <CartIcon className="text-black w-8 h-8" />
+            )}
+
             {cartQty > 0 && (
-              <span className={`absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full px-${cartNumber > 99 ? '3' : '2'} py-1 text-xs bg-red-500 text-white`}>
+              <span
+                className={`absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full text-xs bg-red-500 text-white 
+      ${cartQty > 99 ? "px-3" : "px-2"} py-1`}
+              >
                 {cartQty > 99 ? "99+" : cartQty}
               </span>
             )}
           </Link>
+
 
         </div>
       </div>
@@ -196,7 +213,7 @@ function NavabarComponent({ cartNumber = 0, searchResult, setSearchQuery, search
 
             // Check if the current path includes 'gender' (for gender-related links)
             const isGenderRoute = location.pathname.includes('gender');
-          
+
             return (
               <NavLink
                 to={linkObj.url === "/home" ? "/" : linkObj.url}
@@ -222,25 +239,25 @@ function NavabarComponent({ cartNumber = 0, searchResult, setSearchQuery, search
         </div>
       </div>
       <div className="block md:hidden fixed bottom-[0%] z-20 w-full p-3 bg-white">
-      <div className="flex justify-between w-full">
-  {MobileLinkData.map((linkObj, index) => {
-    const match = useMatch(linkObj.url === "/home" ? "/" : linkObj.url); // ✅ Declare inside the function body
-    return (
-      <NavLink
-        key={index}
-        to={linkObj.url === "/home" ? "/" : linkObj.url}
-        className={({ isActive }) =>
-          isActive
-            ? "flex flex-col items-center sm:gap-2 text-blue-600 font-bold"
-            : "flex flex-col items-center sm:gap-2 text-gray-800 hover:text-blue-600"
-        }
-      >
-        {iconMapping[`${linkObj.icon}${match ? "True" : "False"}`]}
-        <span>{linkObj.name}</span>
-      </NavLink>
-    );
-  })}
-</div>
+        <div className="flex justify-between w-full">
+          {MobileLinkData.map((linkObj, index) => {
+            const match = useMatch(linkObj.url === "/home" ? "/" : linkObj.url); // ✅ Declare inside the function body
+            return (
+              <NavLink
+                key={index}
+                to={linkObj.url === "/home" ? "/" : linkObj.url}
+                className={({ isActive }) =>
+                  isActive
+                    ? "flex flex-col items-center sm:gap-2 text-blue-600 font-bold"
+                    : "flex flex-col items-center sm:gap-2 text-gray-800 hover:text-blue-600"
+                }
+              >
+                {iconMapping[`${linkObj.icon}${match ? "True" : "False"}`]}
+                <span>{linkObj.name}</span>
+              </NavLink>
+            );
+          })}
+        </div>
 
 
 
