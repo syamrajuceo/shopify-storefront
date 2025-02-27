@@ -76,7 +76,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
     const filteredProducts = FilterController(products, filterOptions, priceRange);
     // Set the filtered products in the state
     setFilterProduct(filteredProducts);
-
+    setVisibleCount(8)
 
     // setFilterProduct(filteredProducts);
     // console.log("Filter Options", filterOptions);
