@@ -176,7 +176,7 @@ const FooterComponent = () => {
           <div className="flex flex-col md:flex-row gap-4 md:justify-between">
             <div className="flex flex-col gap-3">
               <p className="text-sm text-gray-600">
-                Copyright {new Date().getFullYear()} © Basari Opticals
+                Copyright {new Date().getFullYear()} © Eyestore
               </p>
               <PaymentMethods />
             </div>

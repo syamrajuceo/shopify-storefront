@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import banner  from '../../assets/banner.png'
 const slides = [
-  {
-    title: "NEW IN",
-    subtitle: "BLACKOUT",
-    description: "THE B COLLECTION",
-    cta: "SHOP NOW",
-    image: "https://images.unsplash.com/photo-1583001931096-959e9a1a6223?auto=format&fit=crop&q=80"
-  },
+  // {
+  //   title: "NEW IN",
+  //   subtitle: "BLACKOUT",
+  //   description: "THE B COLLECTION",
+  //   cta: "SHOP NOW",
+  //   image: "https://images.unsplash.com/photo-1583001931096-959e9a1a6223?auto=format&fit=crop&q=80"
+  // },
   {
     title: "TRENDING",
     subtitle: "SUMMER",
