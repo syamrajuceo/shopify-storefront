@@ -1,6 +1,8 @@
 import offer from "../assets/banner2.png";
+import ScrollToTop from "../utils/ScrollToTop";
 
 function Offers() {
+    ScrollToTop()
     return (
         <div className="w-screen h-screen relative bg-gradient-to-b from-blue-500 via-blue-100 to-blue-500">
             <img

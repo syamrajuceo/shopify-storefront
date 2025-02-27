@@ -5,6 +5,7 @@ import useShopifyStore from "../store/useShopifyStore";
 import ScrollToTop from "../utils/ScrollToTop";
 
 function ShapePage() {
+  ScrollToTop()
   const [shapeProducts, setShapeProducts] = useState([]);
   const products = useShopifyStore((state) => state.products);
 
