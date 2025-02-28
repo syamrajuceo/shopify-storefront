@@ -2,6 +2,8 @@ import { FilterName, SortName } from "../../data/Collection.data";
 
 const FilterController = (products, filterOptions, priceRange) => {
 
+  console.log("products :::::: ", products);
+
   // Apply price filter
 let filteredProducts = products.filter((productObj) => {
   const productPrice = parseFloat(productObj.variants.edges[0].node.priceV2.amount); // Convert to number
