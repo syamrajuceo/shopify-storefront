@@ -17,7 +17,7 @@ const navigationSections = {
   customerCare: {
     title: "Customer Care",
     links: [
-      { href: "/faq", label: "FAQ" },
+      // { href: "/faq", label: "FAQ" },
       { href: "/contact", label: "Contact us" },
       { href: "/account", label: "My Account" },
       { href: "/privacy-policy", label: "Privacy Policy" },
@@ -29,10 +29,12 @@ const navigationSections = {
   category: {
     title: "Category",
     links: [
-      { href: "/sunglasses", label: "Sun Glasses" },
-      { href: "/frames", label: "Frames" },
-      { href: "/color-contacts", label: "Color contact Lenses" },
-      { href: "/clear-contacts", label: "Clear Contact Lenses" },
+      { href: "/shop/Sunglasses", label: "Sun Glasses" },
+      { href: "/shop/Eyeglasses", label: "Eye Glasses" },
+      { href: "/shop/ContactLenses", label: "Contact Lenses" },
+      // { href: "/frames", label: "Frames" },
+      // { href: "/color-contacts", label: "Color contact Lenses" },
+      // { href: "/clear-contacts", label: "Clear Contact Lenses" },
     ],
   },
 };
@@ -48,7 +50,8 @@ const ContactInfo = () => (
   <div className="space-y-4 border-1 ">
     <h3 className="font-semibold text-lg text-gray-900">Do You Need Help?</h3>
     <p className="text-sm text-gray-600">
-      ﻣﺪﻳﻨﺔ اﻟﺸﺎرﻗﺔ ﻟﻺﻋﻼم – اﻟﺸﺎرﻗﺔ – إ ع م Eye Store LLC , Sharjah Media City
+      {/* ﻣﺪﻳﻨﺔ اﻟﺸﺎرﻗﺔ ﻟﻺﻋﻼم – اﻟﺸﺎرﻗﺔ – إ ع م */}
+      Eye Store LLC , Sharjah Media City 
     </p>
     <div className="space-y-3">
       <div className="flex items-center gap-2">
@@ -173,7 +176,7 @@ const FooterComponent = () => {
           <div className="flex flex-col md:flex-row gap-4 md:justify-between">
             <div className="flex flex-col gap-3">
               <p className="text-sm text-gray-600">
-                Copyright 2024 © basari opticals
+                Copyright {new Date().getFullYear()} © Eyestore
               </p>
               <PaymentMethods />
             </div>
@@ -182,7 +185,7 @@ const FooterComponent = () => {
                 Terms and Conditions
               </Link>
               <Link
-                to="/privacy"
+                to="/privacy-policy"
                 className="text-gray-600 hover:text-gray-900"
               >
                 Privacy Policy

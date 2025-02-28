@@ -41,9 +41,11 @@ export const Login = () => {
               .unwrap()
               .then((updatedCart) => {
                 if (updatedCart) {
-                  localStorage.setItem("checkoutUrl", updatedCart.checkoutUrl);
+                  localStorage.removeItem("checkoutUrl");
+                  localStorage.removeItem("cartId");
                   console.log("Updated Cart:", updatedCart);
                 }
+
                 window.location.href = updatedCart.checkoutUrl;
               })
               .catch((error) => {

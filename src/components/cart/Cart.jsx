@@ -187,12 +187,10 @@ export const Cart = () => {
       return;
     }
 
-    // Remove checkoutUrl and cartId from localStorage
-    // localStorage.removeItem("checkoutUrl");
-    // localStorage.removeItem("cartId");
-
     // Redirect to checkout URL
     window.location.href = checkoutUrl;
+    localStorage.removeItem("checkoutUrl");
+    localStorage.removeItem("cartId");
   };
 
   useEffect(() => {

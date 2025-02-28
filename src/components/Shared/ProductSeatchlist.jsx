@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import highlightSearchQuery from "./Helper";
 
-function ProductSearchList({ searchQuery = "", setSearchQuery, searchResult: products = [], small = false, querytype = "Product" ,  selectedIndex = -1, }) {
+function ProductSearchList({ searchQuery = "", setSearchQuery, searchResult: products = [], small = false, queryType = "Product" ,  selectedIndex = -1, }) {
     // Only render the list if searchQuery is not empty
     if (searchQuery === null || searchQuery.trim() === "") return null;
 
@@ -22,10 +22,10 @@ function ProductSearchList({ searchQuery = "", setSearchQuery, searchResult: pro
                             className={small ? "w-[20px] h-[20px] mr-3" : "w-[40px] h-[40px] mr-3 transition-all duration-300 ease-in-out"}
                         />
                         <p className="text-sm font-medium">
-                            {querytype === "Product" ? (
+                            {queryType === "Product" ? (
                                 // Highlight product title when query type is "Product"
                                 highlightSearchQuery(product.title, searchQuery)
-                            ) : querytype === "Price" ? (
+                            ) : queryType === "Price" ? (
                                 // Display product title and price with search query highlighted
                                 <div className="flex flex-col">
                                     <p>{product.title}</p>
@@ -42,7 +42,7 @@ function ProductSearchList({ searchQuery = "", setSearchQuery, searchResult: pro
                                     <p>{product.title}</p>
                                     <p>
                                         {highlightSearchQuery(
-                                            `${querytype}: ${querytype === "Vendor" ? product.vendor : ""}`,
+                                            `${queryType}: ${queryType === "Vendor" ? product.vendor : ""}`,
                                             searchQuery
                                         )}
                                     </p>

@@ -11,7 +11,7 @@ function Navlayout() {
   const [searchQuery, setSearchQuery] = useState("");
   const products = useShopifyStore((state) => state.products);
   const [filterProducts, setFilterProducts] = useState([]);
-  const [querytype, setQueryType] = useState("Product");
+  const [queryType, setQueryType] = useState("Product");
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
@@ -126,11 +126,11 @@ function Navlayout() {
   return (
     <div>
       <NavabarComponent
-        cartnumber={fetchedCart?.quantity || 0}
+        cartNumber={fetchedCart?.quantity || 0}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         searchResult={filterProducts}
-        querytype={querytype}
+        queryType={queryType}
       />
       <div className="min-h-[160px]">
         <Outlet />

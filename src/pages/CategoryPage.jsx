@@ -1,6 +1,10 @@
 import { Box } from '@mui/material';
 import { FaGlasses, FaRegEye } from 'react-icons/fa';
 import { Link as RouterLink } from 'react-router-dom';
+import {
+  EyeglassesIcon,
+  ViewIcon
+} from '@shopify/polaris-icons';
 
 const CategoryPage = () => {
   
@@ -18,7 +22,7 @@ const CategoryPage = () => {
       }}
     >
       <RouterLink
-        to="/shop/sunGlasses" 
+        to="/shop/Sunglasses" 
         style={{
           width: '100%',
           display: 'flex',
@@ -44,13 +48,13 @@ const CategoryPage = () => {
             color: 'black',
           }}
         >
-          <FaGlasses style={{ marginRight: '8px' }} />
-          Sunglass
+          <EyeglassesIcon className='w-9 h-9 mr-[8px]' />
+          Sunglasses
         </Box>
       </RouterLink>
 
       <RouterLink
-        to="/shop/eyeGlasses"
+        to="/shop/Eyeglasses"
         style={{
           width: '100%', 
           display: 'flex',
@@ -76,13 +80,13 @@ const CategoryPage = () => {
             color: 'black',
           }}
         >
-          <FaGlasses style={{ marginRight: '8px' }} />
-          Eye Glass
+          <EyeglassesIcon className='w-9 h-9 mr-[8px]' />
+          Eyeglasses
         </Box>
       </RouterLink>
 
       <RouterLink
-        to="/shop/contactLenses" 
+        to="/shop/ContactLenses" 
         style={{
           width: '100%',
           display: 'flex',
@@ -108,8 +112,8 @@ const CategoryPage = () => {
             color: 'black',
           }}
         >
-          <FaRegEye style={{ marginRight: '8px' }} />
-          Contact Lens
+          <ViewIcon className='w-9 h-9 mr-[6px]' />
+          Contact Lenses
         </Box>
       </RouterLink>
     </Box>

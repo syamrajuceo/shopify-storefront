@@ -6,7 +6,7 @@ import useShopifyStore from "./useShopifyStore";
 export const fetchAllProducts = async () => {
   const query = `
       query {
-        products(first: 100) {
+        products(first: 250) {
           edges {
             node {
               id
@@ -80,7 +80,7 @@ export const fetchAllProducts = async () => {
 
   try {
     const response = await shopifyClient.post("", { query });
-    console.log("response: " + JSON.stringify(response));
+    // console.log("response: " + JSON.stringify(response));
     const products = response.data.data.products.edges.map((edge) => {
       const product = edge.node;
 
