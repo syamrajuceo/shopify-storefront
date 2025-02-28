@@ -12,14 +12,14 @@ import { Link } from "react-router-dom";
 import { categoryOptions, ColorDataOptions, EyeDataBrands, filterDataOptions, FilterName, genderDataOptions, productDataStatus } from "../../data/Collection.data";
 // import useShopifyStore from "../../store/useShopifyStore";
 const currencyFormat = "AED";
-
+const PageAddCount=8
 const formatPrice = (price) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: currencyFormat })
     .format(price)
     .split(".")[0]; // Removes decimal places
 
 function CollectionComponent({ products = [], type = "Men" }) {
-  const [temporarypriceRange, temporarysetPriceRange] = useState({ min: 0, max: 500 });
+  const [temporarypriceRange, temporarysetPriceRange] = useState({ min: 0, max: 6000 });
   const [priceRange, setPriceRange] = useState(temporarypriceRange);
   const [filterProduct, setFilterProduct] = useState(products);
 
@@ -46,7 +46,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
   const [visibleCount, setVisibleCount] = useState(8);
 
   const loadMore = () => {
-    const newCount = visibleCount + 4;
+    const newCount = visibleCount + PageAddCount;
     setVisibleCount(newCount);
 
     if (filterProduct.length >= newCount) {
@@ -287,7 +287,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
         <div>
           {visibleCount < filterProduct.length && (
             <button
-              className="w-full p-5 bg-[#3C424221]  font-semibold mt-4"
+              className="w-full p-5 bg-[#3C424221]  font-semibold mt-4 mb-2"
               onClick={loadMore}
             >
               Load More

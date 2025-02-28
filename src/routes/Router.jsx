@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { LoginPage } from "../pages/LoginPage";
 import { RegisterPage } from "../pages/RegisterPage";
 import { CartPage } from "../pages/CartPage";
-import  ProfilePage  from "../pages/ProfilePage";
+import ProfilePage from "../pages/ProfilePage";
 import { HomePage } from "../pages/HomePage";
 import { ProductDetailsPage } from "../pages/ProductDetailsPage";
 // import { ProductListingPage } from "../pages/ProductListingPage";
@@ -24,6 +24,7 @@ import { RefundPolicyPage } from "../pages/RefundPolicyPage";
 import TermsAndConditions from "../pages/TermsAndConditions";
 import PrivacyPolicyPage from "../pages/Privacy";
 import ShippingDelivery from "../pages/ShippingDelivery";
+import LoginRequiredComponent from "../components/auth/LoginRequiredComponent";
 
 
 export const router = createBrowserRouter([
@@ -48,7 +49,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/",
-        element: < HomePage/>,
+        element: < HomePage />,
       },
       // {
       //   path: "/products",
@@ -62,45 +63,45 @@ export const router = createBrowserRouter([
       {
         path: "/contact",
         element: <ContactPage />,
-      },{
+      }, {
         path: "/offer",
-        element:<Offers/>
+        element: <Offers />
       },
       {
         path: "/shop",
-        element:<ShopController/>
+        element: <ShopController />
       },
       {
         path: "/shop/:type",
-        element:<ShopController/>
+        element: <ShopController />
       },
       {
         path: "/category",
-        element:<CategoryPage/>
+        element: <CategoryPage />
       },
       {
         path: "/query",
-        element:<SearchPage/>
+        element: <SearchPage />
       },
       {
         path: "/shape",
-        element:<ShapePage/>
+        element: <ShapePage />
       },
       {
         path: "/return-policy",
-        element:<RefundPolicyPage/>
+        element: <RefundPolicyPage />
       },
       {
         path: "/terms-and-conditions",
-        element:<TermsAndConditions/>
+        element: <TermsAndConditions />
       },
       {
         path: "/privacy-policy",
-        element:<PrivacyPolicyPage/>
+        element: <PrivacyPolicyPage />
       },
       {
         path: "/shipping-delivery",
-        element:<ShippingDelivery/>
+        element: <ShippingDelivery />
       },
       // User routes
       {
@@ -110,18 +111,20 @@ export const router = createBrowserRouter([
             path: "/cart",
             element: <CartPage />,
           },
-          
+
           {
             path: "/profile",
-            element: <ProfilePage />,
+            element: <LoginRequiredComponent redirect={"/login"}>
+              <ProfilePage />
+            </LoginRequiredComponent>,
           },
           {
             path: "/order",
-            element: <OrdersPage />,
+            element: <LoginRequiredComponent redirect={"/login"}><OrdersPage /></LoginRequiredComponent>,
           },
           {
             path: "/ordersummary",
-            element: <OrderSummary/>,
+            element: <LoginRequiredComponent redirect={"/login"}><OrderSummary /></LoginRequiredComponent>,
           },
         ],
       },]
