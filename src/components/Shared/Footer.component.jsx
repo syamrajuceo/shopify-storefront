@@ -29,8 +29,8 @@ const navigationSections = {
   category: {
     title: "Category",
     links: [
-      { href: "/shop/Sunglasses", label: "Sun Glasses" },
-      { href: "/shop/Eyeglasses", label: "Eye Glasses" },
+      { href: "/shop/Sunglasses", label: "Sunglasses" },
+      { href: "/shop/Eyeglasses", label: "Eyeglasses" },
       { href: "/shop/ContactLenses", label: "Contact Lenses" },
       // { href: "/frames", label: "Frames" },
       // { href: "/color-contacts", label: "Color contact Lenses" },
