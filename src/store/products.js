@@ -5,53 +5,57 @@ import useShopifyStore from "./useShopifyStore";
 
 export const fetchAllProducts = async () => {
   const query = `
-      query {
-        products(first: 250) {
-          edges {
-            node {
-              id
-              title
-              descriptionHtml
-              description
-              vendor
-              handle
-              productType
-              options {
-                name
-                values
-              }
-              variants(first: 100) {
-                edges {
-                  node {
-                    id
-                    priceV2 {
-                      amount
-                      currencyCode
-                    }
-                    compareAtPriceV2 {
-                      amount
-                      currencyCode
-                    }
-                    availableForSale
-                    sku
-                    quantityAvailable
-                    selectedOptions {
-                      name
-                      value
-                    }
+    query ($first: Int!, $after: String) {
+      products(first: $first, after: $after) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        edges {
+          node {
+            id
+            title
+            descriptionHtml
+            description
+            vendor
+            handle
+            productType
+            options {
+              name
+              values
+            }
+            variants(first: 100) {
+              edges {
+                node {
+                  id
+                  priceV2 {
+                    amount
+                    currencyCode
+                  }
+                  compareAtPriceV2 {
+                    amount
+                    currencyCode
+                  }
+                  availableForSale
+                  sku
+                  quantityAvailable
+                  selectedOptions {
+                    name
+                    value
                   }
                 }
               }
-              images(first: 100) {
-                edges {
-                  node {
-                    id
-                    url
-                    altText
-                  }
+            }
+            images(first: 100) {
+              edges {
+                node {
+                  id
+                  url
+                  altText
                 }
               }
-              metafields(identifiers: [
+            }
+            metafields(identifiers: [
               {namespace: "shopify", key: "color-pattern"},
               {namespace: "shopify", key: "age-group"},
               {namespace: "shopify", key: "eyewear-frame-design"},
@@ -64,7 +68,6 @@ export const fetchAllProducts = async () => {
               {namespace: "shopify", key: "lens-color"},
               {namespace: "shopify", key: "temple-color"},
               {namespace: "shopify", key: "eyewear-frame-color"},
-
             ]) {
               namespace
               key
@@ -72,40 +75,64 @@ export const fetchAllProducts = async () => {
               type
               description
             }
-            }
           }
         }
       }
-    `;
+    }
+  `;
+
+  let allProducts = [];
+  let hasNextPage = true;
+  let endCursor = null;
 
   try {
-    const response = await shopifyClient.post("", { query });
-    // console.log("response: " + JSON.stringify(response));
-    const products = response.data.data.products.edges.map((edge) => {
-      const product = edge.node;
-
-      // Safely map metafields if they exist and are not null
-      const metafields = product.metafields
-        ? product.metafields
-          .filter((mf) => mf !== null)
-          .map((mf) => ({
-            key: mf.key,
-            value: mf.value,
-            namespace: mf.namespace,
-            type: mf.type,
-            description: mf.description,
-          }))
-        : [];
-      return {
-        ...product,
-        metafields,
+    while (hasNextPage) {
+      const variables = {
+        first: 250,
+        after: endCursor,
       };
-    });
 
-    const newProduct = await Metacontroller(products);
+      const response = await shopifyClient.post("", { query, variables });
+      const { products } = response.data.data;
+
+      // Map and process the products
+      const processedProducts = products.edges.map((edge) => {
+        const product = edge.node;
+
+        // Safely map metafields if they exist and are not null
+        const metafields = product.metafields
+          ? product.metafields
+              .filter((mf) => mf !== null)
+              .map((mf) => ({
+                key: mf.key,
+                value: mf.value,
+                namespace: mf.namespace,
+                type: mf.type,
+                description: mf.description,
+              }))
+          : [];
+        return {
+          ...product,
+          metafields,
+        };
+      });
+
+      // Add the processed products to the allProducts array
+      allProducts = [...allProducts, ...processedProducts];
+
+      // Update pagination variables
+      hasNextPage = products.pageInfo.hasNextPage;
+      endCursor = products.pageInfo.endCursor;
+    }
+
+    // Process all products with Metacontroller
+    const newProduct = await Metacontroller(allProducts);
 
     // Store products in Zustand
     useShopifyStore.getState().setProducts(newProduct);
+
+    console.log("Products processed :", newProduct)
+
     return newProduct;
   } catch (error) {
     console.error("Error fetching products:", error.message);
@@ -309,14 +336,14 @@ export const fetchProductByHandle = async (handle) => {
     // Safely map metafields if they exist and are not null
     const metafields = productData.metafields
       ? productData.metafields
-        .filter((mf) => mf !== null)
-        .map((mf) => ({
-          key: mf.key,
-          value: mf.value,
-          namespace: mf.namespace,
-          type: mf.type,
-          description: mf.description,
-        }))
+          .filter((mf) => mf !== null)
+          .map((mf) => ({
+            key: mf.key,
+            value: mf.value,
+            namespace: mf.namespace,
+            type: mf.type,
+            description: mf.description,
+          }))
       : [];
 
     // Add media and metafields to the product data
@@ -526,10 +553,6 @@ export const fetchCollectionsWithMetafields = async () => {
   }
 };
 
-
-
-
-
 // export const fetchTopSellingProducts = async () => {
 //   const query = `
 //     query {
@@ -635,10 +658,8 @@ export const fetchCollectionsWithMetafields = async () => {
 //   }
 // };
 
-
 // const SHOPIFY_API_URL = 'https://4bz4tg-qg.myshopify.com/admin/api/2024-10/graphql.json';
 // const SHOPIFY_ACCESS_TOKEN = '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';
-
 
 // Function to fetch top-selling products based on order data
 // export const fetchTopSellingProducts = async () => {
