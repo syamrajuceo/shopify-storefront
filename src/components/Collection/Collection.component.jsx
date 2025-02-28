@@ -236,7 +236,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
       
 
       {/* Main product section */}
-      <div className="w-full lg:w-4/5 px-5 sticky h-full top-2">
+      <div className="w-full lg:w-4/5 px-5">
         <div className="flex items-center space-x-2 text-sm text-gray-700 p-4">
           <Link className="hover:text-blue-600 cursor-pointer" to={"/shop"}>Shop</Link>
           {type !== "" && (<>
