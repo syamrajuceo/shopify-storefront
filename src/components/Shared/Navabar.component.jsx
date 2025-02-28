@@ -44,21 +44,21 @@ import { useSelector } from "react-redux";
 // };
 
 const iconMapping = {
-  FaHomeFalse: <HomeIcon className="w-10 h-10" />,
-  FaOfferFalse: <DiscountIcon className="w-10 h-10" />,
+  FaHomeFalse: <HomeIcon className="w-7 h-7" />,
+  FaOfferFalse: <DiscountIcon className="w-7 h-7" />,
   FaTagFalse: (
     <ProductIcon
-      className="w-10 h-10" />
+      className="w-7 h-7" />
   ),
-  FaShoppingCartFalse: <CartIcon className="w-10 h-10" />,
+  FaShoppingCartFalse: <CartIcon className="w-7 h-7" />,
 
-  FaHomeTrue: <HomeFilledIcon className="w-10 h-10" />,
-  FaOfferTrue: <DiscountFilledIcon className="w-10 h-10" />,
+  FaHomeTrue: <HomeFilledIcon className="w-7 h-7" />,
+  FaOfferTrue: <DiscountFilledIcon className="w-7 h-7" />,
   FaTagTrue: (
     <ProductFilledIcon
-      className="w-10 h-10" />
+      className="w-7 h-7" />
   ),
-  FaShoppingCartTrue: <CartFilledIcon className="w-10 h-10" />
+  FaShoppingCartTrue: <CartFilledIcon className="w-7 h-7" />
 }
 
 
@@ -238,8 +238,9 @@ function NavabarComponent({ cartNumber = 0, searchResult, setSearchQuery, search
           <img src={tabby} alt="Tabby" className="h-6" />
         </div>
       </div>
-      <div className="block md:hidden fixed bottom-[0%] z-20 w-full p-3 bg-white">
-        <div className="flex justify-between w-full">
+
+      <div className="block md:hidden fixed bottom-[0%] left-0 z-20 w-full p-3 bg-white ">
+        <div className="flex justify-around w-full">
           {MobileLinkData.map((linkObj, index) => {
             const match = useMatch(linkObj.url === "/home" ? "/" : linkObj.url); // ✅ Declare inside the function body
             return (

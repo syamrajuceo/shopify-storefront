@@ -19,7 +19,7 @@ const navigationSections = {
     links: [
       // { href: "/faq", label: "FAQ" },
       { href: "/contact", label: "Contact us" },
-      { href: "/account", label: "My Account" },
+      { href: "/profile", label: "My Account" },
       { href: "/privacy-policy", label: "Privacy Policy" },
       { href: "/terms-and-conditions", label: "Terms and Conditions" },
       { href: "/shipping-delivery", label: "Shipping and Delivery" },
