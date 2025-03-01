@@ -204,8 +204,9 @@ export const ProductDetails = () => {
         const allImages = productData.images.edges.map((edge) => edge.node.url);
         setSubImgs(allImages);
       }
-      const videoItems =
-        productData?.media?.filter((media) => media.type === "video") || [];
+      const videoItems = Array.isArray(productData?.media)
+        ? productData.media.filter((media) => media.type === "video")
+        : [];
       setVideos(videoItems);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -358,10 +359,7 @@ export const ProductDetails = () => {
             gender || ""
           }, ${age || ""}, ${frameDesign || ""}`}
         />
-        <link
-          rel="canonical"
-          href={`https://eyestore.ae/product/${handle}`}
-        />
+        <link rel="canonical" href={`https://eyestore.ae/product/${handle}`} />
         <meta property="og:title" content={`${title} - Available Now`} />
         <meta
           property="og:description"

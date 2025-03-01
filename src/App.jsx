@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import { HelmetProvider, Helmet } from "react-helmet-async";
-import {
-  fetchAllCollections,
-  fetchAllProducts,
-  fetchCollectionsWithProducts
-} from "./store/products";
+// import {
+//   fetchAllCollections,
+//   // fetchAllProducts,
+//   fetchCollectionsWithProducts
+// } from "./store/products";
 import { router } from "./routes/Router";
-import { Loading } from "./components/loading/Loading";
+// import { Loading } from "./components/loading/Loading";
 
 import useShopifyStore from "./store/useShopifyStore";
 import { fetchOrders } from "./store/orders";
@@ -15,6 +15,8 @@ import PopupModal from "./components/testPopup/EyeTest";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchReviews } from "./redux/slices/reviewsSlice";
 import { fetchCart } from "./redux/slices/cartSlice";
+import { fetchProducts } from "./redux/slices/productSlice";
+// import { fetchAllProducts } from "./redux/slices/productSlice";
 
 
 const App = () => {
@@ -22,28 +24,31 @@ const App = () => {
   const loading = useShopifyStore((state) => state.loading);
   const [showPopup, setShowPopup] = useState(false);
   const { id, items, status, error } = useSelector((state) => state.cart);
+  const { products } = useSelector((state) => state.products);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(fetchProducts());
     dispatch(fetchReviews());
     dispatch(fetchCart());
   }, [dispatch]);
 
-  console.log("cart items : ",items)
+  console.log("items : ",items)
+  console.log("products : ",products)
 
   useEffect(() => {
     const loadData = async () => {
       try {
         setLoading(true);
-        const products = await fetchAllProducts();
+        // const products = await fetchAllProducts();
         // const TopSellingProducts = await fetchTopSellingProducts();
         // console.log("TopSellingProducts.............. :" ,TopSellingProducts)
         setLoading(false);
         // const cart = await fetchCart();
 
-        const orders = await fetchOrders();
+        // const orders = await fetchOrders();
         const fetchedCart = await fetchCart();
-        const fetchedCollections = await fetchCollectionsWithProducts();
+        // const fetchedCollections = await fetchCollectionsWithProducts();
       } catch (error) {
         console.error("Error during initial fetch:", error.message);
       }

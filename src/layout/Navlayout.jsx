@@ -3,13 +3,14 @@ import NavabarComponent from "../components/Shared/Navabar.component";
 import FooterComponent from "../components/Shared/Footer.component";
 import { useEffect, useState } from "react";
 // import { fetchCart } from "../store/cart";
-import useShopifyStore from "../store/useShopifyStore";
+// import useShopifyStore from "../store/useShopifyStore";
 import { fetchCart } from "../redux/slices/cartSlice";
+import { useSelector } from "react-redux";
 
 function Navlayout() {
   const [fetchedCart, setFetchedCart] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const products = useShopifyStore((state) => state.products);
+  const { products, status, error } = useSelector((state) => state.products);
   const [filterProducts, setFilterProducts] = useState([]);
   const [queryType, setQueryType] = useState("Product");
   const capitalizeFirstLetter = (string) => {
