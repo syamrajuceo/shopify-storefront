@@ -4,10 +4,12 @@ import { ProductCard } from "../productCard/ProductCard";
 import { FaArrowRight } from "react-icons/fa";
 import useShopifyStore from "../../store/useShopifyStore";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export function ProductCarousel2({ title, category = "" }) {
   const scrollContainerRef = useRef(null);
-  const Products = useShopifyStore((state) => state.products);
+  // const Products = useShopifyStore((state) => state.products);
+  const { products, status, error } = useSelector((state) => state.products);
   const scroll = (direction) => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -49,7 +51,7 @@ export function ProductCarousel2({ title, category = "" }) {
             WebkitOverflowScrolling: "touch",
           }}
         >
-          {Products.filter((product) =>
+          {products.filter((product) =>
             category && category.length > 0
               ? category.includes(product.productType)
               : true

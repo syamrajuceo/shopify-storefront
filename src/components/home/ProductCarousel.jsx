@@ -4,10 +4,11 @@ import { ProductCard } from "../productCard/ProductCard";
 import evervaImg from "../../assets/everva.webp";
 import { ArrowRight } from "lucide-react";
 import { cn } from "../../lib/utils";
-import useShopifyStore from "../../store/useShopifyStore";
+// import useShopifyStore from "../../store/useShopifyStore";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 export function ProductCarousel({ Promoimage, category }) {
-  const Products = useShopifyStore((state) => state.products);
+  const { products, status, error } = useSelector((state) => state.products);
   const scrollContainerRef = useRef(null);
 
   const PromoCard = ({ title, subtitle, buttonText, imageUrl, className }) => {
@@ -97,7 +98,7 @@ export function ProductCarousel({ Promoimage, category }) {
 
         {/* Product Cards */}
 
-        {Products?.filter(
+        {products?.filter(
           (product) =>
             product.productType.toLowerCase() === category.toLowerCase()
         ).map((product) => (

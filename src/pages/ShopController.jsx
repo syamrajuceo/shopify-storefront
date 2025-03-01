@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import useShopifyStore from "../store/useShopifyStore";
+// import useShopifyStore from "../store/useShopifyStore";
 import CollectionComponent from "../components/Collection/Collection.component";
 import ScrollToTop from "../utils/ScrollToTop";
+import { useSelector } from "react-redux";
 
 function ShopController() {
     const { type = "ALL" } = useParams(); // Default to "ALL" if no type is provided
     const { search } = useLocation(); // Extract query string from the URL
     const [baseProducts, setBaseProducts] = useState([]);
-    const products = useShopifyStore((state) => state.products);
+    // const products = useShopifyStore((state) => state.products);
+    const { products, status, error } = useSelector((state) => state.products);
     ScrollToTop()
     // Helper to extract query parameters
     const getQueryParams = (key) => {

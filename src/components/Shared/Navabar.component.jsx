@@ -241,7 +241,7 @@ function NavabarComponent({ cartNumber = 0, searchResult, setSearchQuery, search
       <div className="block md:hidden fixed bottom-[0%] z-20 w-full p-3 bg-white">
         <div className="flex justify-between w-full">
           {MobileLinkData.map((linkObj, index) => {
-            const match = useMatch(linkObj.url === "/home" ? "/" : linkObj.url); // ✅ Declare inside the function body
+            const match = useMatch(linkObj.url === "/home" ? "/" : linkObj.url);
             return (
               <NavLink
                 key={index}

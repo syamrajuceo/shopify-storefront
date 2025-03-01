@@ -16,12 +16,15 @@ import bannerMobile3 from "../../assets/bannerMobile3.png";
 import Promo2 from "../../assets/promo3.png";
 import useShopifyStore from "../../store/useShopifyStore";
 import { HomePageSkeleton } from "../skeleton/Home";
+import { useSelector } from "react-redux";
 export const Home = () => {
-  const loading = useShopifyStore((state) => state.loading);
+  // const loading = useShopifyStore((state) => state.loading);
+  const { status } = useSelector((state) => state.products);
+  
 
   return (
     <div>
-      {loading ? (
+      {status.loading ? (
         <HomePageSkeleton />
       ) : (
         <>

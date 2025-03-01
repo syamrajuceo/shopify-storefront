@@ -6,14 +6,13 @@ import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import { ProductCard } from "../productCard/ProductCard";
 import { ProductCarousel2 } from "../home/ProductCarousel2";
 import "./style.css";
-import { useEffect, useRef } from "react";
 import { ScrollButton } from "../home/ScrollButton";
-import { FaArrowRight } from "react-icons/fa";
-import useShopifyStore from "../../store/useShopifyStore";
+import { useSelector } from "react-redux";
+import { useRef } from "react";
 
 export default function ProductList({ title, category = "" }) {
   const scrollContainerRef = useRef(null);
-  const Products = useShopifyStore((state) => state.products);
+  const { products, status, error } = useSelector((state) => state.products);
   const scroll = (direction) => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -49,7 +48,7 @@ export default function ProductList({ title, category = "" }) {
                 WebkitOverflowScrolling: "touch",
               }}
             >
-              {Products.filter((product) =>
+              {products.filter((product) =>
                 category
                   ? product.productType.toLowerCase() === category.toLowerCase()
                   : true
