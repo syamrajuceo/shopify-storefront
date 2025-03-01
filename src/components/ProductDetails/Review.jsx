@@ -42,7 +42,7 @@ export const Review = ({
                 </h1>
                 <div className="flex items-center gap-3 mt-4 ">
                   <Rating
-                    value={averageRating.toFixed(1)}
+                    value={parseFloat(averageRating.toFixed(1))}
                     precision={0.5}
                     readOnly
                   />

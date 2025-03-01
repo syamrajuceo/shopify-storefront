@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5558/api/products";
+const API_BASE_URL = "https://shopify-backend-w6d5.onrender.com/api/products";
 
 // Async thunk to fetch products
 export const fetchProducts = createAsyncThunk(

@@ -55,7 +55,7 @@ function ProductCategories() {
         <div className=" mx-auto px-8">
           <div className="text-center mb-12">
             <h2 className=" font-bold text-gray-900 md:text-2xl mb-4 mt-5">
-            frames
+            Frames
             </h2>
           </div>
 
@@ -75,9 +75,14 @@ function ProductCategories() {
 
       {/* //mobile  */}
       <div className="w-full p-4 flex flex-col gap-3 md:hidden ">
+      <div className="w-full flex justify-center">
+        <h2 className=" font-bold text-gray-900 text-2xl mb-4 mt-5">
+            Frames
+            </h2>
+        </div>
         <div className="flex" onClick={()=>{navigate('/shop/Sunglasses')}}>
           <div className="flex items-center justify-center gap-2 h-[150px] bg-custom-gray w-[40%] rounded-tl-xl rounded-bl-xl ">
-            <h1 className="text-md">sunglass </h1>
+            <h1 className="text-md">Sunglasses </h1>
             <IoMdArrowForward />
           </div>
 
@@ -99,14 +104,14 @@ function ProductCategories() {
             />
           </div>
           <div className="flex items-center justify-center gap-2 h-[150px] bg-custom-gray w-[40%] rounded-tr-xl rounded-br-xl ">
-            <h1 className="text-md">Eyeglass</h1>
+            <h1 className="text-md">Eyeglasses</h1>
             <IoMdArrowForward />
           </div>
         </div>
 
         <div className="flex"  onClick={()=>{navigate('/shop/ContactLenses')}}>
           <div className="flex items-center justify-center gap-2 h-[150px] bg-custom-gray w-[40%] rounded-tl-[18px] rounded-bl-[18px] ">
-            <h1 className="text-md">Contact lenses </h1>
+            <h1 className="text-md">Contact Lenses </h1>
             <IoMdArrowForward />
           </div>
 

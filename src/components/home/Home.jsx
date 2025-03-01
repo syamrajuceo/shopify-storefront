@@ -24,7 +24,7 @@ export const Home = () => {
 
   return (
     <div>
-      {status.loading ? (
+      {status == "loading" ? (
         <HomePageSkeleton />
       ) : (
         <>

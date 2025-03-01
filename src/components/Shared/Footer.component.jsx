@@ -19,7 +19,7 @@ const navigationSections = {
     links: [
       // { href: "/faq", label: "FAQ" },
       { href: "/contact", label: "Contact us" },
-      { href: "/account", label: "My Account" },
+      { href: "/profile", label: "My Account" },
       { href: "/privacy-policy", label: "Privacy Policy" },
       { href: "/terms-and-conditions", label: "Terms and Conditions" },
       { href: "/shipping-delivery", label: "Shipping and Delivery" },
@@ -29,8 +29,8 @@ const navigationSections = {
   category: {
     title: "Category",
     links: [
-      { href: "/shop/Sunglasses", label: "Sun Glasses" },
-      { href: "/shop/Eyeglasses", label: "Eye Glasses" },
+      { href: "/shop/Sunglasses", label: "Sunglasses" },
+      { href: "/shop/Eyeglasses", label: "Eyeglasses" },
       { href: "/shop/ContactLenses", label: "Contact Lenses" },
       // { href: "/frames", label: "Frames" },
       // { href: "/color-contacts", label: "Color contact Lenses" },
