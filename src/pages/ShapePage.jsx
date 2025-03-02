@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import CollectionComponent from "../components/Collection/Collection.component";
-import useShopifyStore from "../store/useShopifyStore";
+// import useShopifyStore from "../store/useShopifyStore";
 import ScrollToTop from "../utils/ScrollToTop";
+import { useSelector } from "react-redux";
 
 function ShapePage() {
   ScrollToTop()
   const [shapeProducts, setShapeProducts] = useState([]);
-  const products = useShopifyStore((state) => state.products);
+  // const products = useShopifyStore((state) => state.products);
+  const { products, status, error } = useSelector((state) => state.products);
 
   // Get the location object
   const location = useLocation();

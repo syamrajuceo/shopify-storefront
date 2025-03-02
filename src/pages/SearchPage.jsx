@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CollectionComponent from '../components/Collection/Collection.component';
-import useShopifyStore from '../store/useShopifyStore';
+// import useShopifyStore from '../store/useShopifyStore';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function SearchPage() {
   const navigate = useNavigate();
   const [searchQueryProducts, setSearchQueryProducts] = useState([]);
   const [resultType, setResultType] = useState("Product");
-  const products = useShopifyStore((state) => state.products);
+  // const products = useShopifyStore((state) => state.products);
+  const { products, status, error } = useSelector((state) => state.products);
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get('query');
