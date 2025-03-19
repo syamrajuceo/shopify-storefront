@@ -12,12 +12,9 @@ import Navlayout from "../layout/Navlayout";
 import CategoryPage from "../pages/CategoryPage";
 import Offers from "../pages/Offers";
 import SearchPage from "../pages/SearchPage";
-import { HomePageSkeleton } from "../components/skeleton/Home";
-import { CartPageSkeleton } from "../components/skeleton/Cart";
 import OrdersPage from "../pages/OrdersPage";
 import OrderSummary from "../components/Order/OrderSummary";
 import ShapePage from "../pages/ShapePage";
-import { ProductVariants } from "../components/ProductDetails/ProductByVarient";
 import ShopController from "../pages/ShopController";
 import { ContactPage } from "../pages/ContactPage";
 import { RefundPolicyPage } from "../pages/RefundPolicyPage";
@@ -51,13 +48,8 @@ export const router = createBrowserRouter([
         path: "/",
         element: < HomePage />,
       },
-      // {
-      //   path: "/products",
-      //   element: <ProductListingPage />,
-      // },
       {
         path: "/product/:handle",
-        // element: <ProductVariants />,
         element: <ProductDetailsPage />,
       },
       {

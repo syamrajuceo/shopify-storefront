@@ -3,10 +3,6 @@ import ScrollToTop from "../utils/ScrollToTop";
 
 
 export const RefundPolicyPage = () => {
-  // useEffect(() => {
-  //   ScrollToTop();
-  // }, []);
-  
   ScrollToTop()
   return (
     <div className="px-[60px] pt-[30px] pb-[30px] text-gray-800">

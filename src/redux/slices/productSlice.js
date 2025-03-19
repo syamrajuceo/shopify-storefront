@@ -20,7 +20,7 @@ const productsSlice = createSlice({
   name: "products",
   initialState: {
     products: [],
-    status: "idle", // idle | loading | succeeded | failed
+    status: "idle", 
     error: null,
   },
   reducers: {},

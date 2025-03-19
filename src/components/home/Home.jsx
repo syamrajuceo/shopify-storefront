@@ -1,5 +1,4 @@
 import React from "react";
-import { ProductCard } from "../productCard/ProductCard";
 import Carousel from "./Carousel";
 import ShapeSelector from "./ShapeSelector";
 import ProductCategories from "./ProductCategories";
@@ -14,14 +13,10 @@ import bannerMobile from "../../assets/bannerMobile.png";
 import bannerMobile2 from "../../assets/bannerMobile2.png";
 import bannerMobile3 from "../../assets/bannerMobile3.png";
 import Promo2 from "../../assets/promo3.png";
-import useShopifyStore from "../../store/useShopifyStore";
 import { HomePageSkeleton } from "../skeleton/Home";
 import { useSelector } from "react-redux";
 export const Home = () => {
-  // const loading = useShopifyStore((state) => state.loading);
-  const { status } = useSelector((state) => state.products);
-  
-
+  const { status,products } = useSelector((state) => state.products);
   return (
     <div>
       {status == "loading" ? (
@@ -34,14 +29,14 @@ export const Home = () => {
             <ProductCategories />
             <Banner image={BannerImage1} mobile={bannerMobile} />
           </div>
-          <ProductCarousel  category = {"contact lenses"}/>
-          <ProductCarousel Promoimage={Promo2} category = {"sunglasses"}/>
+          <ProductCarousel category={"contact lenses"} products = {products}/>
+          <ProductCarousel Promoimage={Promo2} category={"sunglasses"}  products ={products}/>
           <div className="flex flex-col gap-5">
             <Banner image={BannerImage2} mobile={bannerMobile2} />
             <Banner image={BannerImage3} mobile={bannerMobile3} />
           </div>
           <Brand />
-          <ProductCarousel2  tittle={'Explore Our Products'}/>
+          <ProductCarousel2 tittle={"Explore Our Products"} products ={products}/>
         </>
       )}
     </div>

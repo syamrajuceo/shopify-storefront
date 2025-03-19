@@ -2,14 +2,10 @@ import { useEffect, useRef } from "react";
 import { ScrollButton } from "./ScrollButton";
 import { ProductCard } from "../productCard/ProductCard";
 import { FaArrowRight } from "react-icons/fa";
-import useShopifyStore from "../../store/useShopifyStore";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 
-export function ProductCarousel2({ title, category = "" }) {
+export function ProductCarousel2({ title, category = "" ,products}) {
   const scrollContainerRef = useRef(null);
-  // const Products = useShopifyStore((state) => state.products);
-  const { products, status, error } = useSelector((state) => state.products);
   const scroll = (direction) => {
     const container = scrollContainerRef.current;
     if (!container) return;

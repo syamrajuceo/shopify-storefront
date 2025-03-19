@@ -8,7 +8,6 @@ function ProfilePage() {
   const [activeTab, setActiveTab] = useState("/");
 
   useEffect(() => {
-    // ScrollToTop()
     const queryParams = new URLSearchParams(location.search);
     const tab = queryParams.get('activetab');
     if (tab) {
