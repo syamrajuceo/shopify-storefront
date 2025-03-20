@@ -57,7 +57,7 @@ export const deleteCart = createAsyncThunk(
   async (email, { rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        `https://shopify-backend-1-f8t9.onrender.com/api/customer/cart/delete/${email}`
+        `https://shopify-backend-93434035859.us-central1.run.app/api/customer/cart/delete/${email}`
       );
       return response.data;
     } catch (error) {

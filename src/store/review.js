@@ -2,7 +2,7 @@ import axios from 'axios';
 import useShopifyStore from './useShopifyStore';
 const { setReview } = useShopifyStore.getState();
 
-const API_URL = 'https://shopify-backend-1-f8t9.onrender.com/api';
+const API_URL = 'https://shopify-backend-93434035859.us-central1.run.app/api';
 
 // Add a review
 export const addReview = async (reviewData) => {

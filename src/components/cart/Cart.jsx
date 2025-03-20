@@ -31,6 +31,7 @@ export const Cart = () => {
   const dispatch = useDispatch();
   const { id, items, status, error } = useSelector((state) => state.cart);
   const [cartData, setCartData] = useState(items);
+  const {products } = useSelector((state) => state.products);
   // const loadData = async () => {
   //   setLoading(true);
   //   try {
@@ -390,7 +391,7 @@ export const Cart = () => {
           </div>
         )}
         {/* ------------------Similar Products------------------ */}
-        <ProductCarousel2 title={"Similar Products"} category={categories} />
+        <ProductCarousel2 title={"Similar Products"} category={categories} products = {products}/>
       </div>
       {/* ------------------Checkout Button for mobile------------------ */}
       {cartData && (
