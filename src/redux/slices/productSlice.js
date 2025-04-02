@@ -1,15 +1,25 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_BASE_URL = "https://shopify-backend-93434035859.us-central1.run.app/api/products";
+const API_BASE_URL = "http://localhost:5558/api/products";
 
-// Async thunk to fetch products
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async (_, { rejectWithValue }) => {
+  async ({ limit = 50, cursor = null }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(API_BASE_URL);
-      return response.data.products;
+      const response = await axios.get(API_BASE_URL, {
+        params: { limit, cursor },
+      });
+
+      // Ensure the API response has unique products
+      const uniqueProducts = Array.from(
+        new Set(response.data.products.map((p) => p.id))
+      ).map((id) => response.data.products.find((p) => p.id === id));
+
+      return {
+        products: uniqueProducts,
+        pagination: response.data.pagination,
+      };
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
@@ -20,10 +30,21 @@ const productsSlice = createSlice({
   name: "products",
   initialState: {
     products: [],
-    status: "idle", 
+    status: "idle",
     error: null,
+    pagination: {
+      nextCursor: null,
+      hasNextPage: false,
+    },
   },
-  reducers: {},
+  reducers: {
+    resetProducts: (state) => {
+      state.products = [];
+      state.pagination = { nextCursor: null, hasNextPage: true };
+      state.status = "idle";
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state) => {
@@ -31,7 +52,15 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.products = action.payload;
+
+        // Combine existing and new products, then remove duplicates
+        const allProducts = [...state.products, ...action.payload.products];
+        const uniqueProducts = Array.from(
+          new Set(allProducts.map((p) => p.id))
+        ).map((id) => allProducts.find((p) => p.id === id));
+
+        state.products = uniqueProducts;
+        state.pagination = action.payload.pagination;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.status = "failed";
@@ -40,4 +69,5 @@ const productsSlice = createSlice({
   },
 });
 
+export const { resetProducts } = productsSlice.actions;
 export default productsSlice.reducer;

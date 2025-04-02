@@ -1,10 +1,7 @@
 import { BiSortAlt2 } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
 import { FilterName, sortDataOptions } from "../../data/Collection.data";
-
 function SortComponent({ SetSelectedFilter ,Sortoption,setSortOption}) {
-  
-
   return (
     <div className="border-r-1 bg-[#FFFFFF] rounded  w-full lg:w-1/3">
       <div className="flex items-center justify-between p-4 text-xl border-b">
@@ -40,5 +37,4 @@ function SortComponent({ SetSelectedFilter ,Sortoption,setSortOption}) {
     </div>
   );
 }
-
 export default SortComponent;

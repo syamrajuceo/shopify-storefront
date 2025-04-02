@@ -36,6 +36,8 @@ import { TabbyPromo } from "../tabby/TabbyPromo";
 import TamaraPromo from "../tamara/TamaraPromo";
 
 export const ProductDetails = () => {
+  const { products } = useSelector((state) => state.products);
+  const exploreProducts = products.slice(0, 100);
   const [product, setProduct] = useState(null);
   const { handle } = useParams();
   const [mainContent, setMainContent] = useState({
@@ -803,10 +805,18 @@ export const ProductDetails = () => {
         </div>
 
         <div className="">
-          <ProductList title={"Similar Products"} category={productType} />
+          {exploreProducts && (
+            <ProductList
+              title={"Similar Products"}
+              category={productType}
+              products={products}
+            />
+          )}
         </div>
         <div className="">
-          <ProductList title={"Popular Products"} category={""} />
+          {exploreProducts && (
+            <ProductList title={"Popular Products"} category={""} products={exploreProducts}/>
+          )}
         </div>
 
         {/* Mobile fixed bottom Add to Cart */}

@@ -6,40 +6,18 @@ import useShopifyStore from "./store/useShopifyStore";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchReviews } from "./redux/slices/reviewsSlice";
 import { fetchCart } from "./redux/slices/cartSlice";
-import { fetchProducts } from "./redux/slices/productSlice";
+import { fetchProducts, resetProducts } from "./redux/slices/productSlice";
 
 
 
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchProducts());
+    dispatch(resetProducts());
+    dispatch(fetchProducts({ limit: 50 }));
     dispatch(fetchReviews());
     dispatch(fetchCart());
   }, [dispatch]);
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        await fetchCart();
-      } catch (error) {
-        console.error("Error during initial fetch:", error.message);
-      }
-    };
-    loadData();
-  }, []);
-
-  // useEffect(() => {
-  //   const isPopupShown = localStorage.getItem("popupShown");
-  //   if (!isPopupShown) {
-  //     setShowPopup(true);
-  //     localStorage.setItem("popupShown", "true");
-  //   }
-  // }, []);
-
-  // const closeModal = () => {
-  //   setShowPopup(false);
-  // };
-
   return (
     <HelmetProvider>
       <Helmet>

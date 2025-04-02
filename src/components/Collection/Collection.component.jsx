@@ -1,166 +1,173 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import FilterBoxComponent from "./FilterBox.component";
 import { IoIosArrowForward } from "react-icons/io";
 import { ProductCard } from "../productCard/ProductCard";
-// import ProductData from "../../data/Product.data.json";
 import { FaFilter } from "react-icons/fa6";
 import { BiSortAlt2 } from "react-icons/bi";
 import SortComponent from "./Sort.component";
 import FilterComponent from "./Filter.component";
 import FilterController from "./FilterController";
 import { Link } from "react-router-dom";
-import { categoryOptions, ColorDataOptions, EyeDataBrands, filterDataOptions, FilterName, genderDataOptions, productDataStatus } from "../../data/Collection.data";
-// import useShopifyStore from "../../store/useShopifyStore";
+import {
+  categoryOptions,
+  ColorDataOptions,
+  EyeDataBrands,
+  filterDataOptions,
+  FilterName,
+  genderDataOptions,
+  productDataStatus,
+} from "../../data/Collection.data";
+import { useDispatch, useSelector } from "react-redux";
+import { CircularProgress } from "@mui/material";
+import { fetchProducts } from "../../redux/slices/productSlice";
+
 const currencyFormat = "AED";
-const PageAddCount=8
 const formatPrice = (price) =>
-  new Intl.NumberFormat("en-US", { style: "currency", currency: currencyFormat })
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: currencyFormat,
+  })
     .format(price)
-    .split(".")[0]; // Removes decimal places
+    .split(".")[0];
 
-function CollectionComponent({ products = [], type = "Men" }) {
-  const [temporarypriceRange, temporarysetPriceRange] = useState({ min: 0, max: 6000 });
-  const [priceRange, setPriceRange] = useState(temporarypriceRange);
-  const [filterProduct, setFilterProduct] = useState(products);
-
-  const [pagenatedProduct, setPagenatedProduct] = useState(() => {
-    if (!filterProduct || filterProduct.length === 0) {
-      return [];
-    }
-    if (filterProduct.length < 8) {
-      return filterProduct;
-    }
-    return filterProduct.slice(0, 8);
+function CollectionComponent({ type = "Men" }) {
+  const dispatch = useDispatch();
+  const { products, pagination, status } = useSelector((state) => state.products);
+  console.log("products : ",products)
+  const [temporarypriceRange, temporarysetPriceRange] = useState({
+    min: 0,
+    max: 6000,
   });
+  const [priceRange, setPriceRange] = useState(temporarypriceRange);
+  const [filterProduct, setFilterProduct] = useState([]);
+  const [filterOptions, setFilterOptions] = useState(filterDataOptions);
+  const [appliedfilter, SetAppliedFilter] = useState(0);
+  const [selectedfilter, SetSelectedFilter] = useState(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
 
-  useEffect(() => {
-    if (!filterProduct || filterProduct.length === 0) {
-      setPagenatedProduct([]);
-    } else if (filterProduct.length < 8) {
-      setPagenatedProduct(filterProduct);
-    } else {
-      setPagenatedProduct(filterProduct.slice(0, 8));
-    }
-  }, [filterProduct]);
-
-  const [visibleCount, setVisibleCount] = useState(8);
-
-  const loadMore = () => {
-    const newCount = visibleCount + PageAddCount;
-    setVisibleCount(newCount);
-
-    if (filterProduct.length >= newCount) {
-      setPagenatedProduct(filterProduct.slice(0, newCount));
-    } else {
-      setPagenatedProduct(filterProduct);
-    }
+  // Simple debounce implementation
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return function (...args) {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
   };
 
-
-  const [filterOptions, setFilterOptions] = useState(filterDataOptions);
-
+  // Load initial products
   useEffect(() => {
-    // let filteredProducts = [...products];
+    setIsInitialLoad(true);
+    dispatch(fetchProducts({ limit: 20, cursor: null }))
+      .unwrap()
+      .then((response) => {
+        setFilterProduct(response.products || []);
+        setHasMore(response.pagination?.hasNextPage || false);
+      })
+      .finally(() => setIsInitialLoad(false));
+    setFilterOptions(filterDataOptions);
+  }, [dispatch, type]);
 
-    // filteredProducts = filteredProducts.filter(product => 
-    //   product.price >= priceRange.min && product.price <= priceRange.max
-    // );
-
-    // Object.keys(filterOptions).forEach(key => {
-    //   if (filterOptions[key]?.length > 0) {
-    //     filteredProducts = filteredProducts.filter(product => 
-    //       filterOptions[key].some(option => product[key]?.includes(option))
-    //     );
-    //   }
-    // });
+  // Filter products
+  useEffect(() => {
     const filteredProducts = FilterController(products, filterOptions, priceRange);
-    // Set the filtered products in the state
     setFilterProduct(filteredProducts);
-    setVisibleCount(8)
-
-    // setFilterProduct(filteredProducts);
-    // console.log("Filter Options", filterOptions);
   }, [products, filterOptions, priceRange]);
+
+  // Infinite scroll handler
+  const handleScroll = useCallback(() => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop <
+        document.documentElement.offsetHeight - 500 ||
+      status === "loading" ||
+      !hasMore
+    ) {
+      return;
+    }
+    loadMoreProducts();
+  }, [status, hasMore, pagination?.nextCursor]);
+
+  // Debounced scroll handler
+  const debouncedScrollHandler = debounce(handleScroll, 300);
+
+  // Set up scroll event listener
   useEffect(() => {
-    setFilterOptions(filterDataOptions)
-  }, [type])
-  const genderOptions = genderDataOptions;
-  const frameColorOptions = ColorDataOptions;
-  const brandOptions = EyeDataBrands;
-  const productStatusOptions = productDataStatus;
-  const [appliedfilter, SetAppliedFilter] = useState(0);
-  // const [isopen, setIsOpen] = useState(false);
-  const [selectedfilter, SetSelectedFilter] = useState(null);
-  // const toggleAnswer = (index) => {
-  //   setOpenIndexs((prevOpenIndexs) => {
-  //     const newOpenIndexs = [...prevOpenIndexs];
-  //     if (newOpenIndexs.includes(index)) {
-  //       newOpenIndexs.splice(newOpenIndexs.indexOf(index), 1);
-  //     } else {
-  //       newOpenIndexs.push(index);
-  //     }
-  //     return newOpenIndexs;
-  //   });
-  // };
+    window.addEventListener("scroll", debouncedScrollHandler);
+    return () => window.removeEventListener("scroll", debouncedScrollHandler);
+  }, [debouncedScrollHandler]);
+
+  // Load more products function
+  const loadMoreProducts = useCallback(() => {
+    if (status !== "loading" && hasMore && pagination?.nextCursor) {
+      dispatch(fetchProducts({ 
+        limit: 20, 
+        cursor: pagination.nextCursor 
+      }))
+      .unwrap()
+      .then((response) => {
+        setFilterProduct(prev => [...prev, ...(response.products || [])]);
+        setHasMore(response.pagination?.hasNextPage || false);
+      });
+    }
+  }, [dispatch, status, hasMore, pagination?.nextCursor]);
+
+  // Price change handlers
   const handlePriceChange = (e, type) => {
-    // Update state dynamically while user types
     temporarysetPriceRange((prev) => ({
       ...prev,
-      [type]: e.target.value, // Keep live user input
+      [type]: e.target.value,
     }));
   };
 
   const handleKeyDownPriceChange = (e, type) => {
-    const step = 50; // Define step increment/decrement value
-    let value = parseInt(e.target.value, 10) || 0; // Get the input value
+    const step = 50;
+    let value = parseInt(e.target.value, 10) || 0;
 
     if (e.key === "ArrowUp") {
       value += step - 1;
     } else if (e.key === "ArrowDown") {
-      value = Math.max(value - step + 1, 0); // Prevent negative values
+      value = Math.max(value - step + 1, 0);
     } else {
-      return; // Exit if it's not an arrow key
+      return;
     }
 
-    // Ensure value is within range
     if (type === "min") {
-      value = Math.min(value, temporarypriceRange.max); // Prevent min > max
+      value = Math.min(value, temporarypriceRange.max);
     } else if (type === "max") {
-      value = Math.max(value, temporarypriceRange.min); // Prevent max < min
+      value = Math.max(value, temporarypriceRange.min);
     }
 
-    // Update the state with the adjusted value
     temporarysetPriceRange((prev) => ({
       ...prev,
       [type]: value,
     }));
   };
 
-
-
   const handleFilterChange = (header, selectedOptions) => {
-    const parsedOptions = Array.isArray(selectedOptions) ? selectedOptions : JSON.parse(selectedOptions);
+    const parsedOptions = Array.isArray(selectedOptions)
+      ? selectedOptions
+      : JSON.parse(selectedOptions);
 
     setFilterOptions((prevState) => ({
       ...prevState,
-      [header]: parsedOptions
+      [header]: parsedOptions,
     }));
   };
 
-
+  // Mobile filter handlers
+  const genderOptions = genderDataOptions;
+  const frameColorOptions = ColorDataOptions;
+  const brandOptions = EyeDataBrands;
+  const productStatusOptions = productDataStatus;
 
   return (
     <div className="flex flex-col lg:flex-row relative h-full">
-      {/* Sidebar for filters */}
-      {/* <div
-        className={`bg-[#FFFFFF] lg:block ${isopen ? "block" : "hidden"
-          } lg:w-1/5`}
-      > */}
-      <div className={`bg-[#FFFFFF] lg:block lg:w-1/5 hidden border-2 sticky h-full top-2`}>
+      {/* Desktop Filters Sidebar */}
+      <div className="bg-[#FFFFFF] lg:block lg:w-1/5 hidden border-2 sticky h-full top-2">
         <div className="p-3">
           <div className="pl-3">
             <h1 className="font-semibold text-xl">Price</h1>
-            <div className="flex  lg:flex-col xl:flex-row gap-2 mt-3 items-center">
+            <div className="flex lg:flex-col xl:flex-row gap-2 mt-3 items-center">
               <div>
                 <h1 className="text-[12px]">Min Price</h1>
                 <input
@@ -172,46 +179,52 @@ function CollectionComponent({ products = [], type = "Men" }) {
                   onKeyDown={(e) => handleKeyDownPriceChange(e, "min")}
                 />
               </div>
-
               <span className="text-[14px] text-[#030712]">-</span>
               <div>
                 <h1 className="text-[12px]">Max Price</h1>
                 <input
                   type="number"
-                  className="border w-[116.44px] h-[38px]  py-1 px-3"
+                  className="border w-[116.44px] h-[38px] py-1 px-3"
                   min={1}
                   value={temporarypriceRange.max}
                   onChange={(e) => handlePriceChange(e, "max")}
                   onKeyDown={(e) => handleKeyDownPriceChange(e, "max")}
                 />
               </div>
-
             </div>
-
-            <div className="flex  mt-3 items-center justify-between">
-              <div> Price: {formatPrice(temporarypriceRange.min)} — {formatPrice(temporarypriceRange.max)}</div>
-
-              <button className="border  px-3 py-2 bg-[#E5E7EB]  transition" onClick={() => { setPriceRange(temporarypriceRange) }}>
+            <div className="flex mt-3 items-center justify-between">
+              <div>
+                Price: {formatPrice(temporarypriceRange.min)} —{" "}
+                {formatPrice(temporarypriceRange.max)}
+              </div>
+              <button
+                className="border px-3 py-2 bg-[#E5E7EB] transition"
+                onClick={() => setPriceRange(temporarypriceRange)}
+              >
                 Apply
               </button>
             </div>
           </div>
 
           <div className="p-3">
-            {type === "" || !["gender"].includes(type) && <FilterBoxComponent
-              header={FilterName.Gender}
-              options={genderOptions}
-              filterseletedOptions={filterOptions.Gender}
-              onFilterChange={handleFilterChange}
-              type={type}
-            />}
-            {type === "" || !["ContactLenses", "Sunglasses", "Eyeglasses"].includes(type) && <FilterBoxComponent
-              header={FilterName.Category}
-              options={categoryOptions}
-              filterseletedOptions={filterOptions[FilterName.Category]}
-              onFilterChange={handleFilterChange}
-              type={type}
-            />}
+            {type === "" || !["gender"].includes(type) && (
+              <FilterBoxComponent
+                header={FilterName.Gender}
+                options={genderOptions}
+                filterseletedOptions={filterOptions.Gender}
+                onFilterChange={handleFilterChange}
+                type={type}
+              />
+            )}
+            {type === "" || !["ContactLenses", "Sunglasses", "Eyeglasses"].includes(type) && (
+              <FilterBoxComponent
+                header={FilterName.Category}
+                options={categoryOptions}
+                filterseletedOptions={filterOptions[FilterName.Category]}
+                onFilterChange={handleFilterChange}
+                type={type}
+              />
+            )}
             <FilterBoxComponent
               header={FilterName.Color}
               options={frameColorOptions}
@@ -233,127 +246,98 @@ function CollectionComponent({ products = [], type = "Men" }) {
               onFilterChange={handleFilterChange}
               type={type}
             />
-
           </div>
         </div>
       </div>
 
-
-
-      {/* Main product section */}
+      {/* Main Product Section */}
       <div className="w-full lg:w-4/5 px-5">
+        {/* Breadcrumbs */}
         <div className="flex items-center space-x-2 text-sm text-gray-700 p-4">
-          <Link className="hover:text-blue-600 cursor-pointer" to={"/shop"}>Shop</Link>
-          {type !== "" && (<>
-            <IoIosArrowForward />
-            {/* <span className="hover:text-blue-600 cursor-pointer">Eyewear</span>
-          <IoIosArrowForward />  */}
-            <span className="font-semibold">
-              {type === "ContactLenses"
-                ? "Contact Lenses"
-                : type.charAt(0).toUpperCase() + type.slice(1)}
-            </span>
-          </>)}
+          <Link className="hover:text-blue-600 cursor-pointer" to="/shop">
+            Shop
+          </Link>
+          {type !== "" && (
+            <>
+              <IoIosArrowForward />
+              <span className="font-semibold">
+                {type === "ContactLenses"
+                  ? "Contact Lenses"
+                  : type.charAt(0).toUpperCase() + type.slice(1)}
+              </span>
+            </>
+          )}
         </div>
 
+        {/* Product Count */}
         <div className="bg-white p-3 text-sm text-gray-700">
-
-          Showing {pagenatedProduct.length} of {filterProduct.length} results
-
+          Showing {filterProduct.length} products
         </div>
 
-        {/* Product grid */}
+        {/* Product Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4 justify-items-center">
-          {/* {ProductData.map((prodobj, index) => (
-            <ProductCard
-              key={index}
-              DeliveryFee={prodobj.DeliveryFee}
-              image={prodobj.image}
-              Head={prodobj.Head}
-              RealPrice={prodobj.RealPrice}
-              OurPrice={prodobj.OurPrice}
-              off={prodobj.off}
-            /> */}
-
-          {pagenatedProduct && pagenatedProduct.length > 0 ? (
-            pagenatedProduct.map((product) =>
-              product ? <ProductCard key={product.id} product={product} /> : null
-            )
+          {isInitialLoad ? (
+            <div className="col-span-full flex justify-center">
+              <CircularProgress />
+            </div>
+          ) : filterProduct.length > 0 ? (
+            filterProduct.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))
           ) : (
-            <p>No product available</p>
+            <p className="col-span-full">No products available</p>
           )}
-
         </div>
-        <div>
-          {visibleCount < filterProduct.length && (
-            <button
-              className="w-full p-5 bg-[#3C424221]  font-semibold mt-4 mb-2"
-              onClick={loadMore}
-            >
-              Load More
-            </button>
-          )}
 
-          {/* <div className="text-center p-14">
-            النظارات الواقية الصناعية ضرورية لحماية العمال في البيئات التي تشكل”
-            فيها الغبار والحطام والمواد الكيميائية والمخاطر العالية التأثير
-            تهديدًا. تلبي مجموعتنا من النظارات الواقية المعتمدة أعلى المعايير
-            العالمية، بما في ذلك ANSI Z87.1 و EN166، لضمان حماية كاملة للعينين.
-            تتوفر النظارات بعدسات مع أو بدون قوة تصحيحية، ونقدم أنماطًا تناسب كل
-            احتياج صناعي، بدءًا من البناء إلى التصنيع。”
+        {/* Loading indicator */}
+        {status === "loading" && !isInitialLoad && (
+          <div className="w-full flex justify-center p-4">
+            <CircularProgress size={24} />
+          </div>
+        )}
 
-            {faqData.map((faq, index) => (
-              <div key={index} className="p-2 m-2 border-slate-500 ">
-                <h1
-                  className="flex p-2 justify-between font-semibold text-lg border-y-2 border-slate-500 cursor-pointer"
-                  onClick={() => toggleAnswer(index)}
-                >
-                  {faq.question}{" "}
-                  <span className="flex items-center justify-center">
-                    {openindexs.includes(index) ? (
-                      <AiOutlineClose className="text-lg font-semibold" />
-                    ) : (
-                      <GoPlus className="text-lg font-semibold" />
-                    )}
-                  </span>{" "}
-                </h1>
-                {openindexs.includes(index) && (
-                  <p className="text-slate-600">{faq.answer}</p>
-                )}
-              </div>
-            ))}
-          </div> */}
-        </div>
+        {/* End of products message */}
+        {!hasMore && filterProduct.length > 0 && (
+          <div className="text-center py-4 text-gray-500">
+            You've reached the end of products
+          </div>
+        )}
       </div>
-      {/* mobile */}
+
+      {/* Mobile Filters */}
       {selectedfilter === null ? (
         <div className="flex lg:hidden fixed z-30 bottom-[70px] md:bottom-[0px] border-r-1 bg-[#FFFFFF] p-3 w-full justify-between">
           <button
             className="flex flex-col items-center w-[50%] border-r-2"
             onClick={() => SetSelectedFilter("sort")}
           >
-            <div className="flex  items-center gap-3">
+            <div className="flex items-center gap-3">
               <BiSortAlt2 className="text-xl text-blue-600" />
               <p className="mt-1">Sort</p>
             </div>
             <p className="text-[#9C9C9C] text-[11px]">Recommended</p>
           </button>
           <button
-            className="flex flex-col items-center w-[50%] "
+            className="flex flex-col items-center w-[50%]"
             onClick={() => SetSelectedFilter("filter")}
           >
             <div className="flex items-center gap-3">
               <FaFilter className="text-xl text-blue-600" />
               <p className="mt-1">Filter</p>
             </div>
-
-            <p className="text-[#9C9C9C] text-[11px]">{appliedfilter} Applied</p>
+            <p className="text-[#9C9C9C] text-[11px]">
+              {appliedfilter} Applied
+            </p>
           </button>
         </div>
       ) : (
-        <div className="block lg:hidden fixed z-30 bottom-[70px]  bg-[#FFFFFF]  w-full">
+        <div className="block lg:hidden fixed z-30 bottom-[70px] bg-[#FFFFFF] w-full">
           {selectedfilter === "sort" && (
-            <SortComponent SetSelectedFilter={SetSelectedFilter} Sortoption={filterOptions[FilterName.Sort]} setSortOption={setFilterOptions} />
+            <SortComponent
+              SetSelectedFilter={SetSelectedFilter}
+              Sortoption={filterOptions[FilterName.Sort]}
+              setSortOption={setFilterOptions}
+            />
           )}
           {selectedfilter === "filter" && (
             <FilterComponent
@@ -361,7 +345,8 @@ function CollectionComponent({ products = [], type = "Men" }) {
               SetFilterCount={SetAppliedFilter}
               filterOptions={filterOptions}
               onFilterChange={handleFilterChange}
-              priceRange={priceRange} setPriceRange={setPriceRange}
+              priceRange={priceRange}
+              setPriceRange={setPriceRange}
               UrlType={type}
             />
           )}
@@ -370,5 +355,4 @@ function CollectionComponent({ products = [], type = "Men" }) {
     </div>
   );
 }
-
 export default CollectionComponent;
