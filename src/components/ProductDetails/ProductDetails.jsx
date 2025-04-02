@@ -645,76 +645,56 @@ export const ProductDetails = () => {
               </p>
             </div>
 
-            {/* Render options (excluding colors) */}
-            <div className="my-2 h-auto">
-              {product?.options
-                ?.filter(
-                  (option) => !option.name.toLowerCase().includes("color")
-                ) // Exclude color options
-                .map((option) => (
-                  <div key={option.name}>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexWrap: "wrap",
-                        gap: "10px",
-                        alignItems: "center",
-                        paddingLeft: "5px",
-                        maxWidth: "450px",
-                        padding: "2px",
-                        overflow: showAll ? "visible" : "hidden",
-                        maxHeight: showAll ? "none" : "50px",
-                        transition: "max-height 0.3s ease-in-out",
-                      }}
-                    >
-                      {option.values.map((value) => {
-                        const isSelected =
-                          selectedOptions[option.name] === value;
-                        return (
-                          <label
-                            key={value}
-                            style={{
-                              borderRadius: "4px",
-                              color: "black",
-                              border: isSelected
-                                ? "3px solid #ffffff"
-                                : "2px solid #969696",
-                              outline: isSelected
-                                ? "1px solid #2f2f2f"
-                                : "1px solid transparent",
-                              cursor: "pointer",
-                              padding: "1px 2px",
-                            }}
-                          >
-                            <input
-                              type="radio"
-                              name={option.name}
-                              value={value}
-                              checked={isSelected}
-                              onChange={() =>
-                                handleOptionChange(option.name, value)
-                              }
-                              style={{ display: "none" }}
-                            />
-                            <span className="bg-[#E0E0E04D] py-[2px] px-[5px] text-[#3F4646] text-14px font-semibold">
-                              {value}
-                            </span>
-                          </label>
-                        );
-                      })}
-                    </div>
-                    {option.values.length > 10 && (
-                      <button
-                        className="mt-2 text-gray-500 flex items-center gap-1 w-full justify-center border max-w-[450px] bg-[#f9f9f973] rounded"
-                        onClick={() => setShowAll(!showAll)}
-                      >
-                        {showAll ? "Show Less" : "Load More"}
-                        <span>{showAll ? "↑" : "↓"}</span>
-                      </button>
-                    )}
-                  </div>
-                ))}
-            </div>
+          {/* Render all options */}
+<div className="my-2 h-auto">
+  {product?.options?.map((option) => (
+    <div key={option.name} className="mb-4">
+      <h3 className="text-sm font-medium mb-2">{option.name}</h3>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "8px",
+          alignItems: "center",
+          maxWidth: "450px",
+        }}
+      >
+        {option.values.map((value) => {
+          const isSelected = selectedOptions[option.name] === value;
+          return (
+            <label
+              key={value}
+              className={`cursor-pointer rounded border px-3 py-1 text-sm ${
+                isSelected
+                  ? "border-gray-800 bg-gray-100 font-medium"
+                  : "border-gray-300 hover:bg-gray-50"
+              }`}
+            >
+              <input
+                type="radio"
+                name={option.name}
+                value={value}
+                checked={isSelected}
+                onChange={() => handleOptionChange(option.name, value)}
+                className="hidden"
+              />
+              {value}
+            </label>
+          );
+        })}
+      </div>
+      {option.values.length > 10 && (
+        <button
+          className="mt-2 text-gray-500 text-sm flex items-center gap-1 w-full justify-center border max-w-[450px] bg-gray-50 rounded py-1"
+          onClick={() => setShowAll(!showAll)}
+        >
+          {showAll ? "Show Less" : "Show More"}
+          <span>{showAll ? "↑" : "↓"}</span>
+        </button>
+      )}
+    </div>
+  ))}
+</div>
 
             <div className="flex justify-start items-center w-auto max-w-[350px] text-gray-600 gap-2">
               {qtyAvailable > 0 && freeDelivery && (
