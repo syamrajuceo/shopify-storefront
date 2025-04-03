@@ -645,56 +645,58 @@ export const ProductDetails = () => {
               </p>
             </div>
 
-          {/* Render all options */}
-<div className="my-2 h-auto">
-  {product?.options?.map((option) => (
-    <div key={option.name} className="mb-4">
-      <h3 className="text-sm font-medium mb-2">{option.name}</h3>
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "8px",
-          alignItems: "center",
-          maxWidth: "450px",
-        }}
-      >
-        {option.values.map((value) => {
-          const isSelected = selectedOptions[option.name] === value;
-          return (
-            <label
-              key={value}
-              className={`cursor-pointer rounded border px-3 py-1 text-sm ${
-                isSelected
-                  ? "border-gray-800 bg-gray-100 font-medium"
-                  : "border-gray-300 hover:bg-gray-50"
-              }`}
-            >
-              <input
-                type="radio"
-                name={option.name}
-                value={value}
-                checked={isSelected}
-                onChange={() => handleOptionChange(option.name, value)}
-                className="hidden"
-              />
-              {value}
-            </label>
-          );
-        })}
-      </div>
-      {option.values.length > 10 && (
-        <button
-          className="mt-2 text-gray-500 text-sm flex items-center gap-1 w-full justify-center border max-w-[450px] bg-gray-50 rounded py-1"
-          onClick={() => setShowAll(!showAll)}
-        >
-          {showAll ? "Show Less" : "Show More"}
-          <span>{showAll ? "↑" : "↓"}</span>
-        </button>
-      )}
-    </div>
-  ))}
-</div>
+            {/* Render all options */}
+            <div className="my-2 h-auto">
+              {product?.options?.map((option) => (
+                <div key={option.name} className="mb-4">
+                  <h3 className="text-sm font-medium mb-2">{option.name}</h3>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: "8px",
+                      alignItems: "center",
+                      maxWidth: "450px",
+                    }}
+                  >
+                    {option.values.map((value) => {
+                      const isSelected = selectedOptions[option.name] === value;
+                      return (
+                        <label
+                          key={value}
+                          className={`cursor-pointer rounded border px-3 py-1 text-sm ${
+                            isSelected
+                              ? "border-gray-800 bg-gray-100 font-medium"
+                              : "border-gray-300 hover:bg-gray-50"
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name={option.name}
+                            value={value}
+                            checked={isSelected}
+                            onChange={() =>
+                              handleOptionChange(option.name, value)
+                            }
+                            className="hidden"
+                          />
+                          {value}
+                        </label>
+                      );
+                    })}
+                  </div>
+                  {option.values.length > 10 && (
+                    <button
+                      className="mt-2 text-gray-500 text-sm flex items-center gap-1 w-full justify-center border max-w-[450px] bg-gray-50 rounded py-1"
+                      onClick={() => setShowAll(!showAll)}
+                    >
+                      {showAll ? "Show Less" : "Show More"}
+                      <span>{showAll ? "↑" : "↓"}</span>
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
 
             <div className="flex justify-start items-center w-auto max-w-[350px] text-gray-600 gap-2">
               {qtyAvailable > 0 && freeDelivery && (
@@ -795,7 +797,11 @@ export const ProductDetails = () => {
         </div>
         <div className="">
           {exploreProducts && (
-            <ProductList title={"Popular Products"} category={""} products={exploreProducts}/>
+            <ProductList
+              title={"Popular Products"}
+              category={""}
+              products={exploreProducts}
+            />
           )}
         </div>
 

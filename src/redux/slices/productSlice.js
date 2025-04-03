@@ -5,13 +5,32 @@ const API_BASE_URL = "http://localhost:5558/api/products";
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async ({ limit = 50, cursor = null }, { rejectWithValue }) => {
+  async ({ 
+    limit = 50, 
+    cursor = null, 
+    minPrice = 100,
+    maxPrice = 200,
+    gender = "men",
+    frameColor ,
+    brand,
+    available,
+    category
+  }, { rejectWithValue }) => {
     try {
       const response = await axios.get(API_BASE_URL, {
-        params: { limit, cursor },
+        params: { 
+          limit, 
+          cursor,
+          minPrice,
+          maxPrice,
+          gender,
+          frameColor,
+          brand,
+          available,
+          category
+        },
       });
 
-      // Ensure the API response has unique products
       const uniqueProducts = Array.from(
         new Set(response.data.products.map((p) => p.id))
       ).map((id) => response.data.products.find((p) => p.id === id));
@@ -19,6 +38,15 @@ export const fetchProducts = createAsyncThunk(
       return {
         products: uniqueProducts,
         pagination: response.data.pagination,
+        filters: {
+          minPrice,
+          maxPrice,
+          gender,
+          frameColor,
+          brand,
+          available,
+          category
+        }
       };
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);

@@ -134,7 +134,6 @@ export const addToCart = async (variantId, quantity, userEmail = null) => {
       }
     }
   `;
-
   const variables = {
     cartId,
     lines: [{ quantity, merchandiseId: variantId }],
