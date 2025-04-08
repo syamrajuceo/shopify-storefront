@@ -1,62 +1,142 @@
 import { Link } from "react-router-dom";
 import highlightSearchQuery from "./Helper";
 
-function ProductSearchList({ searchQuery = "", setSearchQuery, searchResult: products = [], small = false, queryType = "Product" ,  selectedIndex = -1, }) {
-    // Only render the list if searchQuery is not empty
-    if (searchQuery === null || searchQuery.trim() === "") return null;
+function ProductSearchList({
+  searchQuery = "",
+  setSearchQuery = () => {},
+  searchResult: products = [],
+  searchStatus = "idle",
+  small = false,
+  queryType = "Product",
+  selectedIndex = -1,
+}) {
+  // Don't render if there's no search query
+  if (!searchQuery || searchQuery.trim() === "") return null;
 
+  // Loading state
+  if (searchStatus === "loading") {
     return (
-        <div className={`absolute w-full bg-[#F3F4F6] z-30 ${small ? "p-1" : "p-2"} max-h-[200px] overflow-y-auto top-[45px] transition-all duration-300`}>
-            {products.length > 0 ? (
-                products.map((product,index) => (
-                    <Link to={`/product/${product.handle}`}
-                        key={product.id}
-                        className={`flex p-3 w-full items-center border-b-2 border-slate-100 rounded-md transition-transform transform hover:scale-105 ${
-                            index === selectedIndex ? "bg-blue-200 scale-105" : "hover:bg-slate-200"
-                        }`}
-                        onClick={() => setSearchQuery('')}
-                        >
-                        <img
-                            src={product.images.edges[0].node.url}
-                            alt={`${product.title} img`}
-                            className={small ? "w-[20px] h-[20px] mr-3" : "w-[40px] h-[40px] mr-3 transition-all duration-300 ease-in-out"}
-                        />
-                        <p className="text-sm font-medium">
-                            {queryType === "Product" ? (
-                                // Highlight product title when query type is "Product"
-                                highlightSearchQuery(product.title, searchQuery)
-                            ) : queryType === "Price" ? (
-                                // Display product title and price with search query highlighted
-                                <div className="flex flex-col">
-                                    <p>{product.title}</p>
-                                    <p>
-                                        {highlightSearchQuery(
-                                            `${product.variants.edges[0].node.priceV2.currencyCode} ${product.variants.edges[0].node.priceV2.amount}`,
-                                            searchQuery
-                                        )}
-                                    </p>
-                                </div>
-                            ) : (
-                                // Default case: Handle other query types (e.g., "Vendor")
-                                <div className="flex flex-col">
-                                    <p>{product.title}</p>
-                                    <p>
-                                        {highlightSearchQuery(
-                                            `${queryType}: ${queryType === "Vendor" ? product.vendor : ""}`,
-                                            searchQuery
-                                        )}
-                                    </p>
-                                </div>
-                            )}
-                        </p>
-                    </Link>
-
-                ))
-            ) : (
-                <p className="p-3">No products found</p>
-            )}
-        </div>
+      <div className={`absolute w-full bg-white shadow-lg z-50 ${
+        small ? "max-h-[200px]" : "max-h-[400px]"
+      } overflow-y-auto top-full`}
+      >
+        <div className="p-4 text-center text-gray-500">Searching products...</div>
+      </div>
     );
+  }
+
+  // Error state
+  if (searchStatus === "failed") {
+    return (
+      <div className={`absolute w-full bg-white shadow-lg z-50 ${
+        small ? "max-h-[200px]" : "max-h-[400px]"
+      } overflow-y-auto top-full`}
+      >
+        <div className="p-4 text-center text-red-500">
+          Failed to load search results
+        </div>
+      </div>
+    );
+  }
+
+  // No results state
+  if (products.length === 0) {
+    return (
+      <div className={`absolute w-full bg-white shadow-lg z-50 ${
+        small ? "max-h-[200px]" : "max-h-[400px]"
+      } overflow-y-auto top-full`}
+      >
+        <div className="p-4 text-center text-gray-500">
+          No products found for "{searchQuery}"
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`absolute w-full bg-white shadow-lg z-50 ${
+        small ? "max-h-[200px]" : "max-h-[400px]"
+      } overflow-y-auto top-full border border-gray-200 rounded-lg`}
+    >
+      {/* Query type header */}
+      <div className="sticky top-0 bg-white p-2 font-semibold border-b">
+        {queryType}
+      </div>
+
+      {/* Search results list */}
+      {products.map((product, index) => (
+        <Link
+          to={`/product/${product.handle}`}
+          key={product.id}
+          className={`flex p-3 items-center border-b border-gray-100 hover:bg-gray-50 transition-colors ${
+            index === selectedIndex ? "bg-blue-50" : ""
+          }`}
+          onClick={() => setSearchQuery("")}
+        >
+          {/* Product image with fallback */}
+          <div className={`flex-shrink-0 ${
+            small ? "w-8 h-8" : "w-12 h-12"
+          } mr-3 bg-gray-100 rounded overflow-hidden`}>
+            {product.images?.edges?.[0]?.node?.url ? (
+              <img
+                src={product.images.edges[0].node.url}
+                alt={product.title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+              </div>
+            )}
+          </div>
+
+          {/* Product details */}
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium truncate">
+              {highlightSearchQuery(product.title, searchQuery)}
+            </p>
+            
+            {/* Additional info based on query type */}
+            {queryType === "Price" && product.variants?.edges?.[0]?.node?.priceV2 && (
+              <p className="text-xs text-gray-600">
+                {highlightSearchQuery(
+                  `${product.variants.edges[0].node.priceV2.currencyCode} ${product.variants.edges[0].node.priceV2.amount}`,
+                  searchQuery
+                )}
+              </p>
+            )}
+
+            {queryType === "Vendor" && product.vendor && (
+              <p className="text-xs text-gray-600">
+                {highlightSearchQuery(`Vendor: ${product.vendor}`, searchQuery)}
+              </p>
+            )}
+
+            {/* Display metafield info if query is from metafield search */}
+            {queryType.includes(":") && (
+              <p className="text-xs text-gray-600">
+                {queryType}
+              </p>
+            )}
+          </div>
+        </Link>
+      ))}
+    </div>
+  );
 }
 
 export default ProductSearchList;

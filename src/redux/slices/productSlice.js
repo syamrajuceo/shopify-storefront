@@ -6,47 +6,44 @@ const API_BASE_URL = "http://localhost:5558/api/products";
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async ({ 
-    limit = 50, 
-    cursor = null, 
-    minPrice = 100,
-    maxPrice = 200,
-    gender = "men",
-    frameColor ,
+    limit = 20, 
+    cursor = null,
+    category = null,
+    minPrice,
+    maxPrice,
+    gender,
+    frameColor,
     brand,
-    available,
-    category
-  }, { rejectWithValue }) => {
+    available
+  }, { rejectWithValue, getState }) => {
     try {
-      const response = await axios.get(API_BASE_URL, {
-        params: { 
-          limit, 
-          cursor,
-          minPrice,
-          maxPrice,
-          gender,
-          frameColor,
-          brand,
-          available,
-          category
-        },
-      });
+      const currentCategory = category ?? getState().products.currentCategory;
+      
+      const params = {
+        limit, 
+        cursor,
+        minPrice,
+        maxPrice
+      };
 
-      const uniqueProducts = Array.from(
-        new Set(response.data.products.map((p) => p.id))
-      ).map((id) => response.data.products.find((p) => p.id === id));
+      // Add category filter if specified
+      if (currentCategory) {
+        params.category = currentCategory;
+      }
+
+      // Add optional filters if they exist
+      if (gender?.length) params.gender = gender.join(',');
+      if (frameColor?.length) params.frameColor = frameColor.join(',');
+      if (brand?.length) params.brand = brand.join(',');
+      if (available) params.available = true;
+
+      const response = await axios.get(API_BASE_URL, { params });
 
       return {
-        products: uniqueProducts,
+        products: response.data.products,
         pagination: response.data.pagination,
-        filters: {
-          minPrice,
-          maxPrice,
-          gender,
-          frameColor,
-          brand,
-          available,
-          category
-        }
+        currentCategory,
+        filterParams: { minPrice, maxPrice, gender, frameColor, brand, available }
       };
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -60,6 +57,8 @@ const productsSlice = createSlice({
     products: [],
     status: "idle",
     error: null,
+    currentCategory: null,
+    currentFilters: {},
     pagination: {
       nextCursor: null,
       hasNextPage: false,
@@ -68,10 +67,22 @@ const productsSlice = createSlice({
   reducers: {
     resetProducts: (state) => {
       state.products = [];
-      state.pagination = { nextCursor: null, hasNextPage: true };
+      state.pagination = { nextCursor: null, hasNextPage: false };
       state.status = "idle";
       state.error = null;
+      state.currentFilters = {};
     },
+    setCategory: (state, action) => {
+      if (state.currentCategory !== action.payload) {
+        state.currentCategory = action.payload;
+        state.products = [];
+        state.pagination = { nextCursor: null, hasNextPage: true };
+        state.currentFilters = {};
+      }
+    },
+    setFilters: (state, action) => {
+      state.currentFilters = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -80,15 +91,16 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.status = "succeeded";
-
-        // Combine existing and new products, then remove duplicates
-        const allProducts = [...state.products, ...action.payload.products];
-        const uniqueProducts = Array.from(
-          new Set(allProducts.map((p) => p.id))
-        ).map((id) => allProducts.find((p) => p.id === id));
-
-        state.products = uniqueProducts;
-        state.pagination = action.payload.pagination;
+        
+        if (action.payload.currentCategory === state.currentCategory) {
+          if (action.meta.arg.cursor) {
+            state.products = [...state.products, ...action.payload.products];
+          } else {
+            state.products = action.payload.products;
+          }
+          state.pagination = action.payload.pagination;
+          state.currentFilters = action.payload.filterParams;
+        }
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.status = "failed";
@@ -97,5 +109,5 @@ const productsSlice = createSlice({
   },
 });
 
-export const { resetProducts } = productsSlice.actions;
+export const { resetProducts, setCategory, setFilters } = productsSlice.actions;
 export default productsSlice.reducer;
