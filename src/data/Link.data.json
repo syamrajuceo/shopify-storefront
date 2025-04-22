@@ -6,17 +6,32 @@
     },
     {
         "name": "Eyeglasses",
-        "url": "shop/Eyeglasses",
+        "url": "shop/eyeglasses",
         "active": false
     },
     {
         "name": "Contact Lenses",
-        "url": "shop/ContactLenses",
+        "url": "shop/contact-lenses",
         "active": false
     },
     {
         "name": "Sunglasses",
-        "url": "shop/Sunglasses",
+        "url": "shop/sunglasses",
+        "active": false
+    },
+    {
+        "name": "Clip-On",
+        "url": "shop/clip-On",
+        "active": false
+    },
+    {
+        "name": "Safety Glass",
+        "url": "shop/safety-glass",
+        "active": false
+    },
+    {
+        "name": "Reading Glass",
+        "url": "shop/reading-glass",
         "active": false
     },
     {

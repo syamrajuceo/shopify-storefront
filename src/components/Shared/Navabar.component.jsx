@@ -30,6 +30,7 @@ import ProductSearchList from "./ProductSeatchlist";
 import basari from "../../assets/basari.png"
 import flag from "../../assets/Flags.png"
 import { useSelector } from "react-redux";
+import SearchComponent from "../ProductDetails/Search.jsx";
 
 // const iconMapping = {
 //   FaHome: <FaHome className="text-yellow-500 text-2xl" />,
@@ -118,7 +119,7 @@ function NavabarComponent({ cartNumber = 0, searchResult, setSearchQuery, search
 
         </div>
 
-        <div className="hidden sm:flex bg-[#F3F4F6] items-center h-[40px] sm:w-[300px] md:w-[400px] lg:w-[600px] relative rounded-lg">
+        {/* <div className="hidden sm:flex bg-[#F3F4F6] items-center h-[40px] sm:w-[300px] md:w-[400px] lg:w-[600px] relative rounded-lg">
           <input
             type="search"
             placeholder="Search for products, categories or brands..."
@@ -142,7 +143,9 @@ function NavabarComponent({ cartNumber = 0, searchResult, setSearchQuery, search
             queryType={queryType}
             selectedIndex={selectedIndex}
           />
-        </div>
+        </div> */}
+
+        <SearchComponent/>
 
         <div className="flex items-center md:gap-2 lg:gap-4 justify-center">
           {/* <Link className="hidden md:block text-[15px] text-[#030712] font-[600]" to={"https://booking.eyestore.ae/"}  target="_blank" >Eye test</Link> */}

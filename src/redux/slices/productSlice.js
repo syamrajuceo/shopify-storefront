@@ -5,31 +5,38 @@ const API_BASE_URL = "http://localhost:5558/api/products";
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async ({ 
-    limit = 50, 
-    cursor = null, 
-    minPrice = 100,
-    maxPrice = 200,
-    gender = "men",
-    frameColor ,
-    brand,
-    available,
-    category
-  }, { rejectWithValue }) => {
+  async (
+    {
+      limit = 100,
+      cursor = null,
+      minPrice,
+      maxPrice,
+      gender,
+      color,
+      brand,
+      available,
+      category,
+      shape,
+    },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axios.get(API_BASE_URL, {
-        params: { 
-          limit, 
+        params: {
+          limit,
           cursor,
           minPrice,
           maxPrice,
           gender,
-          frameColor,
+          color,
           brand,
           available,
-          category
+          category,
+          shape,
         },
       });
+
+      console.log("product res : ", response);
 
       const uniqueProducts = Array.from(
         new Set(response.data.products.map((p) => p.id))
@@ -42,11 +49,12 @@ export const fetchProducts = createAsyncThunk(
           minPrice,
           maxPrice,
           gender,
-          frameColor,
+          color,
           brand,
           available,
-          category
-        }
+          category,
+          shape,
+        },
       };
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -64,6 +72,16 @@ const productsSlice = createSlice({
       nextCursor: null,
       hasNextPage: false,
     },
+    filters: {
+      minPrice: 0,
+      maxPrice: 6000,
+      gender: null,
+      color: null,
+      brand: null,
+      available: null,
+      category: null,
+      shape: null,
+    },
   },
   reducers: {
     resetProducts: (state) => {
@@ -71,6 +89,21 @@ const productsSlice = createSlice({
       state.pagination = { nextCursor: null, hasNextPage: true };
       state.status = "idle";
       state.error = null;
+    },
+    updateFilters: (state, action) => {
+      state.filters = { ...state.filters, ...action.payload };
+    },
+    resetFilters: (state) => {
+      state.filters = {
+        minPrice: 0,
+        maxPrice: 6000,
+        gender: null,
+        color: null,
+        brand: null,
+        available: null,
+        category: null,
+        shape: null,
+      };
     },
   },
   extraReducers: (builder) => {
@@ -80,13 +113,10 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.status = "succeeded";
-
-        // Combine existing and new products, then remove duplicates
         const allProducts = [...state.products, ...action.payload.products];
         const uniqueProducts = Array.from(
           new Set(allProducts.map((p) => p.id))
         ).map((id) => allProducts.find((p) => p.id === id));
-
         state.products = uniqueProducts;
         state.pagination = action.payload.pagination;
       })
@@ -97,5 +127,6 @@ const productsSlice = createSlice({
   },
 });
 
-export const { resetProducts } = productsSlice.actions;
+export const { resetProducts, updateFilters, resetFilters } =
+  productsSlice.actions;
 export default productsSlice.reducer;
