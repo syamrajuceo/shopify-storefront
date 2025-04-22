@@ -1,13 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import sunglass from "../../assets/sunglass.jpg";
-import eyeglass from "../../assets/eyeglass.jpg";
-import contactlens from "../../assets/contactlens.jpg";
+import sunglass from "../../assets/sunglass-3.webp";
+import eyeglass from "../../assets/eyeglass-2.jpg";
+import contactlens from "../../assets/contactlens-2.jpg";
 import { IoMdArrowForward } from "react-icons/io";
 import eyeglass2 from "../../assets/Category_Image.webp"
-import clipOn from "../../assets/clip-on-sunglass.png"
+import clipOn from "../../assets/clip-on.png"
 import readingGlass from "../../assets/readingGlass.jpg"
-import safetyglass from "../../assets/safety-glasses.jpg"
+import safetyglass from "../../assets/safetyglass.avif"
 
 const categories = [
   {
@@ -31,12 +31,12 @@ const categories = [
     path:'/shop/Clip-on'
   },
   {
-    title: "Reading glass",
+    title: "Reading glasses",
     image: readingGlass,
     path:'/shop/Reading-glass'
   },
   {
-    title: "Safety glass",
+    title: "Safety glasses",
     image: safetyglass,
     path:'/shop/Safety-glass'
   },
@@ -52,7 +52,7 @@ const ProductCard = ({ title, image,path}) => {
         <img
           src={image}
           alt={title}
-          className="w-full h-full  object-cover transition-transform duration-300 group-hover:scale-110"
+          className="w-full h-auto  object-cover transition-transform duration-300 group-hover:scale-110"
         />
         {/* <div className="absolute inset-0 bg-black/40 transition-opacity duration-300 group-hover:bg-black/50" />   */}
       </div>

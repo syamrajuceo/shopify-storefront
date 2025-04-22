@@ -27,7 +27,7 @@ export const Home = () => {
           <ShapeSelector />
           <div className="flex flex-col gap-6">
             <ProductCategories />
-            <Banner image={BannerImage1} mobile={bannerMobile} />
+            {/* <Banner image={BannerImage1} mobile={bannerMobile} /> */}
           </div>
           <ProductCarousel category={"contact lenses"} products = {products}/>
           <ProductCarousel Promoimage={Promo2} category={"sunglasses"}  products ={products}/>
