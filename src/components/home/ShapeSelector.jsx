@@ -4,6 +4,10 @@ import Rectangle from "../../assets/rectangleglass.png";
 import CatEye from "../../assets/catEyeglass.png";
 import aviator from "../../assets/aviator.png";
 import Geometric from "../../assets/geomatricglass.png";
+import Square from "../../assets/square.png"
+import Semi_cateye from "../../assets/semi cateye.png"
+import oval from "../../assets/oval.png"
+import cateye from "../../assets/cateye.png"
 
 const shapes = [
   {
@@ -19,7 +23,7 @@ const shapes = [
   {
     id: "cat-eye",
     name: "Cat Eye",
-    image: CatEye,
+    image: cateye,
   },
   {
     id: "aviator",
@@ -34,17 +38,17 @@ const shapes = [
   {
     id: "square",
     name: "Square",
-    image: Geometric,
+    image: Square,
   },
   {
     id: "oval",
     name: "Oval",
-    image: Geometric,
+    image: oval,
   },
   {
     id: "semi-cateye",
     name: "Semi Cateye",
-    image: Geometric,
+    image:Semi_cateye,
   },
 ];
 

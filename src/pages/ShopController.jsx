@@ -45,6 +45,24 @@ function ShopController() {
                     ));
                     break;
                 }
+                case "Clip-on": {
+                    setBaseProducts(products.filter(product =>
+                        product.productType?.toLowerCase().includes("clip-on")
+                    ));
+                    break;
+                }
+                case "Reading-glass": {
+                    setBaseProducts(products.filter(product =>
+                        product.productType?.toLowerCase().includes("reading-glass")
+                    ));
+                    break;
+                }
+                case "Safety-glass": {
+                    setBaseProducts(products.filter(product =>
+                        product.productType?.toLowerCase().includes("safety glasses")
+                    ));
+                    break;
+                }
                 case "gender": {
                     const gender = getQueryParams("query") || "unisex"; // Default to "unisex"
                     console.log("Gender query:", gender); // Debug: Log gender value

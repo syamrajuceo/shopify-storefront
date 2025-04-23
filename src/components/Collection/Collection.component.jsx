@@ -205,7 +205,7 @@ function CollectionComponent({ products = [], type = "Men" }) {
               onFilterChange={handleFilterChange}
               type={type}
             />}
-            {type === "" || !["ContactLenses", "Sunglasses", "Eyeglasses"].includes(type) && <FilterBoxComponent
+            {type === "" || !["ContactLenses", "Sunglasses", "Eyeglasses", "Clip-on", "Reading-glass", "Safety glasses"].includes(type) && <FilterBoxComponent
               header={FilterName.Category}
               options={categoryOptions}
               filterseletedOptions={filterOptions[FilterName.Category]}
