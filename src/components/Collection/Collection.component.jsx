@@ -1,10 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 import { Grid, Box, Typography, Skeleton } from "@mui/material";
-import {ProductCard} from "../productCard/ProductCard.jsx"; 
+import { ProductCard } from "../productCard/ProductCard.jsx"; 
 
-const CollectionComponent = ({ products, loading }) => {
+const CollectionComponent = ({ products, loading, loadingMore }) => {
   if (loading) {
     return (
       <Grid container spacing={3}>
@@ -30,21 +29,34 @@ const CollectionComponent = ({ products, loading }) => {
         <Typography variant="body1">
           We couldn't find any products matching your filters.
         </Typography>
-        {/* <Link to="/shop" style={{ textDecoration: "underline" }}>
-          Clear filters
-        </Link> */}
       </Box>
     );
   }
 
   return (
-    <Grid container spacing={3}>
-      {products.map((product) => (
-        <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
-          <ProductCard product={product} />
+    <>
+      <Grid container spacing={3}>
+        {products.map((product) => (
+          <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+            <ProductCard product={product} />
+          </Grid>
+        ))}
+      </Grid>
+      
+      {loadingMore && (
+        <Grid container spacing={3} sx={{ mt: 2 }}>
+          {[...Array(4)].map((_, index) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={`loading-${index}`}>
+              <Skeleton variant="rectangular" width="100%" height={300} />
+              <Box sx={{ pt: 0.5 }}>
+                <Skeleton width="60%" />
+                <Skeleton width="40%" />
+              </Box>
+            </Grid>
+          ))}
         </Grid>
-      ))}
-    </Grid>
+      )}
+    </>
   );
 };
 
@@ -65,11 +77,13 @@ CollectionComponent.propTypes = {
     })
   ),
   loading: PropTypes.bool,
+  loadingMore: PropTypes.bool,
 };
 
 CollectionComponent.defaultProps = {
   products: [],
   loading: false,
+  loadingMore: false,
 };
 
 export default CollectionComponent;

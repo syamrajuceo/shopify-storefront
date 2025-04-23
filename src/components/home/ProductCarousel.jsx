@@ -7,6 +7,8 @@ import { cn } from "../../lib/utils";
 import { Link } from "react-router-dom";
 
 export function ProductCarousel({ Promoimage, category ,products}) {
+
+  "http://localhost:5558/api/products?limit=10&category=contact lenses"
   
   const scrollContainerRef = useRef(null);
 

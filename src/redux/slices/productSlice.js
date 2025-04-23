@@ -5,56 +5,34 @@ const API_BASE_URL = "http://localhost:5558/api/products";
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async (
-    {
-      limit = 100,
-      cursor = null,
-      minPrice,
-      maxPrice,
-      gender,
-      color,
-      brand,
-      available,
-      category,
-      shape,
-    },
-    { rejectWithValue }
-  ) => {
+  async ({ filters, loadMore = false }, { rejectWithValue, getState }) => {
     try {
+      // Clean up filters before sending
+      const cleanedFilters = {};
+      Object.keys(filters).forEach((key) => {
+        if (filters[key] !== null && filters[key] !== undefined && filters[key] !== "") {
+          cleanedFilters[key] = filters[key];
+        }
+      });
+
+      const state = getState();
+      const cursor = loadMore ? state.products.pagination.nextCursor : null;
+
       const response = await axios.get(API_BASE_URL, {
         params: {
-          limit,
+          limit: 12, // Reduced limit for better pagination
           cursor,
-          minPrice,
-          maxPrice,
-          gender,
-          color,
-          brand,
-          available,
-          category,
-          shape,
+          ...cleanedFilters,
+          category: filters.category?.toLowerCase(),
         },
       });
 
-      console.log("product res : ", response);
-
-      const uniqueProducts = Array.from(
-        new Set(response.data.products.map((p) => p.id))
-      ).map((id) => response.data.products.find((p) => p.id === id));
-
       return {
-        products: uniqueProducts,
+        products: response.data.products,
+        // brands: response.data.brandsList || [], // Add brands list from response
         pagination: response.data.pagination,
-        filters: {
-          minPrice,
-          maxPrice,
-          gender,
-          color,
-          brand,
-          available,
-          category,
-          shape,
-        },
+        filters: cleanedFilters,
+        loadMore,
       };
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -66,6 +44,7 @@ const productsSlice = createSlice({
   name: "products",
   initialState: {
     products: [],
+    availableBrands: [], // New state for available brands
     status: "idle",
     error: null,
     pagination: {
@@ -73,51 +52,56 @@ const productsSlice = createSlice({
       hasNextPage: false,
     },
     filters: {
-      minPrice: 0,
-      maxPrice: 6000,
+      minPrice: null,
+      maxPrice: null,
       gender: null,
       color: null,
       brand: null,
       available: null,
       category: null,
       shape: null,
+      priceRanges: [],
     },
   },
   reducers: {
     resetProducts: (state) => {
       state.products = [];
-      state.pagination = { nextCursor: null, hasNextPage: true };
+      state.availableBrands = [];
+      state.pagination = { nextCursor: null, hasNextPage: false };
       state.status = "idle";
       state.error = null;
     },
     updateFilters: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
+      // Reset pagination when filters change
+      state.pagination = { nextCursor: null, hasNextPage: false };
     },
     resetFilters: (state) => {
       state.filters = {
-        minPrice: 0,
-        maxPrice: 6000,
+        minPrice: null,
+        maxPrice: null,
         gender: null,
         color: null,
         brand: null,
         available: null,
         category: null,
         shape: null,
+        priceRanges: [],
       };
+      state.pagination = { nextCursor: null, hasNextPage: false };
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchProducts.pending, (state) => {
-        state.status = "loading";
+      .addCase(fetchProducts.pending, (state, action) => {
+        state.status = action.meta.arg.loadMore ? "loadingMore" : "loading";
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        const allProducts = [...state.products, ...action.payload.products];
-        const uniqueProducts = Array.from(
-          new Set(allProducts.map((p) => p.id))
-        ).map((id) => allProducts.find((p) => p.id === id));
-        state.products = uniqueProducts;
+        state.products = action.payload.loadMore
+          ? [...state.products, ...action.payload.products]
+          : action.payload.products;
+        // state.availableBrands = action.payload.brands; // Update available brands
         state.pagination = action.payload.pagination;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
@@ -127,6 +111,5 @@ const productsSlice = createSlice({
   },
 });
 
-export const { resetProducts, updateFilters, resetFilters } =
-  productsSlice.actions;
+export const { resetProducts, updateFilters, resetFilters } = productsSlice.actions;
 export default productsSlice.reducer;

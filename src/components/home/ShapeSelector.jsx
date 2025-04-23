@@ -47,7 +47,7 @@ export default function ShapeSelector() {
 
 
           <div className="grid grid-cols-3 gap-3">
-            <Link className="relative group flex flex-col items-center "    to={{ pathname: "/shop/", search: "?shape=round" }}>
+            <Link className="relative group flex flex-col items-center "    to={{ pathname: "/shape", search: "?shape=round" }}>
               <div
                 className={`
                  md:h-36 md:w-36 h-24 w-24 border-2  rounded-full overflow-hidden 

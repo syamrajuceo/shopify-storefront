@@ -105,7 +105,7 @@ export const Home = () => {
 
           <ProductCarousel
             title="Contact Lenses"
-            category="contact-lenses"
+            category="contact lenses"
             products={contactLenses}
           />
 

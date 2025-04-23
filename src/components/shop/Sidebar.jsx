@@ -1,9 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Search, X, Check } from "lucide-react";
-import { ColorDataOptions, EyeDataBrands, genderDataOptions, PriceRangeList, productDataStatus } from "../../data/Collection.data";
+import { 
+  ColorDataOptions, 
+  EyeDataBrands, 
+  genderDataOptions, 
+  PriceRangeList, 
+  productDataStatus 
+} from "../../data/Collection.data";
 
-const Sidebar = ({ filters, onFilterChange, onResetFilters, onApplyFilters }) => {
+const Sidebar = ({ 
+  filters, 
+  onFilterChange, 
+  onResetFilters, 
+  onApplyPriceFilter 
+}) => {
   const { type } = useParams();
   const [brandSearch, setBrandSearch] = useState("");
   const [priceInputs, setPriceInputs] = useState({
@@ -11,26 +22,38 @@ const Sidebar = ({ filters, onFilterChange, onResetFilters, onApplyFilters }) =>
     maxPrice: filters.maxPrice || 6000
   });
 
+  // Update price inputs when filters change
+  useEffect(() => {
+    setPriceInputs({
+      minPrice: filters.minPrice || 0,
+      maxPrice: filters.maxPrice || 6000
+    });
+  }, [filters.minPrice, filters.maxPrice]);
+
   // Determine which filters to show based on route params
-  const showCategory = !["contact-lenses", "sunglasses", "eyeglasses","clip-On","safety-glass","reading-glass"].includes(type);
-  const showGender = type !== "gender";
-  const showBrands = type !== "brand"; 
+  const showCategory = !["contact lenses", "sunglasses", "eyeglasses", "clip-on", "safety-glass", "reading-glass"].includes(type.toLowerCase());
+  const showGender = type.toLowerCase() !== "gender";
+  const showBrands = type.toLowerCase() !== "brand"; 
 
   const filteredBrands = EyeDataBrands.filter(brand =>
     brand.toLowerCase().includes(brandSearch.toLowerCase())
   );
 
   const handlePriceInputChange = (type, value) => {
+    const numValue = Number(value);
+    if (isNaN(numValue)) return;
+    
     setPriceInputs(prev => ({
       ...prev,
-      [type]: Number(value) || (type === "minPrice" ? 0 : 6000)
+      [type]: numValue
     }));
   };
 
   const applyPriceFilter = () => {
-    onFilterChange("minPrice", priceInputs.minPrice);
-    onFilterChange("maxPrice", priceInputs.maxPrice);
-    onApplyFilters();
+    onApplyPriceFilter(
+      Math.min(priceInputs.minPrice, priceInputs.maxPrice),
+      Math.max(priceInputs.minPrice, priceInputs.maxPrice)
+    );
   };
 
   return (
@@ -77,50 +100,19 @@ const Sidebar = ({ filters, onFilterChange, onResetFilters, onApplyFilters }) =>
           </button>
         </div>
 
-        {/* Price Range Checkboxes */}
-        {/* <div>
-          <h3 className="font-medium mb-4">Price Range</h3>
-          <div className="space-y-2">
-            {PriceRangeList.map((priceRange) => (
-              <label key={priceRange} className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={filters.priceRanges?.includes(priceRange)}
-                  onChange={() => {
-                    const isSelected = filters.priceRanges?.includes(priceRange);
-                    let updatedPriceRanges = [...(filters.priceRanges || [])];
-                    
-                    if (isSelected) {
-                      updatedPriceRanges = updatedPriceRanges.filter(p => p !== priceRange);
-                    } else {
-                      updatedPriceRanges.push(priceRange);
-                    }
-                    
-                    onFilterChange("priceRanges", updatedPriceRanges);
-                    onApplyFilters();
-                  }}
-                  className="rounded"
-                />
-                <span>{priceRange}</span>
-              </label>
-            ))}
-          </div>
-        </div> */}
-
         {/* Category Filter - Conditionally shown */}
         {showCategory && (
           <div>
             <h3 className="font-medium mb-4">Category</h3>
             <div className="space-y-2">
-              {["ContactLenses", "Sunglasses", "Eyeglasses","clip-On","safety-glass","reading-glass"].map((category) => (
+              {["Contact Lenses", "Sunglasses", "Eyeglasses", "Clip-On", "Safety Glass", "Reading Glass"].map((category) => (
                 <label key={category} className="flex items-center space-x-2">
                   <input
                     type="radio"
                     name="category"
-                    checked={filters.category === category}
+                    checked={filters.category?.toLowerCase() === category.toLowerCase()}
                     onChange={() => {
-                      onFilterChange("category", category);
-                      onApplyFilters();
+                      onFilterChange("category", category.toLowerCase());
                     }}
                     className="rounded"
                   />
@@ -144,7 +136,6 @@ const Sidebar = ({ filters, onFilterChange, onResetFilters, onApplyFilters }) =>
                     checked={filters.gender === gender}
                     onChange={() => {
                       onFilterChange("gender", gender);
-                      onApplyFilters();
                     }}
                     className="rounded"
                   />
@@ -177,7 +168,6 @@ const Sidebar = ({ filters, onFilterChange, onResetFilters, onApplyFilters }) =>
                     checked={filters.brand === brand}
                     onChange={() => {
                       onFilterChange("brand", brand);
-                      onApplyFilters();
                     }}
                     className="rounded"
                   />
@@ -200,7 +190,6 @@ const Sidebar = ({ filters, onFilterChange, onResetFilters, onApplyFilters }) =>
                   checked={filters.color === color}
                   onChange={() => {
                     onFilterChange("color", color);
-                    onApplyFilters();
                   }}
                   className="rounded"
                 />
@@ -222,7 +211,6 @@ const Sidebar = ({ filters, onFilterChange, onResetFilters, onApplyFilters }) =>
                   checked={filters.status === status}
                   onChange={() => {
                     onFilterChange("status", status);
-                    onApplyFilters();
                   }}
                   className="rounded"
                 />
