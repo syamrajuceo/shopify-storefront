@@ -7,7 +7,7 @@ import Geometric from "../../assets/geomatricglass.png";
 import Square from "../../assets/square.png"
 import Semi_cateye from "../../assets/semi cateye.png"
 import oval from "../../assets/oval.png"
-import cateye from "../../assets/cateye.png"
+import cateye from "../../assets/catEye.png"
 
 const shapes = [
   {
