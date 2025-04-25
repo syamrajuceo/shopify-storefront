@@ -17,17 +17,27 @@ function ShopController() {
   const { type = "ALL" } = useParams();
   const { search } = useLocation();
   const dispatch = useDispatch();
-  const { products, status, pagination, filters } = useSelector((state) => state.products);
+  const { products, status, pagination, filters } = useSelector(
+    (state) => state.products
+  );
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const loaderRef = useRef(null);
 
   // Handle scroll to load more products
-  const handleObserver = useCallback((entries) => {
-    const [entry] = entries;
-    if (entry.isIntersecting && status !== "loading" && status !== "loadingMore" && pagination.hasNextPage) {
-      dispatch(fetchProducts({ filters, loadMore: true }));
-    }
-  }, [dispatch, filters, status, pagination.hasNextPage]);
+  const handleObserver = useCallback(
+    (entries) => {
+      const [entry] = entries;
+      if (
+        entry.isIntersecting &&
+        status !== "loading" &&
+        status !== "loadingMore" &&
+        pagination.hasNextPage
+      ) {
+        dispatch(fetchProducts({ filters, loadMore: true }));
+      }
+    },
+    [dispatch, filters, status, pagination.hasNextPage]
+  );
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleObserver, {
@@ -35,7 +45,7 @@ function ShopController() {
       rootMargin: "20px",
       threshold: 0.1,
     });
-    
+
     if (loaderRef.current) {
       observer.observe(loaderRef.current);
     }
@@ -62,7 +72,7 @@ function ShopController() {
 
     // Set filters based on route
     const newFilters = {};
-    
+
     switch (type.toLowerCase()) {
       case "contact-lenses":
         newFilters.category = "contact lenses";
@@ -231,7 +241,10 @@ function ShopController() {
         />
 
         {/* Infinite scroll loader */}
-        <div ref={loaderRef} className="w-full h-10 flex justify-center items-center">
+        <div
+          ref={loaderRef}
+          className="w-full h-10 flex justify-center items-center"
+        >
           {status === "loadingMore" && (
             <div className="text-gray-500">Loading more products...</div>
           )}

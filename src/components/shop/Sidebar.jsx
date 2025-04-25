@@ -1,51 +1,59 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Search, X, Check } from "lucide-react";
-import { 
-  ColorDataOptions, 
-  EyeDataBrands, 
-  genderDataOptions, 
-  PriceRangeList, 
-  productDataStatus 
+import {
+  ColorDataOptions,
+  EyeDataBrands,
+  genderDataOptions,
+  PriceRangeList,
+  productDataStatus,
 } from "../../data/Collection.data";
 
-const Sidebar = ({ 
-  filters, 
-  onFilterChange, 
-  onResetFilters, 
-  onApplyPriceFilter 
+const Sidebar = ({
+  filters,
+  onFilterChange,
+  onResetFilters,
+  onApplyPriceFilter,
 }) => {
-  const { type } = useParams();
+  const { type = "" } = useParams();
   const [brandSearch, setBrandSearch] = useState("");
   const [priceInputs, setPriceInputs] = useState({
     minPrice: filters.minPrice || 0,
-    maxPrice: filters.maxPrice || 6000
+    maxPrice: filters.maxPrice || 6000,
   });
 
   // Update price inputs when filters change
   useEffect(() => {
     setPriceInputs({
       minPrice: filters.minPrice || 0,
-      maxPrice: filters.maxPrice || 6000
+      maxPrice: filters.maxPrice || 6000,
     });
   }, [filters.minPrice, filters.maxPrice]);
 
-  // Determine which filters to show based on route params
-  const showCategory = !["contact lenses", "sunglasses", "eyeglasses", "clip-on", "safety-glass", "reading-glass"].includes(type.toLowerCase());
-  const showGender = type.toLowerCase() !== "gender";
-  const showBrands = type.toLowerCase() !== "brand"; 
+  const showCategory = ![
+    "contact lenses",
+    "sunglasses",
+    "eyeglasses",
+    "clip-on",
+    "safety-glass",
+    "reading-glass",
+  ].includes(type.toLowerCase());
 
-  const filteredBrands = EyeDataBrands.filter(brand =>
+  const showGender = type.toLowerCase() !== "gender";
+  const showBrands = type.toLowerCase() !== "brand";
+  const isSunglasses = type.toLowerCase() === "sunglasses";
+
+  const filteredBrands = EyeDataBrands.filter((brand) =>
     brand.toLowerCase().includes(brandSearch.toLowerCase())
   );
 
   const handlePriceInputChange = (type, value) => {
     const numValue = Number(value);
     if (isNaN(numValue)) return;
-    
-    setPriceInputs(prev => ({
+
+    setPriceInputs((prev) => ({
       ...prev,
-      [type]: numValue
+      [type]: numValue,
     }));
   };
 
@@ -77,7 +85,9 @@ const Sidebar = ({
               type="number"
               min="0"
               value={priceInputs.minPrice}
-              onChange={(e) => handlePriceInputChange("minPrice", e.target.value)}
+              onChange={(e) =>
+                handlePriceInputChange("minPrice", e.target.value)
+              }
               className="w-20 px-2 py-1 border rounded"
               placeholder="Min"
             />
@@ -86,7 +96,9 @@ const Sidebar = ({
               type="number"
               min="0"
               value={priceInputs.maxPrice}
-              onChange={(e) => handlePriceInputChange("maxPrice", e.target.value)}
+              onChange={(e) =>
+                handlePriceInputChange("maxPrice", e.target.value)
+              }
               className="w-20 px-2 py-1 border rounded"
               placeholder="Max"
             />
@@ -105,12 +117,21 @@ const Sidebar = ({
           <div>
             <h3 className="font-medium mb-4">Category</h3>
             <div className="space-y-2">
-              {["Contact Lenses", "Sunglasses", "Eyeglasses", "Clip-On", "Safety Glass", "Reading Glass"].map((category) => (
+              {[
+                "Contact Lenses",
+                "Sunglasses",
+                "Eyeglasses",
+                "Clip-On",
+                "Safety Glass",
+                "Reading Glass",
+              ].map((category) => (
                 <label key={category} className="flex items-center space-x-2">
                   <input
                     type="radio"
                     name="category"
-                    checked={filters.category?.toLowerCase() === category.toLowerCase()}
+                    checked={
+                      filters.category?.toLowerCase() === category.toLowerCase()
+                    }
                     onChange={() => {
                       onFilterChange("category", category.toLowerCase());
                     }}
@@ -178,26 +199,50 @@ const Sidebar = ({
           </div>
         )}
 
-        {/* Color Filter */}
-        <div>
-          <h3 className="font-medium mb-4">Color</h3>
-          <div className="space-y-2 max-h-60 overflow-y-auto">
-            {ColorDataOptions.map((color) => (
-              <label key={color} className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="color"
-                  checked={filters.color === color}
-                  onChange={() => {
-                    onFilterChange("color", color);
-                  }}
-                  className="rounded"
-                />
-                <span>{color}</span>
-              </label>
-            ))}
+        {/* Conditional Color Filter */}
+        {isSunglasses ? (
+          /* Lens Color Filter for Sunglasses */
+          <div>
+            <h3 className="font-medium mb-4">Lens Color</h3>
+            <div className="space-y-2 max-h-60 overflow-y-auto">
+              {ColorDataOptions.map((color) => (
+                <label key={color} className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="lensColor"
+                    checked={filters.lensColor === color}
+                    onChange={() => {
+                      onFilterChange("lensColor", color);
+                    }}
+                    className="rounded"
+                  />
+                  <span>{color}</span>
+                </label>
+              ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          /* Regular Color Filter for other types */
+          <div>
+            <h3 className="font-medium mb-4">Color</h3>
+            <div className="space-y-2 max-h-60 overflow-y-auto">
+              {ColorDataOptions.map((color) => (
+                <label key={color} className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="color"
+                    checked={filters.color === color}
+                    onChange={() => {
+                      onFilterChange("color", color);
+                    }}
+                    className="rounded"
+                  />
+                  <span>{color}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Status Filter */}
         <div>

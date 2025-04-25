@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const Breadcrumb = ({ type }) => {
-  const { search } = useLocation();
+  const { search, pathname } = useLocation();
   const queryParams = new URLSearchParams(search);
   const query = queryParams.get("query");
 
@@ -12,27 +12,40 @@ const Breadcrumb = ({ type }) => {
   };
 
   const getDisplayParts = () => {
-    const parts = ["Shop", "Eyewear"];
+    const parts = [
+      { name: "Shop", path: "/shop" },
+      { name: "Eyewear", path: "/shop" }
+    ];
 
     switch (type) {
       case "gender":
-        parts.push("Gender");
+        parts.push({ name: "Gender", path: "/shop/eyewear/gender" });
         if (query) {
-          parts.push(
-            query === "male" ? "Men" : query === "female" ? "Women" : "Unisex"
-          );
+          parts.push({
+            name: query === "male" ? "Men" : query === "female" ? "Women" : "Unisex",
+            path: `/shop/eyewear/gender?query=${query}`
+          });
         }
         break;
       case "brand":
       case "shape":
-        parts.push(type.charAt(0).toUpperCase() + type.slice(1));
+        parts.push({
+          name: type.charAt(0).toUpperCase() + type.slice(1),
+          path: `/shop/eyewear/${type}`
+        });
         if (query) {
-          parts.push(query.replace(/-/g, " "));
+          parts.push({
+            name: query.replace(/-/g, " "),
+            path: `/shop/eyewear/${type}?query=${query}`
+          });
         }
         break;
       default:
         if (type !== "ALL") {
-          parts.push(formatType(type));
+          parts.push({
+            name: formatType(type),
+            path: `/shop/eyewear/${type.toLowerCase()}`
+          });
         }
     }
 
@@ -48,14 +61,13 @@ const Breadcrumb = ({ type }) => {
           <React.Fragment key={index}>
             {index > 0 && <span>/</span>}
             {index === parts.length - 1 ? (
-              <span className="text-gray-900 capitalize">{part}</span>
+              <span className="text-gray-900 capitalize">{part.name}</span>
             ) : (
               <Link
-                to="#"
+                to={part.path}
                 className="hover:text-purple-600 capitalize"
-                onClick={(e) => e.preventDefault()}
               >
-                {part}
+                {part.name}
               </Link>
             )}
           </React.Fragment>
