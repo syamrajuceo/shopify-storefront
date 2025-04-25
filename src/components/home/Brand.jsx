@@ -23,67 +23,80 @@ import gucciBrand from '../../assets/gucciBrand2.jpg'
 import gucciLogo from '../../assets/gucci-4.svg'
 import pradaBrand  from '../../assets/pradaBrand2.jpg'
 import pradaLogo from '../../assets/prada-logo-1.svg'
+import { Link } from 'react-router-dom';
 function Brand() {
   const brands = [
     {
         name: 'D&G',
         image: DG,
-        logo:DgLoGO 
+        logo:DgLoGO,
+        id:"d&g"
       },
       {
         name:'BURBERRY',
         image:Burberry,
-        logo:BurberryLogo
+        logo:BurberryLogo,
+        id:"Burberry"
       },
       {
         name: 'Gucci',
         image:gucciBrand,
-        logo:gucciLogo
+        logo:gucciLogo,
+        id:"gucci"
       },
     {
       name: 'tiffany&CO',
       image:TiffanyCo ,
-      logo:TiffanyCologo
+      logo:TiffanyCologo,
+      id:"tiffany&co"
     },
     {
       name: ':Vouge',
       image:Vouge,
-      logo:Vougelogo
+      logo:Vougelogo,
+      id:"vouge"
     },
     {
       name: 'ARMANI EXCHANGE',
       image: ArmaniExchange,
-      logo:ArmaniXlogo
+      logo:ArmaniXlogo,
+      id:"Armani-Exchange"
     },
     {
       name: 'versacelogo',
       image:versaceBrand,
-      logo:versacelogo
+      logo:versacelogo,
+      id:"versacelogo"
     },
     {
       name: 'rayban',
       image:raybanBrand,
-      logo:raybanlogo
+      logo:raybanlogo,
+      id:"Ray-Ban"
     },
     {
       name:'prada',
       image:pradaBrand,
-      logo:pradaLogo
+      logo:pradaLogo,
+      id:"prada"
     },
     {
       name: 'OAKLEY',
       image: oakelyBrand,
-      logo:oakelylogo
+      logo:oakelylogo,
+      id:"oakley"
     },
     {
       name: 'AMARA',
       image:amaraBrand,
-      logo:amaralogo
+      logo:amaralogo,
+      id:"amara"
     },
     {
       name: 'MICHAEL KORS',
       image:michaelkrosBrand,
-      logo:michaelkrosLogo
+      logo:michaelkrosLogo,
+      id:"michael kors"
     },
   ];
 
@@ -96,10 +109,12 @@ function Brand() {
         
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {brands.map((brand) => (
-            <div
+            <Link
               key={brand.name}
-              className="relative group overflow-hidden rounded-lg shadow-lg cursor-pointer transition-transform duration-300 hover:scale-105"
+              to={{ pathname: "shop/brand", search: `?query=${brand.id}`}}
             >
+
+            <div className="relative group overflow-hidden rounded-lg shadow-lg cursor-pointer transition-transform duration-300 hover:scale-105">
               <div className="aspect-[16/9]">
                 <img
                   src={brand.image}
@@ -116,7 +131,8 @@ function Brand() {
                     />
                 </div>
               </div>
-            </div>
+              </div>
+              </Link>
           ))}
         </div>
       </div>

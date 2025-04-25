@@ -21,6 +21,7 @@
     "axios": "^1.7.9",
     "date-fns": "^4.1.0",
     "flowbite-react": "^0.10.2",
+    "framer-motion": "^12.8.2",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.468.0",
     "moment": "^2.30.1",
