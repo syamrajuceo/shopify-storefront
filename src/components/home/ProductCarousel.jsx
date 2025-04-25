@@ -1,10 +1,11 @@
 import { useRef } from "react";
 import { ScrollButton } from "./ScrollButton";
 import { ProductCard } from "../productCard/ProductCard";
-import evervaImg from "../../assets/everva.webp";
+// import evervaImg from "../../assets/everva.webp";
 import { ArrowRight } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { Link } from "react-router-dom";
+import clearlenses from "../../assets/lenses.jpg"
 
 export function ProductCarousel({ Promoimage, category ,products}) {
 
@@ -40,7 +41,7 @@ export function ProductCarousel({ Promoimage, category ,products}) {
             \
             <Link
               className="md:inline-flex items-center gap-2 bg-white text-black px-16 py-3 rounded-md hidden"
-              to="/query?query="
+              to="/shop/sunglass"
             >
               {/* Visible only on medium screens and above */}
               {buttonText}
@@ -89,9 +90,9 @@ export function ProductCarousel({ Promoimage, category ,products}) {
         ) : (
           <div className="snap-start   md:w-[370px] rounded-xl flex-shrink-0 w-[200px]  md:h-[430px] lg:h-[440px] xl:[450px]">
             <img
-              src={evervaImg}
-              alt="everva"
-              className="object-cover rounded-xl w-full h-full mr-2"
+              src={clearlenses}
+              alt="lense"
+              className="object rounded-xl w-full h-full mr-2"
             />
           </div>
         )}

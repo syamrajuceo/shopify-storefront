@@ -38,6 +38,7 @@ export const Register = () => {
       localStorage.setItem("accessToken", accessToken);
       const redirectUrl = localStorage.getItem("redirectAfterLogin");
       console.log("Account created successfully:", customer);
+      toast.success("Account created successfully")
       if (redirectUrl && redirectUrl === "/cart") {
         const accessToken = localStorage.getItem("accessToken");
         const cartId = localStorage.getItem("cartId");
@@ -50,16 +51,18 @@ export const Register = () => {
         navigate(updatedCart.checkoutUrl);
         localStorage.removeItem("redirectAfterLogin");
       } else if (redirectUrl) {
+        // toast.success("Successfully login")
         // Navigate to the stored URL
         navigate(redirectUrl);
         localStorage.removeItem("redirectAfterLogin"); // Cleanup
       } else {
+        // toast.success("Successfully login")
         // Default navigation
         navigate("/");
       }
     } catch (error) {
       setLoading(false);
-      // toast.error(error.message);
+      toast.error(error.message);
       console.error("Error during registration:", error.message);
     }
   };

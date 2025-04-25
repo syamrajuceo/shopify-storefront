@@ -6,16 +6,20 @@ import ProductCategories from "./ProductCategories";
 import Brand from "./Brand";
 import Banner from "./Banner";
 import BannerImage1 from "../../assets/banner1.png";
-import BannerImage2 from "../../assets/banner2.png";
-import BannerImage3 from "../../assets/banner3.png";
+// import BannerImage2 from "../../assets/banner2.png";
+// import BannerImage3 from "../../assets/banner3.png";
 import { ProductCarousel } from "./ProductCarousel";
 import bannerMobile from "../../assets/bannerMobile.png";
-import bannerMobile2 from "../../assets/bannerMobile2.png";
-import bannerMobile3 from "../../assets/bannerMobile3.png";
+// import bannerMobile2 from "../../assets/bannerMobile2.png";
+// import bannerMobile3 from "../../assets/bannerMobile3.png";
 import Promo2 from "../../assets/promo3.png";
 import { HomePageSkeleton } from "../skeleton/Home";
 import { ProductCarousel2 } from "./ProductCarousel2";
 import { fetchProducts } from "../../redux/slices/productSlice";
+import BannerImage4 from "../../assets/banner4.jpg"
+import BannerImage5 from "../../assets/banner5.jpg"
+import bannerMobile4 from "../../assets/bannerMobile4.png"
+import bannerMobile5 from "../../assets/bannerMobile5.png"
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -117,8 +121,8 @@ export const Home = () => {
           />
 
           <div className="flex flex-col gap-5">
-            <Banner image={BannerImage2} mobile={bannerMobile2} />
-            <Banner image={BannerImage3} mobile={bannerMobile3} />
+            <Banner image={BannerImage5} mobile={bannerMobile4} />
+            <Banner image={BannerImage4} mobile={bannerMobile5} />
           </div>
 
           <ProductCarousel2 title="Bestsellers" products={bestsellers} />
