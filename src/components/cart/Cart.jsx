@@ -175,25 +175,62 @@ export const Cart = () => {
     }
   };
 
-  const handleCheckoutButtonClick = () => {
+  // const handleCheckoutButtonClick = () => {
+  //   if (!accessToken || !user) {
+  //     console.log("....fgjkg..........")
+  //     localStorage.setItem("redirectAfterLogin", window.location.pathname);
+  //     Navigate("/login");
+  //     return;
+  //   }
+
+  //   const checkoutUrl = localStorage.getItem("checkoutUrl");
+  //   if (!checkoutUrl) {
+  //     console.error("Checkout URL is missing.");
+  //     return;
+  //   }
+
+  //   // Redirect to checkout URL
+  //   window.location.href = checkoutUrl;
+  //   localStorage.removeItem("checkoutUrl");
+  //   localStorage.removeItem("cartId");
+  // };
+
+  const handleCheckoutButtonClick = async () => {
     if (!accessToken || !user) {
-      console.log("....fgjkg..........")
-      localStorage.setItem("redirectAfterLogin", window.location.pathname);
+      localStorage.setItem("redirectAfterLogin", "/cart");
       Navigate("/login");
       return;
     }
-
-    const checkoutUrl = localStorage.getItem("checkoutUrl");
-    if (!checkoutUrl) {
-      console.error("Checkout URL is missing.");
-      return;
+  
+    try {
+      // Ensure we have a cart
+      let cartId = id || localStorage.getItem("cartId");
+      if (!cartId) {
+        const newCart = await dispatch(createCart()).unwrap();
+        cartId = newCart.id;
+      }
+  
+      // Ensure cart is associated with user
+      await dispatch(
+        updateCartBuyerIdentity({
+          cartId,
+          accessToken
+        })
+      ).unwrap();
+  
+      // Get updated checkout URL
+      const checkoutUrl = localStorage.getItem("checkoutUrl");
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
+      } else {
+        throw new Error("Checkout URL not available");
+      }
+    } catch (error) {
+      toast.error("Failed to proceed to checkout: " + error.message);
     }
-
-    // Redirect to checkout URL
-    window.location.href = checkoutUrl;
-    localStorage.removeItem("checkoutUrl");
-    localStorage.removeItem("cartId");
   };
+
+
 
   useEffect(() => {
     if (Array.isArray(cartData) && cartData?.length > 0) {

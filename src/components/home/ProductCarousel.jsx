@@ -18,7 +18,7 @@ export function ProductCarousel({ Promoimage, category }) {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5558/api/products?limit=10&category=${category}`
+          `http://localhost:5558/api/products?limit=20&category=${category}`
         );
         console.log("response ///:: ", res.data.products);
         setProducts(res.data.products)

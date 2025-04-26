@@ -25,47 +25,92 @@ export const Register = () => {
   //     }
   //   }, [navigate]);
 
+  // const onSubmit = async (data) => {
+  //   console.log("Data ", data);
+  //   try {
+  //     const { firstName, lastName, email, password } = data;
+  //     setLoading(true);
+  //     const customer = await signUp(firstName, lastName, email, password);
+  //     console.log("Customer ", customer);
+  //     setLoading(false);
+  //     const { accessToken } = customer;
+
+  //     localStorage.setItem("accessToken", accessToken);
+  //     const redirectUrl = localStorage.getItem("redirectAfterLogin");
+  //     console.log("Account created successfully:", customer);
+  //     toast.success("Account created successfully")
+  //     if (redirectUrl && redirectUrl === "/cart") {
+  //       const accessToken = localStorage.getItem("accessToken");
+  //       const cartId = localStorage.getItem("cartId");
+  //       const updatedCart = await updateCartBuyerIdentity(cartId, accessToken);
+  //       if (updatedCart) {
+  //         localStorage.setItem("checkoutUrl", updatedCart.checkoutUrl);
+  //       }
+  //       console.log("Updated Cart:", updatedCart);
+
+  //       navigate(updatedCart.checkoutUrl);
+  //       localStorage.removeItem("redirectAfterLogin");
+  //     } else if (redirectUrl) {
+  //       // toast.success("Successfully login")
+  //       // Navigate to the stored URL
+  //       navigate(redirectUrl);
+  //       localStorage.removeItem("redirectAfterLogin"); 
+  //     } else {
+  //       // toast.success("Successfully login")
+  //       // Default navigation
+  //       navigate("/");
+  //     }
+  //   } catch (error) {
+  //     setLoading(false);
+  //     toast.error(error.message);
+  //     console.error("Error during registration:", error.message);
+  //   }
+  // };
+
+
   const onSubmit = async (data) => {
-    console.log("Data ", data);
     try {
       const { firstName, lastName, email, password } = data;
       setLoading(true);
+      
+      // 1. Register the user
       const customer = await signUp(firstName, lastName, email, password);
-      console.log("Customer ", customer);
-      setLoading(false);
-      const { accessToken } = customer;
-
-      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("accessToken", customer.accessToken);
+      
+      // 2. Check if we need to handle cart redirection
       const redirectUrl = localStorage.getItem("redirectAfterLogin");
-      console.log("Account created successfully:", customer);
-      toast.success("Account created successfully")
-      if (redirectUrl && redirectUrl === "/cart") {
-        const accessToken = localStorage.getItem("accessToken");
-        const cartId = localStorage.getItem("cartId");
-        const updatedCart = await updateCartBuyerIdentity(cartId, accessToken);
-        if (updatedCart) {
-          localStorage.setItem("checkoutUrl", updatedCart.checkoutUrl);
+      const cartId = localStorage.getItem("cartId");
+      
+      if (redirectUrl === "/cart" && cartId) {
+        // 3. Update cart with buyer identity
+        await dispatch(
+          updateCartBuyerIdentity({
+            cartId,
+            accessToken: customer.accessToken
+          })
+        ).unwrap();
+        
+        // 4. Get updated cart
+        await dispatch(fetchCart()).unwrap();
+        
+        // 5. Redirect to checkout
+        const checkoutUrl = localStorage.getItem("checkoutUrl");
+        if (checkoutUrl) {
+          window.location.href = checkoutUrl;
+          return;
         }
-        console.log("Updated Cart:", updatedCart);
-
-        navigate(updatedCart.checkoutUrl);
-        localStorage.removeItem("redirectAfterLogin");
-      } else if (redirectUrl) {
-        // toast.success("Successfully login")
-        // Navigate to the stored URL
-        navigate(redirectUrl);
-        localStorage.removeItem("redirectAfterLogin"); 
-      } else {
-        // toast.success("Successfully login")
-        // Default navigation
-        navigate("/");
       }
+      
+      // Default redirect
+      navigate(redirectUrl || "/");
+      localStorage.removeItem("redirectAfterLogin");
+      
     } catch (error) {
       setLoading(false);
       toast.error(error.message);
-      console.error("Error during registration:", error.message);
     }
   };
+
 
   const password = watch("password");
 

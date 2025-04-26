@@ -3,53 +3,114 @@ import axios from "axios";
 import { shopifyClient } from "../../config/shopifyClient";
 
 // Async thunks
+// export const createCart = createAsyncThunk(
+//   "cart/create",
+//   async (_, { rejectWithValue }) => {
+//     const query = `
+//     mutation cartCreate($input: CartInput!) {
+//       cartCreate(input: $input) {
+//         cart {
+//           id
+//           checkoutUrl
+//         }
+//       }
+//     }
+//   `;
+//     const variables = {
+//       input: {
+//         lines: [],
+//         attributes: [
+//           {
+//             key: "cart_attribute",
+//             value: "This is a cart attribute",
+//           },
+//         ],
+//       },
+//     };
+
+//     try {
+//       // Step 1: Create cart in Shopify
+//       const response = await shopifyClient.post("", { query, variables });
+
+//       console.log("Response : ", response)
+
+//       if (response.data.errors) {
+//         throw new Error(`GraphQL Error: ${response.data.errors[0].message}`);
+//       }
+
+//       const { cart } = response.data.data.cartCreate;
+//       if (!cart) {
+//         throw new Error("Failed to create a cart.");
+//       }
+//       localStorage.setItem("checkoutUrl" , cart.checkoutUrl);
+//       localStorage.setItem("cartId" , cart.id)
+//       console.log("Cart created successfully:", cart);
+
+//       return cart;
+//     } catch (error) {
+//       console.error("Cart Creation Error:", error.message || error);
+//       throw error;
+//     }
+//   }
+// );
+
+
 export const createCart = createAsyncThunk(
   "cart/create",
   async (_, { rejectWithValue }) => {
-    const query = `
-    mutation cartCreate($input: CartInput!) {
-      cartCreate(input: $input) {
-        cart {
-          id
-          checkoutUrl
-        }
-      }
-    }
-  `;
-    const variables = {
-      input: {
-        lines: [],
-        attributes: [
-          {
-            key: "cart_attribute",
-            value: "This is a cart attribute",
-          },
-        ],
-      },
-    };
-
     try {
-      // Step 1: Create cart in Shopify
+      const query = `
+        mutation cartCreate($input: CartInput!) {
+          cartCreate(input: $input) {
+            cart {
+              id
+              checkoutUrl
+              lines(first: 10) {
+                edges {
+                  node {
+                    id
+                    quantity
+                    merchandise {
+                      ... on ProductVariant {
+                        id
+                        title
+                        product {
+                          id
+                          title
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      `;
+
+      const variables = {
+        input: {
+          lines: [],
+          attributes: [],
+        },
+      };
+
       const response = await shopifyClient.post("", { query, variables });
 
-      console.log("Response : ", response)
-
       if (response.data.errors) {
-        throw new Error(`GraphQL Error: ${response.data.errors[0].message}`);
+        return rejectWithValue(response.data.errors[0].message);
       }
 
-      const { cart } = response.data.data.cartCreate;
+      const cart = response.data.data.cartCreate.cart;
       if (!cart) {
-        throw new Error("Failed to create a cart.");
+        return rejectWithValue("Failed to create cart");
       }
-      localStorage.setItem("checkoutUrl" , cart.checkoutUrl);
-      localStorage.setItem("cartId" , cart.id)
-      console.log("Cart created successfully:", cart);
 
+      localStorage.setItem("cartId", cart.id);
+      localStorage.setItem("checkoutUrl", cart.checkoutUrl);
       return cart;
     } catch (error) {
-      console.error("Cart Creation Error:", error.message || error);
-      throw error;
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -375,15 +436,68 @@ export const fetchCart = createAsyncThunk(
   }
 );
 
+// export const updateCartBuyerIdentity = createAsyncThunk(
+//   "cart/updateBuyerIdentity",
+//   async ({ cartId, accessToken }, { rejectWithValue }) => {
+//     const query = `
+//       mutation cartBuyerIdentityUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) {
+//         cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
+//           cart {
+//             id
+//             checkoutUrl
+//           }
+//           userErrors {
+//             field
+//             message
+//           }
+//         }
+//       }
+//     `;
+
+//     const variables = {
+//       cartId,
+//       buyerIdentity: {
+//         customerAccessToken: accessToken,
+//       },
+//     };
+
+//     try {
+//       const response = await shopifyClient.post("", { query, variables });
+//       const errors =
+//         response?.data?.data?.cartBuyerIdentityUpdate?.userErrors || [];
+
+//       if (errors.length > 0) {
+//         return rejectWithValue(errors.map((err) => err.message).join(", "));
+//       }
+
+//       const cart = response?.data?.data?.cartBuyerIdentityUpdate?.cart;
+//       return cart;
+//     } catch (error) {
+//       return rejectWithValue(
+//         error.message || "Failed to update buyer identity"
+//       );
+//     }
+//   }
+// );
+
 export const updateCartBuyerIdentity = createAsyncThunk(
   "cart/updateBuyerIdentity",
   async ({ cartId, accessToken }, { rejectWithValue }) => {
     const query = `
-      mutation cartBuyerIdentityUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) {
+      mutation cartBuyerIdentityUpdate(
+        $cartId: ID!
+        $buyerIdentity: CartBuyerIdentityInput!
+      ) {
         cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
           cart {
             id
             checkoutUrl
+            buyerIdentity {
+              email
+              customer {
+                id
+              }
+            }
           }
           userErrors {
             field
@@ -396,28 +510,26 @@ export const updateCartBuyerIdentity = createAsyncThunk(
     const variables = {
       cartId,
       buyerIdentity: {
-        customerAccessToken: accessToken,
-      },
+        customerAccessToken: accessToken
+      }
     };
 
     try {
       const response = await shopifyClient.post("", { query, variables });
-      const errors =
-        response?.data?.data?.cartBuyerIdentityUpdate?.userErrors || [];
-
-      if (errors.length > 0) {
-        return rejectWithValue(errors.map((err) => err.message).join(", "));
+      
+      if (response.data.errors) {
+        return rejectWithValue(response.data.errors[0].message);
       }
-
-      const cart = response?.data?.data?.cartBuyerIdentityUpdate?.cart;
-      return cart;
+      
+      const updatedCart = response.data.data.cartBuyerIdentityUpdate.cart;
+      localStorage.setItem("checkoutUrl", updatedCart.checkoutUrl);
+      return updatedCart;
     } catch (error) {
-      return rejectWithValue(
-        error.message || "Failed to update buyer identity"
-      );
+      return rejectWithValue(error.message);
     }
   }
 );
+
 
 const cartSlice = createSlice({
   name: "cart",
