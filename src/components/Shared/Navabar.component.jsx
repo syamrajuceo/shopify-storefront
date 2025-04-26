@@ -174,7 +174,7 @@ function NavabarComponent({ cartNumber = 0, searchResult, setSearchQuery, search
 
         </div>
       </div>
-      <div className="flex sm:hidden  bg-[#F3F4F6] items-center h-[40px] w-[90%] mx-auto my-3 relative  rounded-lg">
+      <div className="fdjhf flex sm:hidden  bg-[#F3F4F6] items-center h-[40px] w-[90%] mx-auto my-3 relative  rounded-lg">
         <input
           type="search"
           placeholder="Search for products, categories or brands..."

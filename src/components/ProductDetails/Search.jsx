@@ -330,7 +330,7 @@ const SearchComponent = () => {
 
   return (
     <div className="relative w-full flex justify-center mt-4">
-      <div className="hidden sm:flex bg-[#F3F4F6] items-center h-[40px] sm:w-[300px] md:w-[400px] lg:w-[600px] relative rounded-lg">
+      <div className=" hidden sm:flex bg-[#F3F4F6] items-center h-[40px] sm:w-[300px] md:w-[400px] lg:w-[600px] relative rounded-lg">
         <input
           type="search"
           placeholder="Search for products, categories or brands..."

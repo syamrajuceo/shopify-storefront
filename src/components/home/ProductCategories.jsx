@@ -1,10 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import sunglass from "../../assets/sunglass.jpg";
-import eyeglass from "../../assets/eyeglass.jpg";
-import contactlens from "../../assets/contactlens.jpg";
+import sunglass from "../../assets/sunglass-3.webp";
+import eyeglass from "../../assets/eyeglass-2.jpg";
+import contactlens from "../../assets/contactlens-2.jpg";
 import { IoMdArrowForward } from "react-icons/io";
 import eyeglass2 from "../../assets/Category_Image.webp"
+import clipOn from "../../assets/clip-on.png"
+import readingGlass from "../../assets/readingGlass.jpg"
+import safetyglass from "../../assets/safetyglass.avif"
+
 const categories = [
   {
     title: "Sunglasses",
@@ -21,6 +25,22 @@ const categories = [
     image: contactlens,
     path:'/shop/ContactLenses'
   },
+  {
+    title: "Clip-on",
+    image: clipOn,
+    path:'/shop/Clip-on'
+  },
+  {
+    title: "Reading glasses",
+    image: readingGlass,
+    path:'/shop/Reading-glass'
+  },
+  {
+    title: "Safety glasses",
+    image: safetyglass,
+    path:'/shop/Safety-glass'
+  },
+  
 ];
 
 // ProductCard Component
@@ -32,7 +52,7 @@ const ProductCard = ({ title, image,path}) => {
         <img
           src={image}
           alt={title}
-          className="w-full h-full  object-cover transition-transform duration-300 group-hover:scale-110"
+          className="w-full h-auto  object-cover transition-transform duration-300 group-hover:scale-110"
         />
         {/* <div className="absolute inset-0 bg-black/40 transition-opacity duration-300 group-hover:bg-black/50" />   */}
       </div>
@@ -51,11 +71,11 @@ function ProductCategories() {
   return (
     <>
       {/* //desktop */}
-      <div className="h-[400px] hidden md:flex">
+      <div className="h-a hidden md:flex">
         <div className=" mx-auto px-8">
           <div className="text-center mb-12">
             <h2 className=" font-bold text-gray-900 md:text-2xl mb-4 mt-5">
-            Frames
+            Category
             </h2>
           </div>
 
@@ -123,6 +143,50 @@ function ProductCategories() {
             />
           </div>
         </div>
+
+        <div className="flex" onClick={()=>{navigate('/shop/Clip-on')}}>
+       <div className="flex items-center justify-center gap-2 h-[150px] bg-custom-gray w-[40%] rounded-tl-[18px] rounded-bl-[18px] ">
+    <h1 className="text-md">Clip-on</h1>
+    <IoMdArrowForward />
+  </div>
+
+  <div className="flex items-center justify-center gap-2 h-[150px]  w-[60%] ">
+    <img
+      src={clipOn}
+      alt="clip-on"
+      className="w-full h-full  object-cover rounded-tr-xl rounded-br-xl"
+    />
+  </div>
+</div>
+
+  <div className="flex" onClick={()=>{navigate('/shop/Reading glass')}}>
+  <div className="flex items-center justify-center gap-2 h-[150px]  w-[60%] ">
+    <img
+      src={readingGlass}
+      alt="reading-glass"
+      className="w-full h-full  object-cover rounded-tl-xl rounded-bl-xl"
+    />
+    </div>
+    <div className="flex items-center justify-center gap-2 h-[150px] bg-custom-gray w-[40%] rounded-tr-xl rounded-br-xl ">
+    <h1 className="text-md">Reading Glass</h1>
+    <IoMdArrowForward />
+  </div>
+  </div>
+
+  <div className="flex" onClick={()=>{navigate('/shop/Safety glass')}}>
+  <div className="flex items-center justify-center gap-2 h-[150px] bg-custom-gray w-[40%] rounded-tl-[18px] rounded-bl-[18px] ">
+    <h1 className="text-md">Safety Glass</h1>
+    <IoMdArrowForward />
+  </div>
+
+    <div className="flex items-center justify-center gap-2 h-[150px]  w-[60%] ">
+    <img
+      src={safetyglass} // example online image or import your own
+      alt="safety-glass"
+      className="w-full h-full  object-cover rounded-tr-xl rounded-br-xl"
+    />
+  </div>
+  </div>
 
       </div>
     </>
