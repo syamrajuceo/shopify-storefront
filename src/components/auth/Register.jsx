@@ -52,7 +52,7 @@ export const Register = () => {
       } else if (redirectUrl) {
         // Navigate to the stored URL
         navigate(redirectUrl);
-        localStorage.removeItem("redirectAfterLogin"); // Cleanup
+        localStorage.removeItem("redirectAfterLogin"); 
       } else {
         // Default navigation
         navigate("/");

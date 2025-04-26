@@ -117,11 +117,11 @@ export const Cart = () => {
       );
       setSubTotal(subTotal);
 
-      const discountedTotal = items.reduce(
+      const discountedTotal = items?.reduce(
         (acc, item) =>
           acc +
           (item?.merchandise?.priceV2?.amount
-            ? parseFloat(item.merchandise.priceV2.amount) * item.quantity
+            ? parseFloat(item?.merchandise?.priceV2?.amount) * item?.quantity
             : 0),
         0
       );
@@ -177,6 +177,7 @@ export const Cart = () => {
 
   const handleCheckoutButtonClick = () => {
     if (!accessToken || !user) {
+      console.log("....fgjkg..........")
       localStorage.setItem("redirectAfterLogin", window.location.pathname);
       Navigate("/login");
       return;
@@ -195,7 +196,7 @@ export const Cart = () => {
   };
 
   useEffect(() => {
-    if (Array.isArray(cartData) && cartData.length > 0) {
+    if (Array.isArray(cartData) && cartData?.length > 0) {
       const fetchedCategories = cartData.map(
         (item) => item?.merchandise?.product?.productType
       );
@@ -209,9 +210,9 @@ export const Cart = () => {
 
   if (loading) return <CartPageSkeleton />;
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  // if (error) {
+  //   return <div>Error: {error}</div>;
+  // }
   return (
     <div>
       <div className="py-8 px-4 md:py-16 md:px-10 bg-white mb-18">

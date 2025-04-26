@@ -1,10 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ScrollButton } from "./ScrollButton";
 import { ProductCard } from "../productCard/ProductCard";
 import { FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-export function ProductCarousel2({ title, category = "" ,products}) {
+export function ProductCarousel2({ title, category = "" }) {
   const scrollContainerRef = useRef(null);
   const scroll = (direction) => {
     const container = scrollContainerRef.current;
@@ -20,6 +21,25 @@ export function ProductCarousel2({ title, category = "" ,products}) {
       behavior: "smooth",
     });
   };
+
+  const [products,setProducts] = useState([])
+  
+    // Properly handle async in useEffect
+    useEffect(() => {
+      const fetchProducts = async () => {
+        try {
+          const res = await axios.get(
+            `http://localhost:5558/api/products?limit=10&category=${category}`
+          );
+          console.log("response ///:: ", res.data.products);
+          setProducts(res.data.products)
+        } catch (error) {
+          console.error("Error fetching products:", error);
+        }
+      };
+  
+      fetchProducts();
+    }, [category]);
 
   return (
     <div className="relative mx-auto  px-8 py-10">

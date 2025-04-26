@@ -1,16 +1,33 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ScrollButton } from "./ScrollButton";
 import { ProductCard } from "../productCard/ProductCard";
 import evervaImg from "../../assets/everva.webp";
 import { ArrowRight } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-export function ProductCarousel({ Promoimage, category ,products}) {
-
-  // "http://localhost:5558/api/products?limit=10&category=contact lenses"
-  
+export function ProductCarousel({ Promoimage, category }) {
   const scrollContainerRef = useRef(null);
+
+  const [products,setProducts] = useState([])
+
+  // Properly handle async in useEffect
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5558/api/products?limit=10&category=${category}`
+        );
+        console.log("response ///:: ", res.data.products);
+        setProducts(res.data.products)
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, [category]);
 
   const PromoCard = ({ title, subtitle, buttonText, imageUrl, className }) => {
     return (
@@ -27,7 +44,7 @@ export function ProductCarousel({ Promoimage, category ,products}) {
             alt="Promotional background"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 " />
+          <div className="absolute inset-0" />
         </div>
 
         {/* Content */}
@@ -37,12 +54,10 @@ export function ProductCarousel({ Promoimage, category ,products}) {
             <p className="text-3xl md:text-5xl font-extrabold text-white mb-3">
               {subtitle}
             </p>
-            \
             <Link
               className="md:inline-flex items-center gap-2 bg-white text-black px-16 py-3 rounded-md hidden"
               to="/query?query="
             >
-              {/* Visible only on medium screens and above */}
               {buttonText}
               <ArrowRight className="w-4 h-4" />
             </Link>
@@ -51,11 +66,12 @@ export function ProductCarousel({ Promoimage, category ,products}) {
       </div>
     );
   };
+
   const scroll = (direction) => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    const scrollAmount = 400; // Adjust scroll amount as needed
+    const scrollAmount = 400;
     const targetScroll =
       container.scrollLeft +
       (direction === "left" ? -scrollAmount : scrollAmount);
@@ -66,28 +82,29 @@ export function ProductCarousel({ Promoimage, category ,products}) {
     });
   };
 
+
   return (
-    <div className="relative p-4 md:p-8 ">
+    <div className="relative p-4 md:p-8">
       <div
         ref={scrollContainerRef}
         className="flex overflow-x-auto gap-6 scroll-smooth snap-x snap-mandatory scrollbar-hide p-4 rounded-xl"
         style={{
-          scrollbarWidth: "none", // For Firefox
-          msOverflowStyle: "none", // For IE/Edge
-          WebkitOverflowScrolling: "touch", // For iOS scrolling behavior
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          WebkitOverflowScrolling: "touch",
         }}
       >
-        {/* Everva Image Div */}
+        {/* Promo Card or Everva Image */}
         {Promoimage ? (
           <PromoCard
             title="BUY 1 GET 2ND"
             subtitle="50% OFF"
             buttonText="View all"
             imageUrl={Promoimage}
-            className="snap-start w-[200px] md:w-[370px] rounded-xl flex-shrink-0"
+            className="snap-start w-[200px] md:w-[370px] rounded-xl flex-shrink-0 h-auto"
           />
         ) : (
-          <div className="snap-start   md:w-[370px] rounded-xl flex-shrink-0 w-[200px]  md:h-[430px] lg:h-[440px] xl:[450px]">
+          <div className="snap-start w-[200px] md:w-[370px] rounded-xl flex-shrink-0 h-[430px] md:h-[430px] lg:h-[440px] xl:h-[450px]">
             <img
               src={evervaImg}
               alt="everva"
@@ -95,22 +112,17 @@ export function ProductCarousel({ Promoimage, category ,products}) {
             />
           </div>
         )}
-        {/* Everva Image Div */}
 
         {/* Product Cards */}
-
-        {products?.filter(
-          (product) =>
-            product.productType.toLowerCase() === category.toLowerCase()
-        ).map((product) => (
-          <div key={product.id} className="snap-start">
+        {products?.map((product) => (
+          <div key={product.id} className="snap-start flex-shrink-0">
             <ProductCard product={product} home={true} />
           </div>
         ))}
       </div>
 
       {/* Scroll Buttons */}
-      <div className="md:hidden">
+      <div className="md:hidden flex justify-center gap-4 mt-4">
         <ScrollButton direction="left" onClick={() => scroll("left")} />
         <ScrollButton direction="right" onClick={() => scroll("right")} />
       </div>

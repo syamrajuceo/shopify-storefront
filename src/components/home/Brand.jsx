@@ -30,12 +30,13 @@ function Brand() {
       name: "D&G",
       image: DG,
       logo: DgLoGO,
-      id: "Dolce & Gabbana",
+      id: "d&g",
     },
     {
       name: "BURBERRY",
       image: Burberry,
       logo: BurberryLogo,
+      id: "Burberry",
     },
     {
       name: "Gucci",
@@ -47,46 +48,55 @@ function Brand() {
       name: "tiffany&CO",
       image: TiffanyCo,
       logo: TiffanyCologo,
+      id: "tiffany&co",
     },
     {
-      name: "Vouge",
+      name: ":Vouge",
       image: Vouge,
       logo: Vougelogo,
+      id: "vouge",
     },
     {
       name: "ARMANI EXCHANGE",
       image: ArmaniExchange,
       logo: ArmaniXlogo,
+      id: "Armani-Exchange",
     },
     {
       name: "versacelogo",
       image: versaceBrand,
       logo: versacelogo,
+      id: "versacelogo",
     },
     {
       name: "rayban",
       image: raybanBrand,
       logo: raybanlogo,
+      id: "Ray-Ban",
     },
     {
       name: "prada",
       image: pradaBrand,
       logo: pradaLogo,
+      id: "prada",
     },
     {
       name: "OAKLEY",
       image: oakelyBrand,
       logo: oakelylogo,
+      id: "oakley",
     },
     {
       name: "AMARA",
       image: amaraBrand,
       logo: amaralogo,
+      id: "amara",
     },
     {
       name: "MICHAEL KORS",
       image: michaelkrosBrand,
       logo: michaelkrosLogo,
+      id: "michael kors",
     },
   ];
 
@@ -112,11 +122,19 @@ function Brand() {
                   <div className="absolute inset-0 bg-black bg-opacity-40 transition-opacity duration-300 group-hover:bg-opacity-30" />
                   <div className="absolute inset-0 flex items-center justify-center  ">
                     <img
-                      src={brand.logo}
-                      alt="logo"
-                      className="object-contain w-[80%] h-[80%]"
-                      style={{ filter: "brightness(0) invert(1)" }}
+                      src={brand.image}
+                      alt={brand.name}
+                      className="w-full h-full object-cover"
                     />
+                    <div className="absolute inset-0 bg-black bg-opacity-40 transition-opacity duration-300 group-hover:bg-opacity-30" />
+                    <div className="absolute inset-0 flex items-center justify-center  ">
+                      <img
+                        src={brand.logo}
+                        alt="logo"
+                        className="object-contain w-[80%] h-[80%]"
+                        style={{ filter: "brightness(0) invert(1)" }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

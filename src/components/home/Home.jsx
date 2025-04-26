@@ -15,81 +15,8 @@ import bannerMobile3 from "../../assets/bannerMobile3.png";
 import Promo2 from "../../assets/promo3.png";
 import { HomePageSkeleton } from "../skeleton/Home";
 import { ProductCarousel2 } from "./ProductCarousel2";
-import { fetchProducts } from "../../redux/slices/productSlice";
 
 export const Home = () => {
-  const dispatch = useDispatch();
-  const { products, status } = useSelector((state) => state.products);
-
-  // Filter products based on categories or tags
-  const contactLenses = products.filter(
-    (product) =>
-      product.category === "contact-lenses" ||
-      product.category === "contact-lenses"
-  );
-
-  const sunglasses = products.filter(
-    (product) =>
-      product.category === "Sunglasses" || product.category === "sunglasses"
-  );
-
-  const bestsellers = products.filter(
-    (product) =>
-      product.tags?.includes("bestseller") ||
-      product.tags?.includes("bestsellers")
-  );
-
-  const newArrivals = products.filter(
-    (product) =>
-      product.tags?.includes("new") || product.tags?.includes("new arrivals")
-  );
-
-  // For explore products, you might want to show a mix or all products
-  const exploreProducts = [...products].slice(0, 20); // Show first 20 products
-
-  // Fetch products for each category with limit
-  useEffect(() => {
-    const fetchInitialProducts = async () => {
-      try {
-        // Fetch contact lenses
-        await dispatch(
-          fetchProducts({
-            category: "contact-lenses",
-            limit: 20,
-          })
-        );
-
-        // Fetch sunglasses
-        await dispatch(
-          fetchProducts({
-            category: "Sunglasses",
-            limit: 20,
-          })
-        );
-
-        // Fetch bestsellers
-        await dispatch(
-          fetchProducts({
-            tags: "bestseller",
-            limit: 20,
-          })
-        );
-
-        // Fetch new arrivals
-        await dispatch(
-          fetchProducts({
-            tags: "new",
-            limit: 20,
-          })
-        );
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-
-    fetchInitialProducts();
-  }, [dispatch]);
-
   return (
     <div>
       {status === "loading" ? (
@@ -103,17 +30,12 @@ export const Home = () => {
             <Banner image={BannerImage1} mobile={bannerMobile} />
           </div>
 
-          <ProductCarousel
-            title="Contact Lenses"
-            category="contact lenses"
-            products={contactLenses}
-          />
+          <ProductCarousel title="Contact Lenses" category="contact lenses" />
 
           <ProductCarousel
             title="Sunglasses"
             Promoimage={Promo2}
             category="sunglasses"
-            products={sunglasses}
           />
 
           <div className="flex flex-col gap-5">
@@ -121,16 +43,13 @@ export const Home = () => {
             <Banner image={BannerImage3} mobile={bannerMobile3} />
           </div>
 
-          <ProductCarousel2 title="Bestsellers" products={bestsellers} />
+          <ProductCarousel2 title="Bestsellers" />
 
-          <ProductCarousel2 title="New Arrivals" products={newArrivals} />
+          <ProductCarousel2 title="New Arrivals" />
 
           <Brand />
 
-          <ProductCarousel2
-            title="Explore Our Products"
-            products={exploreProducts}
-          />
+          <ProductCarousel2 title="Explore Our Products" />
         </>
       )}
     </div>

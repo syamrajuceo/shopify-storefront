@@ -1,3 +1,4 @@
+// productSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -29,7 +30,6 @@ export const fetchProducts = createAsyncThunk(
 
       return {
         products: response.data.products,
-        // brands: response.data.brandsList || [], // Add brands list from response
         pagination: response.data.pagination,
         filters: cleanedFilters,
         loadMore,
@@ -44,7 +44,6 @@ const productsSlice = createSlice({
   name: "products",
   initialState: {
     products: [],
-    availableBrands: [], // New state for available brands
     status: "idle",
     error: null,
     pagination: {
@@ -66,7 +65,6 @@ const productsSlice = createSlice({
   reducers: {
     resetProducts: (state) => {
       state.products = [];
-      state.availableBrands = [];
       state.pagination = { nextCursor: null, hasNextPage: false };
       state.status = "idle";
       state.error = null;
@@ -101,7 +99,6 @@ const productsSlice = createSlice({
         state.products = action.payload.loadMore
           ? [...state.products, ...action.payload.products]
           : action.payload.products;
-        // state.availableBrands = action.payload.brands; // Update available brands
         state.pagination = action.payload.pagination;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
@@ -111,5 +108,6 @@ const productsSlice = createSlice({
   },
 });
 
-export const { resetProducts, updateFilters, resetFilters } = productsSlice.actions;
+export const { resetProducts, updateFilters, resetFilters } =
+  productsSlice.actions;
 export default productsSlice.reducer;

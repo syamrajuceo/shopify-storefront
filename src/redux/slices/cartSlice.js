@@ -32,6 +32,8 @@ export const createCart = createAsyncThunk(
       // Step 1: Create cart in Shopify
       const response = await shopifyClient.post("", { query, variables });
 
+      console.log("Response : ", response)
+
       if (response.data.errors) {
         throw new Error(`GraphQL Error: ${response.data.errors[0].message}`);
       }
@@ -286,7 +288,7 @@ export const fetchCart = createAsyncThunk(
             checkoutUrl
             createdAt
             updatedAt
-            lines(first: 10) {
+            lines(first: 20) {
               edges {
                 node {
                   id
@@ -304,6 +306,7 @@ export const fetchCart = createAsyncThunk(
                         currencyCode
                       }
                       quantityAvailable
+                      availableForSale
                       product {
                         title
                         productType

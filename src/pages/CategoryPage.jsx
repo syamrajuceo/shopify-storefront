@@ -116,22 +116,11 @@
 //           Contact Lenses
 //         </Box>
 //       </RouterLink>
-
-//       {/* 
-      
-//       remaining cards
-      
-//       clip-on
-//       safety glasses
-//       reading glasses
-      
-//       */}
 //     </Box>
 //   );
 // };
 
 // export default CategoryPage;
-
 
 
 import React from 'react';
