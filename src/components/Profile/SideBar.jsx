@@ -6,6 +6,7 @@ import {
   AddLocationAlt,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function SideBar({ pageShow, setPageShow }) {
   // Use navigate to update the URL
@@ -35,6 +36,7 @@ function SideBar({ pageShow, setPageShow }) {
       localStorage.removeItem("accessTokenExpiresAt");
       localStorage.removeItem("popupShown");
       // Redirect to the homepage and reload the page
+      toast.success("Logout Successfully")
       navigate("/");
       window.location.reload();
     } else {
