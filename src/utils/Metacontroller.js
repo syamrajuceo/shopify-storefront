@@ -41,8 +41,8 @@ export const Metacontroller = async (data) => {
 
   const query = `query GetMetaobjects { ${queryParts.join("\n")} }`;
 
-  const API_URL = "https://4bz4tg-qg.myshopify.com/api/2024-10/graphql.json";
-  const API_TOKEN = "aae77a75514b280e61a74cc7ee993635";
+  const API_URL = "https://4bz4tg-qg.myshopify.com/api/2025-04/graphql.json";
+  const API_TOKEN = "80a45abbc99fa8d887c693c5aae5996e";
 
   try {
     const response = await axios.post(
@@ -145,8 +145,8 @@ export const MetaSingleController = async (product) => {
 
   const query = `query GetMetaobjects { ${queryPart} }`;
 
-  const API_URL = "https://4bz4tg-qg.myshopify.com/api/2024-10/graphql.json";
-  const API_TOKEN = "aae77a75514b280e61a74cc7ee993635";
+  const API_URL = "https://4bz4tg-qg.myshopify.com/api/2025-04/graphql.json";
+  const API_TOKEN = "80a45abbc99fa8d887c693c5aae5996e";
 
   try {
     const response = await axios.post(
@@ -232,8 +232,8 @@ export const MetaSingleController = async (product) => {
 
 //   const query = `query GetMetaobjects { ${queryParts.join("\n")} }`;
 
-//   const API_URL = "https://4bz4tg-qg.myshopify.com/api/2024-10/graphql.json";
-//   const API_TOKEN = "aae77a75514b280e61a74cc7ee993635";
+//   const API_URL = "https://4bz4tg-qg.myshopify.com/api/2025-04/graphql.json";
+//   const API_TOKEN = "80a45abbc99fa8d887c693c5aae5996e";
 
 //   try {
 //     const response = await axios.post(

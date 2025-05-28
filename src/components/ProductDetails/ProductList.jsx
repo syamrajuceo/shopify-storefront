@@ -1,11 +1,4 @@
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import expressLogo from "../../assets/images/Frame 390 1.png";
-import truckImg from "../../assets/images/hugeicons_truck-delivery.png";
-import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import { ProductCard } from "../productCard/ProductCard";
-import { ProductCarousel2 } from "../home/ProductCarousel2";
-import "./style.css";
 import { ScrollButton } from "../home/ScrollButton";
 import { useSelector } from "react-redux";
 import { useRef } from "react";
@@ -13,20 +6,30 @@ import { useRef } from "react";
 export default function ProductList({ title, category = "" }) {
   const scrollContainerRef = useRef(null);
   const { products, status, error } = useSelector((state) => state.products);
+
   const scroll = (direction) => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    const scrollAmount = 400; // Adjust scroll amount as needed
+    const scrollAmount = 400;
     const targetScroll =
       container.scrollLeft +
       (direction === "left" ? -scrollAmount : scrollAmount);
-    console.log(targetScroll);
+    
     container.scrollTo({
       left: targetScroll,
       behavior: "smooth",
     });
   };
+
+  // Filter and limit products to 10
+  const filteredProducts = products
+    ?.filter((product) =>
+      category
+        ? product.productType.toLowerCase() === category.toLowerCase()
+        : true
+    )
+    .slice(0, 10);
 
   return (
     <div className="bg-white">
@@ -34,9 +37,7 @@ export default function ProductList({ title, category = "" }) {
         <h2 className="text-[22px] md:text-[28px] font-bold tracking-tight text-gray-900">
           {title}
         </h2>
-        <div className="relative mx-auto   py-5">
-          {/* Header */}
-
+        <div className="relative mx-auto py-5">
           {/* Carousel */}
           <div className="relative">
             <div
@@ -48,11 +49,7 @@ export default function ProductList({ title, category = "" }) {
                 WebkitOverflowScrolling: "touch",
               }}
             >
-              {products.filter((product) =>
-                category
-                  ? product.productType.toLowerCase() === category.toLowerCase()
-                  : true
-              ).map((product) => (
+              {filteredProducts?.map((product) => (
                 <div key={product.id} className="snap-start">
                   <ProductCard
                     className="min-w-[300px] transform transition-all duration-300 hover:scale-105"

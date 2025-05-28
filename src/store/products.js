@@ -143,13 +143,13 @@ export const fetchAllProducts = async () => {
 export const fetchProductByHandle = async (handle) => {
   try {
     const response = await fetch(
-      "https://4bz4tg-qg.myshopify.com/api/2024-10/graphql.json",
+      "https://4bz4tg-qg.myshopify.com/api/2025-04/graphql.json",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-Shopify-Storefront-Access-Token":
-            "aae77a75514b280e61a74cc7ee993635",
+            "80a45abbc99fa8d887c693c5aae5996e",
         },
         body: JSON.stringify({
           query: `
