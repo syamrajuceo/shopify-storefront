@@ -6,8 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { Link } from "react-router-dom";
 
-export function ProductCarousel({ Promoimage, category ,products}) {
-  
+export function ProductCarousel({ Promoimage, category, products }) {
   const scrollContainerRef = useRef(null);
 
   const PromoCard = ({ title, subtitle, buttonText, imageUrl, className }) => {
@@ -35,12 +34,10 @@ export function ProductCarousel({ Promoimage, category ,products}) {
             <p className="text-3xl md:text-5xl font-extrabold text-white mb-3">
               {subtitle}
             </p>
-            \
             <Link
               className="md:inline-flex items-center gap-2 bg-white text-black px-16 py-3 rounded-md hidden"
               to="/query?query="
             >
-              {/* Visible only on medium screens and above */}
               {buttonText}
               <ArrowRight className="w-4 h-4" />
             </Link>
@@ -49,11 +46,12 @@ export function ProductCarousel({ Promoimage, category ,products}) {
       </div>
     );
   };
+
   const scroll = (direction) => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    const scrollAmount = 400; // Adjust scroll amount as needed
+    const scrollAmount = 400;
     const targetScroll =
       container.scrollLeft +
       (direction === "left" ? -scrollAmount : scrollAmount);
@@ -64,18 +62,26 @@ export function ProductCarousel({ Promoimage, category ,products}) {
     });
   };
 
+  // Filter and limit products to 10
+  const filteredProducts = products
+    ?.filter(
+      (product) =>
+        product.productType.toLowerCase() === category.toLowerCase()
+    )
+    .slice(0, 10);
+
   return (
-    <div className="relative p-4 md:p-8 ">
+    <div className="relative p-4 md:p-8">
       <div
         ref={scrollContainerRef}
         className="flex overflow-x-auto gap-6 scroll-smooth snap-x snap-mandatory scrollbar-hide p-4 rounded-xl"
         style={{
-          scrollbarWidth: "none", // For Firefox
-          msOverflowStyle: "none", // For IE/Edge
-          WebkitOverflowScrolling: "touch", // For iOS scrolling behavior
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          WebkitOverflowScrolling: "touch",
         }}
       >
-        {/* Everva Image Div */}
+        {/* Promo Card or Everva Image */}
         {Promoimage ? (
           <PromoCard
             title="BUY 1 GET 2ND"
@@ -85,7 +91,7 @@ export function ProductCarousel({ Promoimage, category ,products}) {
             className="snap-start w-[200px] md:w-[370px] rounded-xl flex-shrink-0"
           />
         ) : (
-          <div className="snap-start   md:w-[370px] rounded-xl flex-shrink-0 w-[200px]  md:h-[430px] lg:h-[440px] xl:[450px]">
+          <div className="snap-start md:w-[370px] rounded-xl flex-shrink-0 w-[200px] md:h-[430px] lg:h-[440px] xl:h-[450px]">
             <img
               src={evervaImg}
               alt="everva"
@@ -93,21 +99,16 @@ export function ProductCarousel({ Promoimage, category ,products}) {
             />
           </div>
         )}
-        {/* Everva Image Div */}
 
-        {/* Product Cards */}
-
-        {products?.filter(
-          (product) =>
-            product.productType.toLowerCase() === category.toLowerCase()
-        ).map((product) => (
+        {/* Product Cards (limited to 10) */}
+        {filteredProducts?.map((product) => (
           <div key={product.id} className="snap-start">
             <ProductCard product={product} home={true} />
           </div>
         ))}
       </div>
 
-      {/* Scroll Buttons */}
+      {/* Scroll Buttons (mobile only) */}
       <div className="md:hidden">
         <ScrollButton direction="left" onClick={() => scroll("left")} />
         <ScrollButton direction="right" onClick={() => scroll("right")} />
